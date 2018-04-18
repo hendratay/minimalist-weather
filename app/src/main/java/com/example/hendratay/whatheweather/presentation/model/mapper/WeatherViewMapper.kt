@@ -2,8 +2,9 @@ package com.example.hendratay.whatheweather.presentation.model.mapper
 
 import com.example.hendratay.whatheweather.domain.model.Weather
 import com.example.hendratay.whatheweather.presentation.model.WeatherView
+import javax.inject.Inject
 
-class WeatherViewMapper: Mapper<WeatherView, Weather> {
+class WeatherViewMapper @Inject constructor(): Mapper<WeatherView, Weather> {
 
     override fun mapToView(type: Weather): WeatherView {
         return WeatherView(type.id, type.main, type.description, type.icon)

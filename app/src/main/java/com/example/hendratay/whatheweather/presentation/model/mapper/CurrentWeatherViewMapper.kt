@@ -2,15 +2,16 @@ package com.example.hendratay.whatheweather.presentation.model.mapper
 
 import com.example.hendratay.whatheweather.domain.model.CurrentWeather
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
+import javax.inject.Inject
 
-class CurrentWeatherViewMapper(val coordinateViewMapper: CoordinateViewMapper,
-                               val weatherViewMapper: WeatherViewMapper,
-                               val mainViewMapper: MainViewMapper,
-                               val windViewMapper: WindViewMapper,
-                               val cloudViewMapper: CloudViewMapper,
-                               val rainViewMapper: RainViewMapper,
-                               val snowViewMapper: SnowViewMapper,
-                               val sysViewMapper: SysViewMapper):
+class CurrentWeatherViewMapper @Inject constructor(val coordinateViewMapper: CoordinateViewMapper,
+                                                   val weatherViewMapper: WeatherViewMapper,
+                                                   val mainViewMapper: MainViewMapper,
+                                                   val windViewMapper: WindViewMapper,
+                                                   val cloudViewMapper: CloudViewMapper,
+                                                   val rainViewMapper: RainViewMapper,
+                                                   val snowViewMapper: SnowViewMapper,
+                                                   val sysViewMapper: SysViewMapper):
         Mapper<CurrentWeatherView, CurrentWeather> {
 
     override fun mapToView(type: CurrentWeather): CurrentWeatherView {

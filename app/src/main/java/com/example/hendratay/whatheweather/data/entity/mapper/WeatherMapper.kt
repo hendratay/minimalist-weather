@@ -2,8 +2,9 @@ package com.example.hendratay.whatheweather.data.entity.mapper
 
 import com.example.hendratay.whatheweather.data.entity.WeatherEntity
 import com.example.hendratay.whatheweather.domain.model.Weather
+import javax.inject.Inject
 
-class WeatherMapper: Mapper<WeatherEntity, Weather> {
+class WeatherMapper @Inject constructor(): Mapper<WeatherEntity, Weather> {
 
     override fun mapFromEntity(type: WeatherEntity): Weather {
         return Weather(type.id, type.main, type.description, type.icon)

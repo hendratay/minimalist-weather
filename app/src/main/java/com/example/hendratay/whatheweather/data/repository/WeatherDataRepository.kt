@@ -7,10 +7,11 @@ import com.example.hendratay.whatheweather.data.repository.datasource.WeatherDat
 import com.example.hendratay.whatheweather.domain.model.CurrentWeather
 import com.example.hendratay.whatheweather.domain.model.WeatherForecast
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class WeatherDataRepository(val factory: WeatherDataStoreFactory,
-                            val currentWeatherMapper: CurrentWeatherMapper,
-                            val weatherForecastMapper: WeatherForecastMapper):
+class WeatherDataRepository @Inject constructor(val factory: WeatherDataStoreFactory,
+                                                val currentWeatherMapper: CurrentWeatherMapper,
+                                                val weatherForecastMapper: WeatherForecastMapper):
         WeatherRepository {
 
     override fun getCurrentWeather(cityName: String): Observable<CurrentWeather> {

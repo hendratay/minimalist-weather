@@ -2,9 +2,10 @@ package com.example.hendratay.whatheweather.presentation.model.mapper
 
 import com.example.hendratay.whatheweather.domain.model.WeatherForecast
 import com.example.hendratay.whatheweather.presentation.model.WeatherForecastView
+import javax.inject.Inject
 
-class WeatherForecastViewMapper(val cityViewMapper: CityViewMapper,
-                                val forecastViewMapper: ForecastViewMapper):
+class WeatherForecastViewMapper @Inject constructor(val cityViewMapper: CityViewMapper,
+                                                    val forecastViewMapper: ForecastViewMapper):
         Mapper<WeatherForecastView, WeatherForecast> {
 
     override fun mapToView(type: WeatherForecast): WeatherForecastView {

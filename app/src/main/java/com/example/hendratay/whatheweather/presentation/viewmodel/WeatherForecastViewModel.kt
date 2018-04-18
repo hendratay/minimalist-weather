@@ -9,9 +9,10 @@ import com.example.hendratay.whatheweather.domain.interactor.GetWeatherForecast
 import com.example.hendratay.whatheweather.domain.model.WeatherForecast
 import com.example.hendratay.whatheweather.presentation.model.mapper.WeatherForecastViewMapper
 import com.example.hendratay.whatheweather.presentation.model.WeatherForecastView
+import javax.inject.Inject
 
-class WeatherForecastViewModel(val getWeatherForecast: GetWeatherForecast,
-                               val weatherForecastViewMapper: WeatherForecastViewMapper):
+class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWeatherForecast,
+                                                   val weatherForecastViewMapper: WeatherForecastViewMapper):
         ViewModel() {
 
     private val forecastLiveData: MutableLiveData<WeatherForecastView> = MutableLiveData()

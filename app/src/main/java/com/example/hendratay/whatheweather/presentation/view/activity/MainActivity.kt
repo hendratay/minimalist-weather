@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.hendratay.whatheweather.R
+import com.example.hendratay.whatheweather.WhatheWeatherApplication
 import com.example.hendratay.whatheweather.data.entity.mapper.*
 import com.example.hendratay.whatheweather.data.repository.WeatherDataRepository
 import com.example.hendratay.whatheweather.data.repository.datasource.WeatherDataStoreFactory
@@ -17,35 +18,22 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeather
 import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
+    @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
+    @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
+
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
-    private lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
-    private lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        WhatheWeatherApplication.component.inject(this)
 
-        initComponents()
-    }
-
-    fun initComponents() {
-        val weatherDataStoreFactory = WeatherDataStoreFactory()
-        val currentWeatherMapper = CurrentWeatherMapper(CoordinateMapper(), WeatherMapper(), MainMapper(), WindMapper(), CloudMapper(), RainMapper(), SnowMapper(), SysMapper())
-        val weatherForecastMapper = WeatherForecastMapper(CityMapper(CoordinateMapper()), ForecastMapper(MainMapper(), WeatherMapper(), CloudMapper(), WindMapper(), RainMapper(), SnowMapper()))
-        val weatherDataRepository = WeatherDataRepository(weatherDataStoreFactory, currentWeatherMapper, weatherForecastMapper)
-
-        val getCurrentWeather = GetCurrentWeather(weatherDataRepository)
-        val currentWeatherViewMapper = CurrentWeatherViewMapper(CoordinateViewMapper(), WeatherViewMapper(), MainViewMapper(), WindViewMapper(), CloudViewMapper(), RainViewMapper(), SnowViewMapper(), SysViewMapper())
-        currentWeatherViewModelFactory = CurrentWeatherViewModelFactory(getCurrentWeather, currentWeatherViewMapper)
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
-
-        val getWeatherForecast = GetWeatherForecast(weatherDataRepository)
-        val weatherForecastViewMapper = WeatherForecastViewMapper(CityViewMapper(CoordinateViewMapper()), ForecastViewMapper(MainViewMapper(), WeatherViewMapper(), CloudViewMapper(), WindViewMapper(), RainViewMapper(), SnowViewMapper()))
-        weatherForecastViewModelFactory = WeatherForecastViewModelFactory(getWeatherForecast, weatherForecastViewMapper)
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
     }
 

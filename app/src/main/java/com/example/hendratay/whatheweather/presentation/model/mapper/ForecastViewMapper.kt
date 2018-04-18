@@ -2,13 +2,14 @@ package com.example.hendratay.whatheweather.presentation.model.mapper
 
 import com.example.hendratay.whatheweather.domain.model.Forecast
 import com.example.hendratay.whatheweather.presentation.model.ForecastView
+import javax.inject.Inject
 
-class ForecastViewMapper(val mainViewMapper: MainViewMapper,
-                         val weatherViewMapper: WeatherViewMapper,
-                         val cloudViewMapper: CloudViewMapper,
-                         val windViewMapper: WindViewMapper,
-                         val rainViewMapper: RainViewMapper,
-                         val snowViewMapper: SnowViewMapper):
+class ForecastViewMapper @Inject constructor(val mainViewMapper: MainViewMapper,
+                                             val weatherViewMapper: WeatherViewMapper,
+                                             val cloudViewMapper: CloudViewMapper,
+                                             val windViewMapper: WindViewMapper,
+                                             val rainViewMapper: RainViewMapper,
+                                             val snowViewMapper: SnowViewMapper):
         Mapper<ForecastView, Forecast> {
 
     override fun mapToView(type: Forecast): ForecastView {

@@ -2,15 +2,16 @@ package com.example.hendratay.whatheweather.data.entity.mapper
 
 import com.example.hendratay.whatheweather.data.entity.CurrentWeatherEntity
 import com.example.hendratay.whatheweather.domain.model.CurrentWeather
+import javax.inject.Inject
 
-class CurrentWeatherMapper(val coordinateMapper: CoordinateMapper,
-                           val weatherMapper: WeatherMapper,
-                           val mainMapper: MainMapper,
-                           val windMapper: WindMapper,
-                           val cloudMapper: CloudMapper,
-                           val rainMapper: RainMapper,
-                           val snowMapper: SnowMapper,
-                           val sysMapper: SysMapper):
+class CurrentWeatherMapper @Inject constructor(val coordinateMapper: CoordinateMapper,
+                                               val weatherMapper: WeatherMapper,
+                                               val mainMapper: MainMapper,
+                                               val windMapper: WindMapper,
+                                               val cloudMapper: CloudMapper,
+                                               val rainMapper: RainMapper,
+                                               val snowMapper: SnowMapper,
+                                               val sysMapper: SysMapper):
         Mapper<CurrentWeatherEntity, CurrentWeather> {
 
     override fun mapFromEntity(type: CurrentWeatherEntity): CurrentWeather {

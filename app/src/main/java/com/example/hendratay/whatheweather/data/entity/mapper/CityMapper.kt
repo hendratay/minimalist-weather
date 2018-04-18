@@ -2,8 +2,9 @@ package com.example.hendratay.whatheweather.data.entity.mapper
 
 import com.example.hendratay.whatheweather.data.entity.CityEntity
 import com.example.hendratay.whatheweather.domain.model.City
+import javax.inject.Inject
 
-class CityMapper(val coordinateMapper: CoordinateMapper): Mapper<CityEntity, City> {
+class CityMapper @Inject constructor(val coordinateMapper: CoordinateMapper): Mapper<CityEntity, City> {
 
     override fun mapFromEntity(type: CityEntity): City {
         return City(type.cityId, type.cityName, coordinateMapper.mapFromEntity(type.coordinate), type.countryCode)

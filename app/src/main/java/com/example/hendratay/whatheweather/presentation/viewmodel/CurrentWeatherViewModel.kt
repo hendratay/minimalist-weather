@@ -10,9 +10,10 @@ import com.example.hendratay.whatheweather.domain.model.CurrentWeather
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.model.mapper.WeatherViewMapper
 import com.example.hendratay.whatheweather.presentation.model.mapper.CurrentWeatherViewMapper
+import javax.inject.Inject
 
-class CurrentWeatherViewModel(val getCurrentWeather: GetCurrentWeather,
-                              val currentWeatherViewMapper: CurrentWeatherViewMapper):
+class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurrentWeather,
+                                                  val currentWeatherViewMapper: CurrentWeatherViewMapper):
         ViewModel() {
 
     private val weatherLiveData: MutableLiveData<CurrentWeatherView> = MutableLiveData()
