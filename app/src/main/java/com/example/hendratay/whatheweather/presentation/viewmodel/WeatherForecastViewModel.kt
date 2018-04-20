@@ -37,7 +37,7 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
         }
 
         override fun onNext(t: WeatherForecast) {
-            weatherForecastViewMapper.mapToView(t)
+            forecastLiveData.postValue(weatherForecastViewMapper.mapToView(t))
             Log.d("Weather Forecast", t.toString())
         }
 
