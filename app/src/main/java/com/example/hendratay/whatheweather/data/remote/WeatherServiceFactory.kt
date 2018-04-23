@@ -1,5 +1,6 @@
 package com.example.hendratay.whatheweather.data.remote
 
+import com.example.hendratay.whatheweather.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.HttpUrl
@@ -36,11 +37,10 @@ object WeatherServiceFactory {
 
 }
 
-// Todo: move appid to secret place
 class OpenWeatherInterceptor : Interceptor{
     override fun intercept(chain: Interceptor.Chain): Response {
         val url: HttpUrl = chain.request().url().newBuilder()
-                .addQueryParameter("APPID", "e439f1771858a8389570d253d90bfee9" )
+                .addQueryParameter("APPID", BuildConfig.OPENWEATHERMAP_API_KEY)
                 .addQueryParameter("units", "metric" )
                 .build()
         return chain.proceed(chain.request().newBuilder().addHeader("Accept", "application/json").url(url).build())

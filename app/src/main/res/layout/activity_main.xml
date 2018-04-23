@@ -41,7 +41,7 @@
             android:background="@color/colorPrimary"
             android:padding="16dp"
             android:layout_height="0dp"
-            android:layout_weight="1.6">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/temp_text_view"
@@ -62,17 +62,16 @@
 
             <ImageView
                 android:src="@drawable/wi_cloudy"
-                android:id="@+id/weather_condition_image_view"
-                android:layout_width="144dp"
-                android:layout_height="144dp"
-                android:layout_marginTop="32dp"
+                android:id="@+id/weather_icon_image_view"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
                 android:layout_centerHorizontal="true" />
 
             <TextView
-                android:id="@+id/weather_condition_text_view"
+                android:id="@+id/weather_desc_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/weather_condition_image_view"
+                android:layout_below="@+id/weather_icon_image_view"
                 android:layout_centerHorizontal="true"
                 tools:text="Clear Sky" />
 
@@ -84,16 +83,6 @@
                 android:drawableLeft="@drawable/wi_humidity"
                 android:layout_alignParentBottom="true"
                 tools:text="81 %" />
-
-            <TextView
-                android:id="@+id/wind_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:drawableLeft="@drawable/wi_wind_deg"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                tools:text="4.1 KM/S" />
 
             <TextView
                 android:id="@+id/cloud_text_view"
@@ -111,8 +100,7 @@
             android:id="@+id/rv_weather_forecast"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
+            android:layout_weight="1.8"
             android:layout_gravity="bottom" >
         </android.support.v7.widget.RecyclerView>
 
