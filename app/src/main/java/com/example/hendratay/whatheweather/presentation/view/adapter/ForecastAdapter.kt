@@ -1,6 +1,7 @@
 package com.example.hendratay.whatheweather.presentation.view.adapter
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,8 @@ import kotlinx.android.synthetic.main.item_date.view.*
 import kotlinx.android.synthetic.main.item_forecast.view.*
 import kotlin.math.roundToInt
 
-class ForecastAdapter(val forecastList: List<ListItem>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ForecastAdapter(val forecastList: List<ListItem>):
+        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount() = forecastList.size
 
@@ -51,7 +53,6 @@ class ForecastAdapter(val forecastList: List<ListItem>): RecyclerView.Adapter<Re
                 dateViewHolder.dateTextView.text = dateItem.date
             }
         }
-
     }
 
     inner class DateViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -23,6 +24,7 @@ import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
     private lateinit var adapter: ForecastAdapter
+
+    private lateinit var groupedHashMap: Map<String, MutableList<ForecastView>>
 
     private var consolidatedList: MutableList<ListItem> = ArrayList()
 
@@ -86,7 +90,8 @@ class MainActivity : AppCompatActivity() {
 
         weatherForecastViewModel.getWeatherForecast().observe(this,
                 Observer<WeatherForecastView> {
-                    val groupedHashMap: HashMap<String, MutableList<ForecastView>> = groupDataIntoHashMap(it!!.forecastList.toMutableList())
+                    groupedHashMap = groupDataIntoHashMap(it!!.forecastList.toMutableList())
+                    consolidatedList.clear()
                     for(forecastDate: String in groupedHashMap.keys) {
                         val dateItem = DateItem(forecastDate)
                         consolidatedList.add(dateItem)
@@ -99,10 +104,10 @@ class MainActivity : AppCompatActivity() {
                 })
     }
 
-    private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): HashMap<String, MutableList<ForecastView>> {
+    private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): Map<String, MutableList<ForecastView>> {
         val groupedHashMap: HashMap<String, MutableList<ForecastView>> = HashMap()
         for(forecastView: ForecastView in forecastList) {
-            val sdf = SimpleDateFormat("EEEE, d MMMM y")
+            val sdf = SimpleDateFormat("dd MMMM y, EEEE")
             val date = sdf.format(Date(forecastView.dateTime * 1000))
             if(groupedHashMap.containsKey(date)) {
                 groupedHashMap.get(date)?.add(forecastView)
@@ -112,7 +117,8 @@ class MainActivity : AppCompatActivity() {
                 groupedHashMap.put(date, list)
             }
         }
-        return groupedHashMap
+        val result = groupedHashMap.toList().sortedBy { (key, _) -> key }.toMap()
+        return result
     }
 
 }
