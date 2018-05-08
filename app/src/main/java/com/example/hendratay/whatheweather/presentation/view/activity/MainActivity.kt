@@ -15,16 +15,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,37 +33,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
     private lateinit var adapter: ForecastAdapter
 
-    private lateinit var groupedHashMap: Map<String, MutableList<ForecastView>>
-
-    private var consolidatedList: MutableList<ListItem> = ArrayList()
+    private var forecastList: MutableList<ForecastView> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         WhatheWeatherApplication.component.inject(this)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        rv_weather_forecast.layoutManager = LinearLayoutManager(this)
-        adapter = ForecastAdapter(consolidatedList)
-        rv_weather_forecast.adapter = adapter
+        setupToolbar()
+        setupRecyclerView()
 
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate(R.menu.menu_toolbar, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.refresh -> {
-                //TODO: REFRESH CURRENT DATA AND WEATHER FORECAST
-                Toast.makeText(this, "Refresh Clicked", Toast.LENGTH_SHORT).show()
+                currentWeatherViewModel.fetchCurrentWeather()
                 return true
             }
             else -> { return super.onOptionsItemSelected(item) }
@@ -75,50 +64,63 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        getCurrentWeather()
+        getTodayWeatherForecast()
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    private fun setupRecyclerView() {
+        rv_weather_forecast.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        adapter = ForecastAdapter(forecastList)
+        rv_weather_forecast.adapter = adapter
+    }
+
+    private fun getCurrentWeather() {
         currentWeatherViewModel.getCurrentWeather().observe(this,
                 Observer<CurrentWeatherView> {
-                    city_name_text_view.text = it?.cityName?.toUpperCase()
-                    temp_text_view.text = it?.main?.temp?.roundToInt().toString() + " \u2103"
-                    pressure_text_view.text = it?.main?.pressure?.roundToInt().toString()
-                    weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it?.weatherList?.get(0)!!.id,
-                            it?.weatherList?.get(0).icon))
-                    weather_desc_text_view.text = it?.weatherList?.get(0)?.description?.toUpperCase()
+                    if (it != null) {
+                        city_name_text_view.text = it.cityName.toUpperCase()
 
-                    humidity_text_view.text = it?.main?.humidity.toString() + " %"
-                    cloud_text_view.text = it?.clouds?.cloudiness.toString()
+                        weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
+                        temp_text_view.text = it.main.temp.roundToInt().toString() + " \u2103"
+                        weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
+
+                        pressure_text_view.text = it.main.pressure.roundToInt().toString() + "hPa"
+                        humidity_text_view.text = it.main.humidity.toString() + " %"
+                        cloud_text_view.text = it.clouds.cloudiness.toString() + " %"
+
+                        val tempMin = it.main.tempMin.toString() + " \u2103"
+                        val tempMax = it.main.tempMax.toString() + " \u2103"
+                        min_max_temp_text_view.text = "$tempMin / $tempMax"
+                        wind_text_view.text = it.wind.speed.toString() + " m/s"
+                        val sunrise = it.sys.sunriseTime
+                        val sunset = it.sys.sunsetTime
+                        val sdf = SimpleDateFormat("H:mm")
+                        val sunriseTime = sdf.format(Date(sunrise * 1000))
+                        val sunsetTime = sdf.format(Date(sunset * 1000))
+                        sunrise_sunset_text_view.text = "$sunriseTime / $sunsetTime"
+                    }
                 })
+    }
 
+    private fun getTodayWeatherForecast() {
         weatherForecastViewModel.getWeatherForecast().observe(this,
                 Observer<WeatherForecastView> {
-                    groupedHashMap = groupDataIntoHashMap(it!!.forecastList.toMutableList())
-                    consolidatedList.clear()
-                    for(forecastDate: String in groupedHashMap.keys) {
-                        val dateItem = DateItem(forecastDate)
-                        consolidatedList.add(dateItem)
-                        for (forecast: ForecastView in groupedHashMap.get(forecastDate)!!) {
-                            val generalItem = GeneralItem(forecast)
-                            consolidatedList.add(generalItem)
+                    forecastList.clear()
+                    it?.forecastList?.forEach {
+                        val sdf = SimpleDateFormat("dd MM yyyy")
+                        val dateTime = sdf.format(Date(it.dateTime * 1000))
+                        val currentDateTime = sdf.format(Calendar.getInstance().time)
+                        if (dateTime == currentDateTime) {
+                            forecastList.add(it)
                         }
                     }
                     adapter.notifyDataSetChanged()
                 })
-    }
-
-    private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): Map<String, MutableList<ForecastView>> {
-        val groupedHashMap: HashMap<String, MutableList<ForecastView>> = HashMap()
-        for(forecastView: ForecastView in forecastList) {
-            val sdf = SimpleDateFormat("dd MMMM y, EEEE")
-            val date = sdf.format(Date(forecastView.dateTime * 1000))
-            if(groupedHashMap.containsKey(date)) {
-                groupedHashMap.get(date)?.add(forecastView)
-            } else {
-                val list: MutableList<ForecastView> = ArrayList()
-                list.add(forecastView)
-                groupedHashMap.put(date, list)
-            }
-        }
-        val result = groupedHashMap.toList().sortedBy { (key, _) -> key }.toMap()
-        return result
     }
 
 }

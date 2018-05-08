@@ -8,12 +8,12 @@
     tools:context=".presentation.view.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
-        app:elevation="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            android:background="@android:color/background_light"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" >
 
@@ -21,7 +21,6 @@
                 android:id="@+id/city_name_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="BATAM, INDONESIA" />
@@ -33,77 +32,140 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
-            android:padding="16dp"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+        <ImageView
+            android:src="@drawable/wi_cloudy"
+            android:id="@+id/weather_icon_image_view"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_gravity="center" />
 
-            <TextView
-                android:id="@+id/temp_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:drawableLeft="@drawable/wi_thermometer"
-                tools:text="50 \u2103" />
+        <TextView
+            android:id="@+id/temp_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="32sp"
+            tools:text="50\u2103" />
+
+        <TextView
+            android:id="@+id/weather_desc_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:text="Clear Sky" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp">
 
             <TextView
                 android:id="@+id/pressure_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
                 android:gravity="center"
-                android:drawableLeft="@drawable/wi_barometer"
-                android:layout_alignParentRight="true"
+                android:drawableBottom="@drawable/wi_barometer"
+                android:background="@android:color/background_light"
                 tools:text="1012" />
-
-            <ImageView
-                android:src="@drawable/wi_cloudy"
-                android:id="@+id/weather_icon_image_view"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:layout_centerHorizontal="true" />
-
-            <TextView
-                android:id="@+id/weather_desc_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/weather_icon_image_view"
-                android:layout_centerHorizontal="true"
-                tools:text="Clear Sky" />
 
             <TextView
                 android:id="@+id/humidity_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:gravity="center"
-                android:drawableLeft="@drawable/wi_humidity"
-                android:layout_alignParentBottom="true"
+                android:drawableBottom="@drawable/wi_humidity"
+                android:background="@android:color/background_light"
                 tools:text="81 %" />
 
             <TextView
                 android:id="@+id/cloud_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
                 android:gravity="center"
-                android:layout_alignParentRight="true"
-                android:drawableLeft="@drawable/wi_cloudy"
-                android:layout_alignParentBottom="true"
+                android:drawableBottom="@drawable/wi_cloudy"
+                android:background="@android:color/background_light"
                 tools:text="4.1km/s" />
 
-        </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp">
+
+            <TextView
+                android:id="@+id/min_max_temp_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:gravity="center"
+                android:drawableBottom="@drawable/wi_thermometer"
+                android:background="@android:color/background_light"
+                tools:text="1012" />
+
+            <TextView
+                android:id="@+id/wind_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:drawableBottom="@drawable/wi_wind_deg"
+                android:background="@android:color/background_light"
+                tools:text="81 %" />
+
+            <TextView
+                android:id="@+id/sunrise_sunset_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:gravity="center"
+                android:drawableBottom="@drawable/wi_day_sunny"
+                android:background="@android:color/background_light"
+                tools:text="4.1km/s" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_weather_forecast"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.8"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:layout_gravity="bottom" >
         </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@android:color/white"
+        app:menu="@menu/menu_bottom_navigation">
+
+    </android.support.design.widget.BottomNavigationView>
 
 </android.support.design.widget.CoordinatorLayout>

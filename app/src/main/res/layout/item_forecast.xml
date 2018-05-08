@@ -3,34 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_item_forecast"
-    android:orientation="horizontal"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/background_light"
+    android:padding="16dp"
+    android:layout_width="96dp"
     android:layout_height="wrap_content">
 
     <TextView
         tools:text="Clear Sky"
         android:id="@+id/item_weather_desc_text_view"
-        android:layout_gravity="center_vertical"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <TextView
-        tools:text="28 \u2103"
-        android:id="@+id/item_temp_text_view"
-        android:drawablePadding="-8dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="16dp"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <ImageView
         android:src="@drawable/wi_cloudy"
         android:id="@+id/item_weather_icon_image_view"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_width="48dp"
         android:layout_height="48dp" />
+
+    <TextView
+        tools:text="1 pm"
+        android:id="@+id/item_date_time_text_view"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
