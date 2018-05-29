@@ -2,8 +2,12 @@ package com.example.hendratay.whatheweather.presentation.view.activity
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.IntentSender
+import android.content.pm.PackageManager
+import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.WhatheWeatherApplication
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastAdapter
@@ -11,23 +15,35 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeather
 import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
+import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_main.*
+import java.security.Permission
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+const val TAG = "MainActivity"
+const val REQUEST_ACCESS_FINE_LOCATION = 111
+const val REQUEST_CHECK_SETTINGS = 222
 class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
 
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
@@ -38,13 +54,66 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        WhatheWeatherApplication.component.inject(this)
+        AndroidInjection.inject(this)
 
         setupToolbar()
         setupRecyclerView()
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        checkLocationPermission()
+        createLocationRequest()
+
+        locationRequestListener()
+        locationRequest()
+
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
+    }
+
+    private fun checkLocationPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        val builder = LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest)
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+        task.addOnFailureListener {
+            if (it is ResolvableApiException){
+                try {
+                    it.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.e(TAG, "Error at LocationSettingsResponse.addOnFailureListener")
+                }
+            }
+        }
+    }
+
+    private fun locationRequest() {
+        if(ActivityCompat.checkSelfPermission(this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.requestLocationUpdates(locationRequest,
+                    locationCallback,
+                    null)
+        }
+    }
+
+    private fun locationRequestListener() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult?) {
+                p0 ?: return
+                for(location in p0.locations) {
+                    Log.i(TAG, "Success!")
+                    currentWeatherViewModel.setlatLng("Singapore")
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

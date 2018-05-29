@@ -1,18 +1,29 @@
 package com.example.hendratay.whatheweather
 
-import android.app.Application
-import com.example.hendratay.whatheweather.di.ApplicationComponent
 import com.example.hendratay.whatheweather.di.DaggerApplicationComponent
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class WhatheWeatherApplication: Application() {
+class WhatheWeatherApplication: DaggerApplication() {
+
+/*    @Inject
+    lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
     companion object {
-        lateinit var component: ApplicationComponent
+        @JvmStatic lateinit var component: ApplicationComponent
     }
 
     override fun onCreate() {
         super.onCreate()
-        component = DaggerApplicationComponent.create()
+        component = DaggerApplicationComponent.builder().
+        //component.inject(this)
     }
 
+    override fun activityInjector(): AndroidInjector<Activity> {
+        return mActivityDispatchingAndroidInjector
+    }*/
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerApplicationComponent.builder().create(this)
+    }
 }

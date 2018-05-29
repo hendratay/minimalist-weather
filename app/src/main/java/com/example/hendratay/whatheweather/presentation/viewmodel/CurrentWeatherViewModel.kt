@@ -8,7 +8,6 @@ import com.example.hendratay.whatheweather.domain.interactor.DefaultObserver
 import com.example.hendratay.whatheweather.domain.interactor.GetCurrentWeather
 import com.example.hendratay.whatheweather.domain.model.CurrentWeather
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
-import com.example.hendratay.whatheweather.presentation.model.mapper.WeatherViewMapper
 import com.example.hendratay.whatheweather.presentation.model.mapper.CurrentWeatherViewMapper
 import javax.inject.Inject
 
@@ -17,6 +16,9 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
         ViewModel() {
 
     private val weatherLiveData: MutableLiveData<CurrentWeatherView> = MutableLiveData()
+    // Initial Location
+    // TODO: getLastKnownLocation
+    private var latLng: String = ""
 
     init {
         fetchCurrentWeather()
@@ -29,7 +31,13 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
 
     fun getCurrentWeather() = weatherLiveData
 
-    fun fetchCurrentWeather() = getCurrentWeather.execute(CurrentWeatherObserver(), GetCurrentWeather.Params.forCity("Indonesia"))
+    fun setlatLng(newLatLng: String) {
+        latLng =  newLatLng
+        fetchCurrentWeather()
+    }
+
+    fun fetchCurrentWeather() = getCurrentWeather.execute(CurrentWeatherObserver(), GetCurrentWeather.Params.forCity(latLng))
+
 
     inner class CurrentWeatherObserver: DefaultObserver<CurrentWeather>() {
 

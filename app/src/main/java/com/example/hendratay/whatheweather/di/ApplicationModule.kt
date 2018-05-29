@@ -32,13 +32,6 @@ class ApplicationModule {
     }
 
     @Provides
-    fun provideCurrentWeatherViewModelFactory(getCurrentWeather: GetCurrentWeather,
-                                              currentWeatherViewMapper: CurrentWeatherViewMapper):
-            CurrentWeatherViewModelFactory {
-        return CurrentWeatherViewModelFactory(getCurrentWeather, currentWeatherViewMapper)
-    }
-
-    @Provides
     fun provideWeatherForecastViewModelFactory(getWeatherForecast: GetWeatherForecast,
                                                weatherForecastViewMapper: WeatherForecastViewMapper):
             WeatherForecastViewModelFactory {
