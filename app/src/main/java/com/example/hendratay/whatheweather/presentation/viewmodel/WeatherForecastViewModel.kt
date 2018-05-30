@@ -16,10 +16,8 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
         ViewModel() {
 
     private val forecastLiveData: MutableLiveData<WeatherForecastView> = MutableLiveData()
-
-    init {
-        fetchWeatherForecast()
-    }
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
     override fun onCleared() {
         getWeatherForecast.dispose()
@@ -28,7 +26,13 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
 
     fun getWeatherForecast() = forecastLiveData
 
-    fun fetchWeatherForecast() = getWeatherForecast.execute(WeatherForecastObserver(), GetWeatherForecast.Params.forCity("Indonesia"))
+    fun setlatLng(newLatLng: String) {
+        latitude = newLatLng.split(",")[0].toDouble()
+        longitude =  newLatLng.split(",")[1].toDouble()
+        fetchWeatherForecast()
+    }
+
+    fun fetchWeatherForecast() = getWeatherForecast.execute(WeatherForecastObserver(), GetWeatherForecast.Params.forLocation(latitude, longitude))
 
     inner class WeatherForecastObserver: DefaultObserver<WeatherForecast>() {
 

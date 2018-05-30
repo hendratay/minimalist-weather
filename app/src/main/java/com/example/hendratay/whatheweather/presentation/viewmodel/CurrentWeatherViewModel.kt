@@ -16,13 +16,8 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
         ViewModel() {
 
     private val weatherLiveData: MutableLiveData<CurrentWeatherView> = MutableLiveData()
-    // Initial Location
-    // TODO: getLastKnownLocation
-    private var latLng: String = ""
-
-    init {
-        fetchCurrentWeather()
-    }
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
     override fun onCleared() {
         getCurrentWeather.dispose()
@@ -32,12 +27,12 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
     fun getCurrentWeather() = weatherLiveData
 
     fun setlatLng(newLatLng: String) {
-        latLng =  newLatLng
+        latitude = newLatLng.split(",")[0].toDouble()
+        longitude =  newLatLng.split(",")[1].toDouble()
         fetchCurrentWeather()
     }
 
-    fun fetchCurrentWeather() = getCurrentWeather.execute(CurrentWeatherObserver(), GetCurrentWeather.Params.forCity(latLng))
-
+    fun fetchCurrentWeather() = getCurrentWeather.execute(CurrentWeatherObserver(), GetCurrentWeather.Params.forLocation(latitude, longitude))
 
     inner class CurrentWeatherObserver: DefaultObserver<CurrentWeather>() {
 

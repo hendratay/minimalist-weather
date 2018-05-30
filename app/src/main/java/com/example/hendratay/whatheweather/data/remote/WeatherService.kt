@@ -8,12 +8,10 @@ import retrofit2.http.Query
 
 interface WeatherService {
 
-    //Todo: currentWeather from lat and lng
     @GET("weather")
-    fun currentWeather(@Query("q") cityName: String): Observable<CurrentWeatherEntity>
+    fun currentWeather(@Query("lat") latitude: Double, @Query("lon") longitude: Double): Observable<CurrentWeatherEntity>
 
-    //Todo: weatherForecast from lat and lng
     @GET("forecast")
-    fun weatherForecast(@Query("q") cityName: String): Observable<WeatherForecastEntity>
+    fun weatherForecast(@Query("lat") latitude: Double, @Query("lon") longitude: Double): Observable<WeatherForecastEntity>
 
 }

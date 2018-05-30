@@ -7,12 +7,12 @@ import io.reactivex.Observable
 
 class WeatherCloudDataStore: WeatherDataStore {
 
-    override fun getCurrentWeather(cityName: String): Observable<CurrentWeatherEntity> {
-        return WeatherServiceFactory.makeService().currentWeather(cityName)
+    override fun getCurrentWeather(latitude: Double, longitude: Double): Observable<CurrentWeatherEntity> {
+        return WeatherServiceFactory.makeService().currentWeather(latitude, longitude)
     }
 
-    override fun getWeatherForecast(cityName: String): Observable<WeatherForecastEntity> {
-        return WeatherServiceFactory.makeService().weatherForecast(cityName)
+    override fun getWeatherForecast(latitude: Double, longitude: Double): Observable<WeatherForecastEntity> {
+        return WeatherServiceFactory.makeService().weatherForecast(latitude, longitude)
     }
 
 }

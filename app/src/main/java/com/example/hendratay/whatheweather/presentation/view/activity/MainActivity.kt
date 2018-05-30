@@ -4,34 +4,35 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.IntentSender
 import android.content.pm.PackageManager
-import android.location.Location
-import android.support.v7.app.AppCompatActivity
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import com.example.hendratay.whatheweather.R
-import com.example.hendratay.whatheweather.WhatheWeatherApplication
-import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastAdapter
-import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModel
-import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
-import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
-import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
-import javax.inject.Inject
-import kotlin.math.roundToInt
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.model.*
+import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastAdapter
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
+import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModel
+import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
+import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
+import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.activity_main.*
-import java.security.Permission
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
+import kotlinx.android.synthetic.main.activity_main.*
+
+// Todo: add swipe to refresh view
 
 const val TAG = "MainActivity"
 const val REQUEST_ACCESS_FINE_LOCATION = 111
@@ -50,6 +51,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ForecastAdapter
 
     private var forecastList: MutableList<ForecastView> = ArrayList()
+    // Todo: follow display a location address guide
+    private lateinit var geocoder: Geocoder
+    private var address: List<Address> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,15 +63,21 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
         setupRecyclerView()
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         checkLocationPermission()
         createLocationRequest()
 
-        locationRequestListener()
-        locationRequest()
+        fusedLocationClient = provideFusedLocationClient()
+        receiveLocationUpdates()
+        startLocationUpdates()
+
+        geocoder = Geocoder(this, Locale.getDefault())
 
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
+    }
+
+    fun provideFusedLocationClient(): FusedLocationProviderClient {
+        return LocationServices.getFusedLocationProviderClient(this)
     }
 
     private fun checkLocationPermission() {
@@ -76,8 +86,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest().apply {
-            interval = 10000
-            fastestInterval = 5000
+            interval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         val builder = LocationSettingsRequest.Builder()
@@ -95,25 +104,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun locationRequest() {
+    private fun startLocationUpdates() {
         if(ActivityCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.requestLocationUpdates(locationRequest,
-                    locationCallback,
-                    null)
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
         }
     }
 
-    private fun locationRequestListener() {
+    private fun receiveLocationUpdates() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult?) {
                 p0 ?: return
                 for(location in p0.locations) {
-                    Log.i(TAG, "Success!")
-                    currentWeatherViewModel.setlatLng("Singapore")
+                    currentWeatherViewModel.setlatLng("${location.latitude},${location.longitude}")
+                    weatherForecastViewModel.setlatLng("${location.latitude},${location.longitude}")
+
+                    // Todo: Follow display a location addresss guide at android develoepr
+                    address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                 }
+                stopLocationUpdates()
             }
         }
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -151,8 +166,9 @@ class MainActivity : AppCompatActivity() {
     private fun getCurrentWeather() {
         currentWeatherViewModel.getCurrentWeather().observe(this,
                 Observer<CurrentWeatherView> {
-                    if (it != null) {
-                        city_name_text_view.text = it.cityName.toUpperCase()
+                    it?.let {
+                        city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
+                                "${address[0].locality}, ${address[0].countryName}".capitalize()
 
                         weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
                         temp_text_view.text = it.main.temp.roundToInt().toString() + " \u2103"

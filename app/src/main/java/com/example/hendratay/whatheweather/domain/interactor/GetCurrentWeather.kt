@@ -8,14 +8,14 @@ import javax.inject.Inject
 class GetCurrentWeather @Inject constructor(val weatherRepository: WeatherRepository): UseCase<CurrentWeather, GetCurrentWeather.Params>() {
 
     override fun buildUseCaseObservable(params: Params?): Observable<CurrentWeather> {
-        return weatherRepository.getCurrentWeather(params!!.cityName)
+        return weatherRepository.getCurrentWeather(params!!.latitude, params!!.longitude)
     }
 
-    class Params(val cityName: String) {
+    class Params(val latitude: Double, val longitude: Double) {
 
         companion object {
-            fun forCity(cityName: String): Params {
-                return Params(cityName)
+            fun forLocation(latitude: Double, longitude: Double): Params {
+                return Params(latitude, longitude)
             }
         }
 
