@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.example.hendratay.whatheweather.R
+import com.example.hendratay.whatheweather.presentation.view.fragment.LocationFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
+import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,9 +16,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        AndroidInjection.inject(this)
 
         setupToolbar()
+        loadFragment(TodayFragment())
+
+        bottom_navigation_view.setOnNavigationItemSelectedListener {
+            lateinit var fragment: Fragment
+            when(it.itemId) {
+                R.id.today -> fragment = TodayFragment()
+                R.id.weekly -> fragment = WeeklyFragment()
+                R.id.location -> fragment = LocationFragment()
+            }
+            loadFragment(fragment)
+            true
+        }
 
     }
 

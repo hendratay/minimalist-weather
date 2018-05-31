@@ -31,11 +31,4 @@ class ApplicationModule {
         return WeatherDataRepository(weatherDataStoreFactory, currentWeatherMapper, weatherForecastMapper)
     }
 
-    @Provides
-    fun provideWeatherForecastViewModelFactory(getWeatherForecast: GetWeatherForecast,
-                                               weatherForecastViewMapper: WeatherForecastViewMapper):
-            WeatherForecastViewModelFactory {
-        return WeatherForecastViewModelFactory(getWeatherForecast, weatherForecastViewMapper)
-    }
-
 }

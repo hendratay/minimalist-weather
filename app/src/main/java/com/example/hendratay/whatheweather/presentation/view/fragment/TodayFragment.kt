@@ -32,6 +32,8 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecas
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import dagger.android.AndroidInjection
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_today.*
 import java.text.SimpleDateFormat
@@ -60,8 +62,14 @@ class TodayFragment: Fragment() {
     private lateinit var geocoder: Geocoder
     private var address: List<Address> = listOf()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_today, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onActivityCreated(savedInstanceState)
+
         setupRecyclerView()
         setupSwipeRefresh()
         setupEmptyErrorButtonClick()
@@ -77,10 +85,7 @@ class TodayFragment: Fragment() {
         geocoder = Geocoder(activity, Locale.getDefault())
 
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_today, container, false)
+        weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
     }
 
     override fun onStart() {
@@ -131,7 +136,7 @@ class TodayFragment: Fragment() {
                     // Todo: Follow display a location addresss guide at android develoepr
                     address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                 }
-                swipe_refresh_layout.isRefreshing = false
+                swipe_refresh_layout?.let { it.isRefreshing = false }
                 stopLocationUpdates()
             }
         }
@@ -190,7 +195,7 @@ class TodayFragment: Fragment() {
     private fun setupScreenForLoadingState() {
         progress_bar.visibility = View.VISIBLE
         data_view.visibility = View.GONE
-        city_name_text_view.visibility = View.GONE
+        activity?.city_name_text_view?.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.GONE
     }
@@ -199,7 +204,7 @@ class TodayFragment: Fragment() {
         progress_bar.visibility = View.GONE
         error_view.visibility = View.GONE
         if (it != null) {
-            city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
+            activity?.city_name_text_view?.text = "${address[0].thoroughfare} \n".capitalize() +
                     "${address[0].locality}, ${address[0].countryName}".capitalize()
 
             weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
@@ -221,7 +226,7 @@ class TodayFragment: Fragment() {
             val sunsetTime = sdf.format(Date(sunset * 1000))
             sunrise_sunset_text_view.text = "$sunriseTime / $sunsetTime"
 
-            city_name_text_view.visibility = View.VISIBLE
+            activity?.city_name_text_view?.visibility = View.VISIBLE
             data_view.visibility = View.VISIBLE
         } else {
             empty_view.visibility = View.VISIBLE
@@ -231,7 +236,7 @@ class TodayFragment: Fragment() {
     private fun setupScreenForError(message: String?) {
         progress_bar.visibility = View.GONE
         data_view.visibility = View.GONE
-        city_name_text_view.visibility = View.GONE
+        activity?.city_name_text_view?.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.VISIBLE
     }
