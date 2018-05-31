@@ -2,10 +2,12 @@ package com.example.hendratay.whatheweather.presentation.view.activity
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
@@ -13,7 +15,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.example.hendratay.whatheweather.R
+import com.example.hendratay.whatheweather.presentation.data.Resource
+import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastAdapter
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
@@ -31,6 +36,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 // Todo: add swipe to refresh view
 
@@ -62,11 +68,13 @@ class MainActivity : AppCompatActivity() {
 
         setupToolbar()
         setupRecyclerView()
+        setupEmptyErrorButtonClick()
 
         checkLocationPermission()
         createLocationRequest()
 
-        fusedLocationClient = provideFusedLocationClient()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        // initiate location callback first for pass into requestlocationupdates at `startLocationUpdates`
         receiveLocationUpdates()
         startLocationUpdates()
 
@@ -74,10 +82,6 @@ class MainActivity : AppCompatActivity() {
 
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
-    }
-
-    fun provideFusedLocationClient(): FusedLocationProviderClient {
-        return LocationServices.getFusedLocationProviderClient(this)
     }
 
     private fun checkLocationPermission() {
@@ -139,7 +143,12 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.refresh -> {
-                currentWeatherViewModel.fetchCurrentWeather()
+                val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    startLocationUpdates()
+                } else {
+                    currentWeatherViewModel.setlatLng("0,0")
+                }
                 return true
             }
             else -> { return super.onOptionsItemSelected(item) }
@@ -163,33 +172,74 @@ class MainActivity : AppCompatActivity() {
         rv_weather_forecast.adapter = adapter
     }
 
+    private fun setupEmptyErrorButtonClick() {
+        empty_button.setOnClickListener {
+            startLocationUpdates()
+        }
+        error_button.setOnClickListener {
+            startLocationUpdates()
+        }
+    }
+
     private fun getCurrentWeather() {
         currentWeatherViewModel.getCurrentWeather().observe(this,
-                Observer<CurrentWeatherView> {
-                    it?.let {
-                        city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
-                                "${address[0].locality}, ${address[0].countryName}".capitalize()
-
-                        weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
-                        temp_text_view.text = it.main.temp.roundToInt().toString() + " \u2103"
-                        weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
-
-                        pressure_text_view.text = it.main.pressure.roundToInt().toString() + "hPa"
-                        humidity_text_view.text = it.main.humidity.toString() + " %"
-                        cloud_text_view.text = it.clouds.cloudiness.toString() + " %"
-
-                        val tempMin = it.main.tempMin.toString() + " \u2103"
-                        val tempMax = it.main.tempMax.toString() + " \u2103"
-                        min_max_temp_text_view.text = "$tempMin / $tempMax"
-                        wind_text_view.text = it.wind.speed.toString() + " m/s"
-                        val sunrise = it.sys.sunriseTime
-                        val sunset = it.sys.sunsetTime
-                        val sdf = SimpleDateFormat("H:mm")
-                        val sunriseTime = sdf.format(Date(sunrise * 1000))
-                        val sunsetTime = sdf.format(Date(sunset * 1000))
-                        sunrise_sunset_text_view.text = "$sunriseTime / $sunsetTime"
-                    }
+                Observer<Resource<CurrentWeatherView>> {
+                    it?.let { handleCurrentWeatherViewState(it.status, it.data, it.message) }
                 })
+    }
+
+    private fun handleCurrentWeatherViewState(resoureState: ResourceState, data: CurrentWeatherView?, message: String?) {
+        when(resoureState) {
+            ResourceState.LOADING -> setupScreenForLoadingState()
+            ResourceState.SUCCESS -> setupScreenForSucess(data)
+            ResourceState.ERROR -> setupScreenForError(message)
+        }
+    }
+
+    private fun setupScreenForLoadingState() {
+        progress_bar.visibility = View.VISIBLE
+        data_view.visibility = View.GONE
+        empty_view.visibility = View.GONE
+        error_view.visibility = View.GONE
+    }
+
+    private fun setupScreenForSucess(it: CurrentWeatherView?) {
+        progress_bar.visibility = View.GONE
+        error_view.visibility = View.GONE
+        if (it != null) {
+            city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
+                    "${address[0].locality}, ${address[0].countryName}".capitalize()
+
+            weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
+            temp_text_view.text = it.main.temp.roundToInt().toString() + " \u2103"
+            weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
+
+            pressure_text_view.text = it.main.pressure.roundToInt().toString() + "hPa"
+            humidity_text_view.text = it.main.humidity.toString() + " %"
+            cloud_text_view.text = it.clouds.cloudiness.toString() + " %"
+
+            val tempMin = it.main.tempMin.toString() + " \u2103"
+            val tempMax = it.main.tempMax.toString() + " \u2103"
+            min_max_temp_text_view.text = "$tempMin / $tempMax"
+            wind_text_view.text = it.wind.speed.toString() + " m/s"
+            val sunrise = it.sys.sunriseTime
+            val sunset = it.sys.sunsetTime
+            val sdf = SimpleDateFormat("H:mm")
+            val sunriseTime = sdf.format(Date(sunrise * 1000))
+            val sunsetTime = sdf.format(Date(sunset * 1000))
+            sunrise_sunset_text_view.text = "$sunriseTime / $sunsetTime"
+
+            data_view.visibility = View.VISIBLE
+        } else {
+            empty_view.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setupScreenForError(message: String?) {
+        progress_bar.visibility = View.GONE
+        data_view.visibility = View.GONE
+        empty_view.visibility = View.GONE
+        error_view.visibility = View.VISIBLE
     }
 
     private fun getTodayWeatherForecast() {

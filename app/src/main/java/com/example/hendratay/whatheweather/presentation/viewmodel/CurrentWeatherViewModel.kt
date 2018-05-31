@@ -7,6 +7,8 @@ import android.util.Log
 import com.example.hendratay.whatheweather.domain.interactor.DefaultObserver
 import com.example.hendratay.whatheweather.domain.interactor.GetCurrentWeather
 import com.example.hendratay.whatheweather.domain.model.CurrentWeather
+import com.example.hendratay.whatheweather.presentation.data.Resource
+import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.model.mapper.CurrentWeatherViewMapper
 import javax.inject.Inject
@@ -15,9 +17,13 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
                                                   val currentWeatherViewMapper: CurrentWeatherViewMapper):
         ViewModel() {
 
-    private val weatherLiveData: MutableLiveData<CurrentWeatherView> = MutableLiveData()
+    private val weatherLiveData: MutableLiveData<Resource<CurrentWeatherView>> = MutableLiveData()
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
+
+    init {
+        fetchCurrentWeather()
+    }
 
     override fun onCleared() {
         getCurrentWeather.dispose()
@@ -32,7 +38,10 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
         fetchCurrentWeather()
     }
 
-    fun fetchCurrentWeather() = getCurrentWeather.execute(CurrentWeatherObserver(), GetCurrentWeather.Params.forLocation(latitude, longitude))
+    fun fetchCurrentWeather() {
+        weatherLiveData.postValue(Resource(ResourceState.LOADING, null, null))
+        getCurrentWeather.execute(CurrentWeatherObserver(), GetCurrentWeather.Params.forLocation(latitude, longitude))
+    }
 
     inner class CurrentWeatherObserver: DefaultObserver<CurrentWeather>() {
 
@@ -41,11 +50,12 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
         }
 
         override fun onNext(t: CurrentWeather) {
-            weatherLiveData.postValue(currentWeatherViewMapper.mapToView(t))
+            weatherLiveData.postValue(Resource(ResourceState.SUCCESS, currentWeatherViewMapper.mapToView(t), null))
             Log.d("Current Weather", t.toString())
         }
 
         override fun onError(e: Throwable) {
+            weatherLiveData.postValue(Resource(ResourceState.ERROR, null, e.message))
             Log.d("Current Weather", e.toString())
         }
 
