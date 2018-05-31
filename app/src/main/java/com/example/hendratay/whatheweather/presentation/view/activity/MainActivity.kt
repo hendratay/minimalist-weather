@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         setupToolbar()
         setupRecyclerView()
+        setupSwipeRefresh()
         setupEmptyErrorButtonClick()
 
         checkLocationPermission()
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest().apply {
-            interval = 1000
+            interval = 0
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         val builder = LocationSettingsRequest.Builder()
@@ -126,6 +127,7 @@ class MainActivity : AppCompatActivity() {
                     // Todo: Follow display a location addresss guide at android develoepr
                     address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                 }
+                swipe_refresh_layout.isRefreshing = false
                 stopLocationUpdates()
             }
         }
@@ -133,26 +135,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_toolbar, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId) {
-            R.id.refresh -> {
-                val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    startLocationUpdates()
-                } else {
-                    currentWeatherViewModel.setlatLng("0,0")
-                }
-                return true
-            }
-            else -> { return super.onOptionsItemSelected(item) }
-        }
     }
 
     override fun onStart() {
@@ -170,6 +152,18 @@ class MainActivity : AppCompatActivity() {
         rv_weather_forecast.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         adapter = ForecastAdapter(forecastList)
         rv_weather_forecast.adapter = adapter
+    }
+
+    private fun setupSwipeRefresh() {
+        swipe_refresh_layout.setOnRefreshListener {
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                startLocationUpdates()
+            } else {
+                currentWeatherViewModel.setlatLng("0,0")
+                swipe_refresh_layout.isRefreshing = false
+            }
+        }
     }
 
     private fun setupEmptyErrorButtonClick() {
@@ -196,6 +190,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Todo: Appbar layout text to progress
     private fun setupScreenForLoadingState() {
         progress_bar.visibility = View.VISIBLE
         data_view.visibility = View.GONE
