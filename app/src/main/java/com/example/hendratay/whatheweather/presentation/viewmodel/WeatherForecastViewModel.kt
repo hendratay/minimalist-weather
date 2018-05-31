@@ -7,6 +7,8 @@ import android.util.Log
 import com.example.hendratay.whatheweather.domain.interactor.DefaultObserver
 import com.example.hendratay.whatheweather.domain.interactor.GetWeatherForecast
 import com.example.hendratay.whatheweather.domain.model.WeatherForecast
+import com.example.hendratay.whatheweather.presentation.data.Resource
+import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.mapper.WeatherForecastViewMapper
 import com.example.hendratay.whatheweather.presentation.model.WeatherForecastView
 import javax.inject.Inject
@@ -15,7 +17,7 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
                                                    val weatherForecastViewMapper: WeatherForecastViewMapper):
         ViewModel() {
 
-    private val forecastLiveData: MutableLiveData<WeatherForecastView> = MutableLiveData()
+    private val forecastLiveData: MutableLiveData<Resource<WeatherForecastView>> = MutableLiveData()
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 
@@ -26,13 +28,16 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
 
     fun getWeatherForecast() = forecastLiveData
 
-    fun setlatLng(newLatLng: String) {
-        latitude = newLatLng.split(",")[0].toDouble()
-        longitude =  newLatLng.split(",")[1].toDouble()
+    fun setlatLng(lat: Double, lng: Double) {
+        latitude = lat
+        longitude =  lng
         fetchWeatherForecast()
     }
 
-    fun fetchWeatherForecast() = getWeatherForecast.execute(WeatherForecastObserver(), GetWeatherForecast.Params.forLocation(latitude, longitude))
+    fun fetchWeatherForecast() {
+        forecastLiveData.postValue(Resource(ResourceState.LOADING, null, null))
+        getWeatherForecast.execute(WeatherForecastObserver(), GetWeatherForecast.Params.forLocation(latitude, longitude))
+    }
 
     inner class WeatherForecastObserver: DefaultObserver<WeatherForecast>() {
 
@@ -41,11 +46,12 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
         }
 
         override fun onNext(t: WeatherForecast) {
-            forecastLiveData.postValue(weatherForecastViewMapper.mapToView(t))
+            forecastLiveData.postValue(Resource(ResourceState.SUCCESS, weatherForecastViewMapper.mapToView(t), null))
             Log.d("Weather Forecast", t.toString())
         }
 
         override fun onError(e: Throwable) {
+            forecastLiveData.postValue(Resource(ResourceState.ERROR, null, e.message))
             Log.d("Weather Forecast", e.toString())
         }
 

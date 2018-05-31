@@ -21,10 +21,6 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 
-    init {
-        fetchCurrentWeather()
-    }
-
     override fun onCleared() {
         getCurrentWeather.dispose()
         super.onCleared()
@@ -32,9 +28,9 @@ class CurrentWeatherViewModel @Inject constructor(val getCurrentWeather: GetCurr
 
     fun getCurrentWeather() = weatherLiveData
 
-    fun setlatLng(newLatLng: String) {
-        latitude = newLatLng.split(",")[0].toDouble()
-        longitude =  newLatLng.split(",")[1].toDouble()
+    fun setLatLng(lat: Double, lng: Double) {
+        latitude = lat
+        longitude =  lng
         fetchCurrentWeather()
     }
 
