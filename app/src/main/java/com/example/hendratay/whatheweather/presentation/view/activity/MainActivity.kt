@@ -156,22 +156,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupSwipeRefresh() {
         swipe_refresh_layout.setOnRefreshListener {
-            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                startLocationUpdates()
-            } else {
-                currentWeatherViewModel.setlatLng("0,0")
-                swipe_refresh_layout.isRefreshing = false
-            }
+            checkGpsEnabled()
         }
     }
 
     private fun setupEmptyErrorButtonClick() {
         empty_button.setOnClickListener {
-            startLocationUpdates()
+            checkGpsEnabled()
         }
         error_button.setOnClickListener {
+            checkGpsEnabled()
+        }
+    }
+
+    private fun checkGpsEnabled() {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             startLocationUpdates()
+        } else {
+            currentWeatherViewModel.setlatLng("0,0")
+            swipe_refresh_layout.isRefreshing = false
         }
     }
 
