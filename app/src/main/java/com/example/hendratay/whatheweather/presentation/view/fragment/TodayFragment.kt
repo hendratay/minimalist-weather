@@ -32,7 +32,6 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecas
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
-import dagger.android.AndroidInjection
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_today.*
@@ -85,7 +84,8 @@ class TodayFragment: Fragment() {
         geocoder = Geocoder(activity, Locale.getDefault())
 
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
-        weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
+        // using `activity as MainActivity` because it can share between fragment
+        weatherForecastViewModel = ViewModelProviders.of(activity as MainActivity, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
     }
 
     override fun onStart() {

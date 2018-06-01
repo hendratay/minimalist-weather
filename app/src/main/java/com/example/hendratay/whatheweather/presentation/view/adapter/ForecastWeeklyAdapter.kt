@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.model.ForecastView
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
+import kotlinx.android.synthetic.main.fragment_today.view.*
 import kotlinx.android.synthetic.main.item_forecast.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ForecastAdapter(val forecastList: List<ForecastView>):
-        RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>() {
+
+class ForecastWeeklyAdapter(val forecastList: List<ForecastView>):
+        RecyclerView.Adapter<ForecastWeeklyAdapter.ForecastViewHolder>() {
 
     override fun getItemCount() = forecastList.size
 
@@ -27,6 +29,7 @@ class ForecastAdapter(val forecastList: List<ForecastView>):
         val sdf = SimpleDateFormat("K a")
         val dateTime = sdf.format(Date(forecast.dateTime * 1000))
         holder.dateTimeTextview.text = dateTime.toLowerCase()
+
     }
 
     inner class ForecastViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
