@@ -3,11 +3,11 @@ package com.example.hendratay.whatheweather.presentation.view.activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.view.fragment.LocationFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val TAG = "MainActivity"
@@ -39,10 +39,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFragment(fragment: Fragment) {
-        if(fragment != null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .commit()
+        val newFragment: Fragment? = supportFragmentManager.findFragmentByTag(fragment::class.simpleName)
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, newFragment ?: fragment, fragment::class.simpleName)
+                .addToBackStack(null)
+                .commit()
+    }
+
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount > 1) {
+            super.onBackPressed()
+            when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+                is TodayFragment -> bottom_navigation_view.menu.getItem(0).setChecked(true)
+                is WeeklyFragment -> bottom_navigation_view.menu.getItem(1).setChecked(true)
+                is LocationFragment -> bottom_navigation_view.menu.getItem(2).setChecked(true)
+            }
+        } else {
+            finish()
         }
     }
 
