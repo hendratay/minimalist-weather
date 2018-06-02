@@ -53,9 +53,9 @@ class WeeklyFragment: Fragment() {
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(activity as MainActivity)
-        val dividerItemDecoration = DividerItemDecoration(activity, layoutManager.orientation)
+        //val dividerItemDecoration = DividerItemDecoration(activity, layoutManager.orientation)
         rv_forecast_weekly.layoutManager = layoutManager
-        rv_forecast_weekly.addItemDecoration(dividerItemDecoration)
+        //rv_forecast_weekly.addItemDecoration(dividerItemDecoration)
         adapter = ForecastWeeklyAdapter(consolidatedList)
         rv_forecast_weekly.adapter = adapter
     }
@@ -81,7 +81,7 @@ class WeeklyFragment: Fragment() {
     private fun setupRecyclerForSuccess(it: WeatherForecastView?) {
         it?.let {
             consolidatedList.clear()
-            val groupedHashMap: HashMap<String, MutableList<ForecastView>> = groupDataIntoHashMap(it.forecastList.toMutableList())
+            val groupedHashMap: Map<String, MutableList<ForecastView>> = groupDataIntoHashMap(it.forecastList.toMutableList())
             for(forecastDate: String in groupedHashMap.keys) {
                 val dateItem = DateItem(forecastDate)
                 consolidatedList.add(dateItem)
@@ -97,10 +97,10 @@ class WeeklyFragment: Fragment() {
     private fun setupRecylerForError(message: String?) {
     }
 
-    private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): HashMap<String, MutableList<ForecastView>> {
+    private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): Map<String, MutableList<ForecastView>> {
         val groupedHashMap: HashMap<String, MutableList<ForecastView>> = HashMap()
         for(forecastView: ForecastView in forecastList) {
-            val sdf = SimpleDateFormat("EEEE, d MMMM y")
+            val sdf = SimpleDateFormat("dd MMMM y, EEEE")
             val date = sdf.format(Date(forecastView.dateTime * 1000))
             if(groupedHashMap.containsKey(date)) {
                 groupedHashMap.get(date)?.add(forecastView)
@@ -110,7 +110,7 @@ class WeeklyFragment: Fragment() {
                 groupedHashMap.put(date, list)
             }
         }
-        return groupedHashMap
+        return groupedHashMap.toList().sortedBy { (key, _) -> key }.toMap()
     }
 
 }

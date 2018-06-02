@@ -102,7 +102,7 @@ class TodayFragment: Fragment() {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest().apply {
-            interval = 0
+            interval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         val builder = LocationSettingsRequest.Builder()
@@ -146,6 +146,7 @@ class TodayFragment: Fragment() {
 
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
+        Log.d(TAG, "stopped")
     }
 
     private fun setupRecyclerView() {
