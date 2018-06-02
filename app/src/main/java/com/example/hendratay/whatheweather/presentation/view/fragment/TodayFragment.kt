@@ -40,6 +40,8 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+// Todo: onActivityResult for finish if permission is not allowed
+// Todo: move locatin request and permission check to activity
 const val TAG = "TodayFragment"
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
@@ -186,7 +188,8 @@ class TodayFragment: Fragment() {
 
     private fun handleCurrentWeatherViewState(resoureState: ResourceState, data: CurrentWeatherView?, message: String?) {
         when(resoureState) {
-            ResourceState.LOADING -> setupScreenForLoadingState()
+            // because the data is small, so we remove the loading state
+            //ResourceState.LOADING -> setupScreenForLoadingState()
             ResourceState.SUCCESS -> setupScreenForSuscess(data)
             ResourceState.ERROR -> setupScreenForError(message)
         }

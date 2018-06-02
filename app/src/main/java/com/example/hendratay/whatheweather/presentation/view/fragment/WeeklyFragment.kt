@@ -4,15 +4,17 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
-import com.example.hendratay.whatheweather.presentation.model.ForecastView
-import com.example.hendratay.whatheweather.presentation.model.WeatherForecastView
+import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastWeeklyAdapter
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
@@ -29,7 +31,7 @@ class WeeklyFragment: Fragment() {
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
 
     private lateinit var adapter: ForecastWeeklyAdapter
-    private var forecastList: MutableList<ForecastView> = ArrayList()
+    private var consolidatedList: MutableList<ListItem> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_weekly, container, false)
@@ -50,8 +52,11 @@ class WeeklyFragment: Fragment() {
     }
 
     private fun setupRecyclerView() {
-        rv_forecast_weekly.layoutManager = GridLayoutManager(activity as MainActivity, 4)
-        adapter = ForecastWeeklyAdapter(forecastList)
+        val layoutManager = LinearLayoutManager(activity as MainActivity)
+        val dividerItemDecoration = DividerItemDecoration(activity, layoutManager.orientation)
+        rv_forecast_weekly.layoutManager = layoutManager
+        rv_forecast_weekly.addItemDecoration(dividerItemDecoration)
+        adapter = ForecastWeeklyAdapter(consolidatedList)
         rv_forecast_weekly.adapter = adapter
     }
 
@@ -75,12 +80,15 @@ class WeeklyFragment: Fragment() {
 
     private fun setupRecyclerForSuccess(it: WeatherForecastView?) {
         it?.let {
-            forecastList.clear()
-            it.forecastList.forEach {
-                val sdf = SimpleDateFormat("dd MM yyyy")
-                val dateTime = sdf.format(Date(it.dateTime * 1000))
-                val currentDateTime = sdf.format(Calendar.getInstance().time)
-                forecastList.add(it)
+            consolidatedList.clear()
+            val groupedHashMap: HashMap<String, MutableList<ForecastView>> = groupDataIntoHashMap(it.forecastList.toMutableList())
+            for(forecastDate: String in groupedHashMap.keys) {
+                val dateItem = DateItem(forecastDate)
+                consolidatedList.add(dateItem)
+                for (forecast: ForecastView in groupedHashMap.get(forecastDate)!!) {
+                    val generalItem = GeneralItem(forecast)
+                    consolidatedList.add(generalItem)
+                }
             }
             adapter.notifyDataSetChanged()
         }
@@ -89,6 +97,21 @@ class WeeklyFragment: Fragment() {
     private fun setupRecylerForError(message: String?) {
     }
 
+    private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): HashMap<String, MutableList<ForecastView>> {
+        val groupedHashMap: HashMap<String, MutableList<ForecastView>> = HashMap()
+        for(forecastView: ForecastView in forecastList) {
+            val sdf = SimpleDateFormat("EEEE, d MMMM y")
+            val date = sdf.format(Date(forecastView.dateTime * 1000))
+            if(groupedHashMap.containsKey(date)) {
+                groupedHashMap.get(date)?.add(forecastView)
+            } else {
+                val list: MutableList<ForecastView> = ArrayList()
+                list.add(forecastView)
+                groupedHashMap.put(date, list)
+            }
+        }
+        return groupedHashMap
+    }
 
 }
 

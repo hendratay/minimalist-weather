@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_item_forecast"
+    android:orientation="horizontal"
+    android:background="@android:color/background_light"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/wi_cloudy"
+            android:id="@+id/weekly_weather_icon_image_view"
+            android:layout_gravity="center"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <TextView
+            tools:text="Clear Sky"
+            android:id="@+id/weekly_weather_desc_text_view"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5" />
+
+        <TextView
+            tools:text="30 \u2103"
+            android:id="@+id/weekly_temp_text_view"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+</LinearLayout>
