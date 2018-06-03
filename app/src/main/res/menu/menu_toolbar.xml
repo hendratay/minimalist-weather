@@ -6,7 +6,6 @@
         android:id="@+id/search"
         android:title="@string/search"
         android:icon="@drawable/places_ic_search"
-        app:showAsAction="always"
-        app:actionViewClass="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
+        app:showAsAction="always" />
 
 </menu>
