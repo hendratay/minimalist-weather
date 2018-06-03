@@ -232,6 +232,9 @@ class TodayFragment: Fragment() {
 
             activity?.city_name_text_view?.visibility = View.VISIBLE
             data_view.visibility = View.VISIBLE
+            (activity as MainActivity).supportActionBar?.show()
+            activity?.city_name_text_view?.visibility = View.VISIBLE
+            activity?.weekly?.visibility = View.VISIBLE
         } else {
             empty_view.visibility = View.VISIBLE
         }
@@ -240,9 +243,11 @@ class TodayFragment: Fragment() {
     private fun setupScreenForError(message: String?) {
         progress_bar.visibility = View.GONE
         data_view.visibility = View.GONE
-        activity?.city_name_text_view?.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.VISIBLE
+        (activity as MainActivity).supportActionBar?.hide()
+        activity?.city_name_text_view?.visibility = View.GONE
+        activity?.weekly?.visibility = View.GONE
     }
 
     private fun getTodayWeatherForecast() {

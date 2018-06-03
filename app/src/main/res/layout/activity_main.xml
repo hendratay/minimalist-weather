@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:background="@android:color/background_light"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" >
+            android:layout_height="?android:attr/actionBarSize" >
 
             <TextView
                 android:id="@+id/city_name_text_view"
@@ -33,17 +33,14 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
+    <Button
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:id="@+id/weekly"
+        android:text="@string/show_weekly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@android:color/white"
-        app:menu="@menu/menu_bottom_navigation">
-
-    </android.support.design.widget.BottomNavigationView>
+        android:layout_gravity="bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>
