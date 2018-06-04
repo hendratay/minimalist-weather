@@ -99,8 +99,7 @@ class TodayFragment: Fragment() {
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             (activity as MainActivity).startLocationUpdates()
         } else {
-            currentWeatherViewModel.setLatLng(0.0, 0.0)
-            swipe_refresh_layout.isRefreshing = false
+            (activity as MainActivity).createLocationRequest()
         }
     }
 
@@ -121,11 +120,6 @@ class TodayFragment: Fragment() {
     }
 
     private fun setupScreenForLoadingState() {
-        progress_bar.visibility = View.VISIBLE
-        data_view.visibility = View.GONE
-        activity?.city_name_text_view?.visibility = View.GONE
-        empty_view.visibility = View.GONE
-        error_view.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")
@@ -169,6 +163,7 @@ class TodayFragment: Fragment() {
         (activity as MainActivity).supportActionBar?.hide()
         activity?.city_name_text_view?.visibility = View.GONE
         activity?.weekly?.visibility = View.GONE
+        swipe_refresh_layout.isRefreshing = false
         Log.e(TAG, message)
     }
 

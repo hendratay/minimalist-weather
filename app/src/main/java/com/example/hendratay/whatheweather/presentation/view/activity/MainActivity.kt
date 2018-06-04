@@ -8,7 +8,10 @@ import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -38,7 +41,6 @@ import java.io.IOException
 import java.util.*
 import javax.inject.Inject
 
-// Todo: onActivityResult for finish if permission is not allowed
 const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
@@ -65,13 +67,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        checkLocationPermission()
         createLocationRequest()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         // initialize location callback first for pass into requestlocationupdates at `startLocationUpdates`
         receiveLocationUpdates()
-        startLocationUpdates()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geocoder = Geocoder(this, Locale.getDefault())
+        startLocationUpdates()
 
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory)[CurrentWeatherViewModel::class.java]
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory)[WeatherForecastViewModel::class.java]
@@ -100,29 +101,54 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            when(resultCode) {
-                Activity.RESULT_OK -> {
-                    val place: Place = PlaceAutocomplete.getPlace(this, data)
-                    currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
-                    weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
-                    // Todo: Follow display a location address guide at android developer
-                    try {
-                        address = geocoder.getFromLocation(place.latLng.latitude, place.latLng.longitude, 1)
-                        city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
-                                "${address[0].locality}, ${address[0].countryName}".capitalize()
-                    } catch (e: IOException) {
-                        city_name_text_view.text = "${place.address}"
+        when(requestCode) {
+            PLACE_AUTOCOMPLETE_REQUEST_CODE -> {
+                when(resultCode) {
+                    Activity.RESULT_OK -> {
+                        val place: Place = PlaceAutocomplete.getPlace(this, data)
+                        currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
+                        weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
+                        // Todo: Follow display a location address guide at android developer
+                        try {
+                            address = geocoder.getFromLocation(place.latLng.latitude, place.latLng.longitude, 1)
+                            city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
+                                    "${address[0].locality}, ${address[0].countryName}".capitalize()
+                        } catch (e: IOException) {
+                            city_name_text_view.text = "${place.address}"
+                        }
+                    }
+                    Activity.RESULT_CANCELED -> {
+                    }
+                    PlaceAutocomplete.RESULT_ERROR -> {
+                        val status: Status = PlaceAutocomplete.getStatus(this, data)
+                        Log.i(TAG, status.statusMessage)
                     }
                 }
-                Activity.RESULT_CANCELED -> {
-                }
-                PlaceAutocomplete.RESULT_ERROR -> {
-                    val status: Status = PlaceAutocomplete.getStatus(this, data)
-                    Log.i(TAG, status.toString())
+            }
+            REQUEST_CHECK_SETTINGS -> {
+                when(resultCode) {
+                    Activity.RESULT_OK -> startLocationUpdates()
+                    Activity.RESULT_CANCELED -> {
+                        currentWeatherViewModel.setLatLng(0.0, 0.0)
+                        weatherForecastViewModel.setlatLng(0.0, 0.0)
+                    }
                 }
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when(requestCode) {
+            REQUEST_ACCESS_FINE_LOCATION -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLocationUpdates()
+                } else {
+                    currentWeatherViewModel.setLatLng(0.0, 0.0)
+                    weatherForecastViewModel.setlatLng(0.0, 0.0)
+                }
+            }
+        }
+
     }
 
     override fun onBackPressed() {
@@ -178,11 +204,26 @@ class MainActivity : AppCompatActivity() {
                 .commit()
     }
 
-    private fun checkLocationPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+    private fun requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+            Snackbar.make(coordinator_layout, "Please Enable Location Permission", Snackbar.LENGTH_LONG)
+                    .setAction("Enable") {
+                        val intent = Intent()
+                        val uri = Uri.fromParts("package", packageName, null)
+                        intent.apply {
+                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                            data = uri
+                        }
+                        startActivity(intent)
+                    }
+                    .show()
+        }
     }
 
-    private fun createLocationRequest() {
+    fun createLocationRequest() {
         locationRequest = LocationRequest().apply {
             interval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -206,6 +247,8 @@ class MainActivity : AppCompatActivity() {
         if(ActivityCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+        } else {
+            requestLocationPermission()
         }
     }
 
