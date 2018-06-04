@@ -4,8 +4,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,6 +24,10 @@ import java.util.*
 import javax.inject.Inject
 
 class WeeklyFragment: Fragment() {
+
+    companion object {
+        private val TAG = WeeklyFragment::class.simpleName
+    }
 
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
@@ -67,11 +69,11 @@ class WeeklyFragment: Fragment() {
                 })
     }
 
-    private fun handleWeatherForecastState(resoureState: ResourceState, data: WeatherForecastView?, message: String?) {
-        when(resoureState) {
+    private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?, message: String?) {
+        when(resourceState) {
             ResourceState.LOADING -> setupRecyclerForLoadingState()
             ResourceState.SUCCESS -> setupRecyclerForSuccess(data)
-            ResourceState.ERROR -> setupRecylerForError(message)
+            ResourceState.ERROR -> setupRecyclerForError(message)
         }
     }
 
@@ -85,7 +87,7 @@ class WeeklyFragment: Fragment() {
             for(forecastDate: String in groupedHashMap.keys) {
                 val dateItem = DateItem(forecastDate)
                 consolidatedList.add(dateItem)
-                for (forecast: ForecastView in groupedHashMap.get(forecastDate)!!) {
+                for (forecast: ForecastView in groupedHashMap[forecastDate]!!) {
                     val generalItem = GeneralItem(forecast)
                     consolidatedList.add(generalItem)
                 }
@@ -94,20 +96,21 @@ class WeeklyFragment: Fragment() {
         }
     }
 
-    private fun setupRecylerForError(message: String?) {
+    private fun setupRecyclerForError(message: String?) {
+        Log.e(TAG, message)
     }
 
     private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): Map<String, MutableList<ForecastView>> {
         val groupedHashMap: HashMap<String, MutableList<ForecastView>> = HashMap()
         for(forecastView: ForecastView in forecastList) {
-            val sdf = SimpleDateFormat("dd MMMM y, EEEE")
+            val sdf = SimpleDateFormat("dd MMM y, EEE", Locale.getDefault())
             val date = sdf.format(Date(forecastView.dateTime * 1000))
             if(groupedHashMap.containsKey(date)) {
-                groupedHashMap.get(date)?.add(forecastView)
+                groupedHashMap[date]?.add(forecastView)
             } else {
                 val list: MutableList<ForecastView> = ArrayList()
                 list.add(forecastView)
-                groupedHashMap.put(date, list)
+                groupedHashMap[date] = list
             }
         }
         return groupedHashMap.toList().sortedBy { (key, _) -> key }.toMap()

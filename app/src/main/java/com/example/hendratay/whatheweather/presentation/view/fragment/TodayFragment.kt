@@ -1,5 +1,6 @@
 package com.example.hendratay.whatheweather.presentation.view.fragment
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -7,11 +8,11 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.hendratay.whatheweather.R
-import com.example.hendratay.whatheweather.domain.model.Main
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
@@ -33,6 +34,10 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class TodayFragment: Fragment() {
+
+    companion object {
+        private val TAG = TodayFragment::class.simpleName
+    }
 
     @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
@@ -93,7 +98,6 @@ class TodayFragment: Fragment() {
         val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             (activity as MainActivity).startLocationUpdates()
-            swipe_refresh_layout.isRefreshing = false
         } else {
             currentWeatherViewModel.setLatLng(0.0, 0.0)
             swipe_refresh_layout.isRefreshing = false
@@ -107,11 +111,11 @@ class TodayFragment: Fragment() {
                 })
     }
 
-    private fun handleCurrentWeatherViewState(resoureState: ResourceState, data: CurrentWeatherView?, message: String?) {
-        when(resoureState) {
+    private fun handleCurrentWeatherViewState(resourceState: ResourceState, data: CurrentWeatherView?, message: String?) {
+        when(resourceState) {
             // because the data is small, so we remove the loading state
-            //ResourceState.LOADING -> setupScreenForLoadingState()
-            ResourceState.SUCCESS -> setupScreenForSuscess(data)
+            ResourceState.LOADING -> setupScreenForLoadingState()
+            ResourceState.SUCCESS -> setupScreenForSuccess(data)
             ResourceState.ERROR -> setupScreenForError(message)
         }
     }
@@ -124,25 +128,24 @@ class TodayFragment: Fragment() {
         error_view.visibility = View.GONE
     }
 
-    private fun setupScreenForSuscess(it: CurrentWeatherView?) {
+    @SuppressLint("SetTextI18n")
+    private fun setupScreenForSuccess(it: CurrentWeatherView?) {
         progress_bar.visibility = View.GONE
         error_view.visibility = View.GONE
         if (it != null) {
             weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
             temp_text_view.text = it.main.temp.roundToInt().toString() + " \u2103"
             weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
-
-            pressure_text_view.text = it.main.pressure.roundToInt().toString() + "hPa"
-            humidity_text_view.text = it.main.humidity.toString() + " %"
+            pressure_text_view.text = "${it.main.pressure.roundToInt()} hPa"
+            humidity_text_view.text = "${it.main.humidity}  %"
             cloud_text_view.text = it.clouds.cloudiness.toString() + " %"
-
             val tempMin = it.main.tempMin.toString() + " \u2103"
             val tempMax = it.main.tempMax.toString() + " \u2103"
             min_max_temp_text_view.text = "$tempMin / $tempMax"
             wind_text_view.text = it.wind.speed.toString() + " m/s"
             val sunrise = it.sys.sunriseTime
             val sunset = it.sys.sunsetTime
-            val sdf = SimpleDateFormat("H:mm")
+            val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
             val sunriseTime = sdf.format(Date(sunrise * 1000))
             val sunsetTime = sdf.format(Date(sunset * 1000))
             sunrise_sunset_text_view.text = "$sunriseTime / $sunsetTime"
@@ -152,6 +155,7 @@ class TodayFragment: Fragment() {
             (activity as MainActivity).supportActionBar?.show()
             activity?.city_name_text_view?.visibility = View.VISIBLE
             activity?.weekly?.visibility = View.VISIBLE
+            swipe_refresh_layout.isRefreshing = false
         } else {
             empty_view.visibility = View.VISIBLE
         }
@@ -165,6 +169,7 @@ class TodayFragment: Fragment() {
         (activity as MainActivity).supportActionBar?.hide()
         activity?.city_name_text_view?.visibility = View.GONE
         activity?.weekly?.visibility = View.GONE
+        Log.e(TAG, message)
     }
 
     private fun getTodayWeatherForecast() {
@@ -174,11 +179,11 @@ class TodayFragment: Fragment() {
                 })
     }
 
-    private fun handleWeatherForecastState(resoureState: ResourceState, data: WeatherForecastView?, message: String?) {
-        when(resoureState) {
+    private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?, message: String?) {
+        when(resourceState) {
             ResourceState.LOADING -> setupRecyclerForLoadingState()
             ResourceState.SUCCESS -> setupRecyclerForSuccess(data)
-            ResourceState.ERROR -> setupRecylerForError(message)
+            ResourceState.ERROR -> setupRecyclerForError(message)
         }
     }
 
@@ -189,7 +194,7 @@ class TodayFragment: Fragment() {
         it?.let {
             forecastList.clear()
             it.forecastList.forEach {
-                val sdf = SimpleDateFormat("dd MM yyyy")
+                val sdf = SimpleDateFormat("dd MM yyyy", Locale.getDefault())
                 val dateTime = sdf.format(Date(it.dateTime * 1000))
                 val currentDateTime = sdf.format(Calendar.getInstance().time)
                 if (dateTime == currentDateTime) {
@@ -200,7 +205,8 @@ class TodayFragment: Fragment() {
         }
     }
 
-    private fun setupRecylerForError(message: String?) {
+    private fun setupRecyclerForError(message: String?) {
+        Log.e(TAG, message)
     }
 
 }

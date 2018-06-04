@@ -1,5 +1,6 @@
 package com.example.hendratay.whatheweather.presentation.view.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -33,17 +34,19 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.tasks.Task
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_today.*
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
 
 // Todo: onActivityResult for finish if permission is not allowed
-const val TAG = "MainActivity"
 const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private val TAG = MainActivity::class.simpleName
+    }
 
     @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
@@ -95,6 +98,7 @@ class MainActivity : AppCompatActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             when(resultCode) {
@@ -102,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                     val place: Place = PlaceAutocomplete.getPlace(this, data)
                     currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                     weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
-                    // Todo: Follow display a location addresss guide at android develoepr
+                    // Todo: Follow display a location address guide at android developer
                     try {
                         address = geocoder.getFromLocation(place.latLng.latitude, place.latLng.longitude, 1)
                         city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
@@ -207,12 +211,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun receiveLocationUpdates() {
         locationCallback = object : LocationCallback() {
+            @SuppressLint("SetTextI18n")
             override fun onLocationResult(p0: LocationResult?) {
                 p0 ?: return
                 for(location in p0.locations) {
                     currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
                     weatherForecastViewModel.setlatLng(location.latitude, location.longitude)
-                    // Todo: Follow display a location addresss guide at android develoepr
+                    // Todo: Follow display a location address guide at android developer
                     address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                 }
                 city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
