@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
-    // Todo: follow display a location address guide
     private lateinit var geocoder: Geocoder
     private var address: List<Address> = listOf()
 
@@ -109,11 +108,13 @@ class MainActivity : AppCompatActivity() {
                         val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
-                        // Todo: Follow display a location address guide at android developer
                         try {
                             address = geocoder.getFromLocation(place.latLng.latitude, place.latLng.longitude, 1)
-                            city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
-                                    "${address[0].locality}, ${address[0].countryName}".capitalize()
+                            val roadName = address[0].thoroughfare ?: ""
+                            val locality = address[0].locality ?: ""
+                            val countryName = address[0].countryName ?: ""
+                            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
+                                    "$roadName".capitalize()
                         } catch (e: Exception) {
                             city_name_text_view.text = "${place.address}"
                         }
@@ -252,11 +253,17 @@ class MainActivity : AppCompatActivity() {
                 for(location in p0.locations) {
                     currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
                     weatherForecastViewModel.setlatLng(location.latitude, location.longitude)
-                    // Todo: Follow display a location address guide at android developer
-                    address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    try {
+                        address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                        val roadName = address[0].thoroughfare ?: ""
+                        val locality = address[0].locality ?: ""
+                        val countryName = address[0].countryName ?: ""
+                        city_name_text_view.text = "$locality, $countryName \n".capitalize() +
+                                "$roadName".capitalize()
+                    } catch (e: Exception) {
+                        city_name_text_view.text = "No Address"
+                    }
                 }
-                city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
-                        "${address[0].locality}, ${address[0].countryName}".capitalize()
                 stopLocationUpdates()
             }
         }

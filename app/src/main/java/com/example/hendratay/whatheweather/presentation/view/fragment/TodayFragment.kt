@@ -122,6 +122,7 @@ class TodayFragment: Fragment() {
 
     private fun setupScreenForLoadingState() {
         progress_bar.visibility = if(swipe_refresh_layout.isRefreshing) View.GONE else View.VISIBLE
+        swipe_refresh_layout.isEnabled = progress_bar.visibility == View.GONE
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.GONE
@@ -131,6 +132,7 @@ class TodayFragment: Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setupScreenForSuccess(it: CurrentWeatherView?) {
+        swipe_refresh_layout.isEnabled = true
         progress_bar.visibility = View.GONE
         error_view.visibility = View.GONE
         if (it != null) {
@@ -163,6 +165,7 @@ class TodayFragment: Fragment() {
     }
 
     private fun setupScreenForError(message: String?) {
+        swipe_refresh_layout.isEnabled = false
         progress_bar.visibility = View.GONE
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
