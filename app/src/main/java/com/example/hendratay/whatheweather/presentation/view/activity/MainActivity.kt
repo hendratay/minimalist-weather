@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                             address = geocoder.getFromLocation(place.latLng.latitude, place.latLng.longitude, 1)
                             city_name_text_view.text = "${address[0].thoroughfare} \n".capitalize() +
                                     "${address[0].locality}, ${address[0].countryName}".capitalize()
-                        } catch (e: IOException) {
+                        } catch (e: Exception) {
                             city_name_text_view.text = "${place.address}"
                         }
                     }
@@ -126,8 +126,8 @@ class MainActivity : AppCompatActivity() {
                 when(resultCode) {
                     Activity.RESULT_OK -> startLocationUpdates()
                     Activity.RESULT_CANCELED -> {
-                        currentWeatherViewModel.setLatLng(0.0, 0.0)
-                        weatherForecastViewModel.setlatLng(0.0, 0.0)
+                        currentWeatherViewModel.setLatLng(null,null)
+                        weatherForecastViewModel.setlatLng(null, null)
                     }
                 }
             }
@@ -140,8 +140,8 @@ class MainActivity : AppCompatActivity() {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationUpdates()
                 } else {
-                    currentWeatherViewModel.setLatLng(0.0, 0.0)
-                    weatherForecastViewModel.setlatLng(0.0, 0.0)
+                    currentWeatherViewModel.setLatLng(null, null)
+                    weatherForecastViewModel.setlatLng(null, null)
                 }
             }
         }
