@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
-        android:title="@string/search"
-        android:icon="@drawable/places_ic_search"
+        android:id="@+id/location"
+        android:title="@string/location"
+        android:icon="@drawable/ic_location_on_black_24dp"
         app:showAsAction="always" />
 
 </menu>

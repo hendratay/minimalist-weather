@@ -85,12 +85,14 @@ class TodayFragment: Fragment() {
     private fun setupEmptyErrorButtonClick() {
         empty_button.setOnClickListener {
             checkGpsEnabled()
+            setupScreenForLoadingState()
         }
         error_button.setOnClickListener {
             checkGpsEnabled()
+            setupScreenForLoadingState()
         }
-        search_button.setOnClickListener {
-            (activity as MainActivity).autoCompleteIntent()
+        location_button.setOnClickListener {
+            (activity as MainActivity).placePickerIntent()
         }
     }
 
@@ -112,7 +114,6 @@ class TodayFragment: Fragment() {
 
     private fun handleCurrentWeatherViewState(resourceState: ResourceState, data: CurrentWeatherView?, message: String?) {
         when(resourceState) {
-            // because the data is small, so we remove the loading state
             ResourceState.LOADING -> setupScreenForLoadingState()
             ResourceState.SUCCESS -> setupScreenForSuccess(data)
             ResourceState.ERROR -> setupScreenForError(message)
@@ -120,6 +121,12 @@ class TodayFragment: Fragment() {
     }
 
     private fun setupScreenForLoadingState() {
+        progress_bar.visibility = if(swipe_refresh_layout.isRefreshing) View.GONE else View.VISIBLE
+        data_view.visibility = View.GONE
+        empty_view.visibility = View.GONE
+        error_view.visibility = View.GONE
+        activity?.city_name_text_view?.visibility = View.GONE
+        activity?.weekly?.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")

@@ -27,13 +27,12 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeather
 import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.*
 import com.google.android.gms.location.places.Place
-import com.google.android.gms.location.places.ui.PlaceAutocomplete
+import com.google.android.gms.location.places.ui.PlacePicker
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.Task
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
@@ -41,7 +40,9 @@ import java.io.IOException
 import java.util.*
 import javax.inject.Inject
 
-const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
+// Todo: Internet connection check
+// Todo: disable permission snackbar on first time launch
+const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
 class MainActivity : AppCompatActivity() {
@@ -92,8 +93,8 @@ class MainActivity : AppCompatActivity() {
             onBackPressed()
             true
         }
-        R.id.search -> {
-            autoCompleteIntent()
+        R.id.location -> {
+            placePickerIntent()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -102,10 +103,10 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode) {
-            PLACE_AUTOCOMPLETE_REQUEST_CODE -> {
+            PLACE_PICKER_REQUEST_CODE -> {
                 when(resultCode) {
                     Activity.RESULT_OK -> {
-                        val place: Place = PlaceAutocomplete.getPlace(this, data)
+                        val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
                         // Todo: Follow display a location address guide at android developer
@@ -118,10 +119,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     Activity.RESULT_CANCELED -> {
-                    }
-                    PlaceAutocomplete.RESULT_ERROR -> {
-                        val status: Status = PlaceAutocomplete.getStatus(this, data)
-                        Log.i(TAG, status.statusMessage)
                     }
                 }
             }
@@ -183,15 +180,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun autoCompleteIntent() {
-        try {
-            val intent: Intent = PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this)
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
-        } catch (e: GooglePlayServicesRepairableException) {
-            Log.e(TAG, e.message)
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            Log.e(TAG, e.message)
-        }
+    fun placePickerIntent() {
+        // Todo: setlatlngbounds
+        val builder = PlacePicker.IntentBuilder()
+        startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST_CODE)
     }
 
     private fun loadFragment(fragment: Fragment) {

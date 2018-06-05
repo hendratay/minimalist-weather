@@ -6,6 +6,6 @@
         Please turn on location if is not turn on</string>
     <string name="empty_button">Check again</string>
     <string name="error_button">Try again</string>
-    <string name="search">Search</string>
     <string name="show_weekly">show weekly</string>
+    <string name="location">Location</string>
 </resources>
