@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">Whathe Weather</string>
     <string name="refresh">Refresh</string>
+    <string name="location">Location</string>
+    <string name="show_weekly">show weekly</string>
     <string name="empty_text_view">Oops, there is no result to display</string>
     <string name="error_text_view">Oops, there was an error fetching the data \n
         Please turn on location if is not turn on</string>
     <string name="empty_button">Check again</string>
     <string name="error_button">Try again</string>
-    <string name="show_weekly">show weekly</string>
-    <string name="location">Location</string>
+    <string name="saved_latitude">Saved Latitude</string>
+    <string name="saved_longitude">Saved Longitude</string>
 </resources>
