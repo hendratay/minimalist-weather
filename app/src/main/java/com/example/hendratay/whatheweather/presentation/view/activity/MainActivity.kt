@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -42,7 +43,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import javax.inject.Inject
 
-// Todo: Internet connection check
 const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
@@ -72,16 +72,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         sharedPref = getPreferences(Context.MODE_PRIVATE)
-
-        createLocationRequest()
-        // initialize location callback first for pass into requestlocationupdates at `startLocationUpdates`
-        receiveLocationUpdates()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        geocoder = Geocoder(this, Locale.getDefault())
-        startLocationUpdates()
-
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory)[CurrentWeatherViewModel::class.java]
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory)[WeatherForecastViewModel::class.java]
+
+        if(connectivityStatus()) {
+            createLocationRequest()
+            // initialize location callback first for pass into requestlocationupdates at `startLocationUpdates`
+            receiveLocationUpdates()
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            geocoder = Geocoder(this, Locale.getDefault())
+            startLocationUpdates()
+        } else {
+            currentWeatherViewModel.setLatLng(null, null)
+            weatherForecastViewModel.setLatLng(null, null)
+        }
 
         setupToolbar()
         setupWeeklyButton()
@@ -113,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_OK -> {
                         val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
-                        weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
+                        weatherForecastViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         setupToolbarTitle(place.latLng.latitude, place.latLng.longitude)
                         saveLocation(place.latLng.latitude,place.latLng.longitude)
                     }
@@ -127,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_CANCELED -> {
                         getSavedLocation()
                         currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
-                        weatherForecastViewModel.setlatLng(savedLatitude, savedLongitude)
+                        weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
                         setupToolbarTitle(savedLatitude, savedLongitude)
                     }
                 }
@@ -143,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     getSavedLocation()
                     currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
-                    weatherForecastViewModel.setlatLng(savedLatitude, savedLongitude)
+                    weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
                     setupToolbarTitle(savedLatitude, savedLongitude)
                 }
             }
@@ -173,6 +177,21 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         // remove App Title (Whathe Weather)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setupToolbarTitle(lat: Double?, lng: Double?) {
+        lat ?: return; lng ?: return
+        try {
+            address = geocoder.getFromLocation(lat, lng, 1)
+            val roadName = address[0].thoroughfare ?: ""
+            val locality = address[0].locality ?: ""
+            val countryName = address[0].countryName ?: ""
+            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
+                    roadName.capitalize()
+        } catch (e: Exception) {
+            city_name_text_view.text = "No Address"
+        }
     }
 
     private fun setupWeeklyButton() {
@@ -268,7 +287,7 @@ class MainActivity : AppCompatActivity() {
                 p0 ?: return
                 for(location in p0.locations) {
                     currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
-                    weatherForecastViewModel.setlatLng(location.latitude, location.longitude)
+                    weatherForecastViewModel.setLatLng(location.latitude, location.longitude)
                     setupToolbarTitle(location.latitude, location.longitude)
                     saveLocation(location.latitude,location.longitude)
                 }
@@ -279,6 +298,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    fun connectivityStatus(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        return activeNetwork?.isConnectedOrConnecting ?: false
     }
 
     private fun saveLocation(lat: Double, lng: Double) {
@@ -304,21 +329,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun getPermissionCheck(): Boolean {
         return sharedPref.getBoolean(getString(R.string.saved_permission), true)
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupToolbarTitle(lat: Double?, lng: Double?) {
-        lat ?: return; lng ?: return
-        try {
-            address = geocoder.getFromLocation(lat, lng, 1)
-            val roadName = address[0].thoroughfare ?: ""
-            val locality = address[0].locality ?: ""
-            val countryName = address[0].countryName ?: ""
-            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
-                    roadName.capitalize()
-        } catch (e: Exception) {
-            city_name_text_view.text = "No Address"
-        }
     }
 
 }
