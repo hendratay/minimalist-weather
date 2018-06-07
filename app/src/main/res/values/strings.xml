@@ -10,4 +10,5 @@
     <string name="error_button">Try again</string>
     <string name="saved_latitude">Saved Latitude</string>
     <string name="saved_longitude">Saved Longitude</string>
+    <string name="saved_permission">Saved Permission</string>
 </resources>

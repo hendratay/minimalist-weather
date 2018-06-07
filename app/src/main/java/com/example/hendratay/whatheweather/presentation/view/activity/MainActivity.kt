@@ -43,7 +43,6 @@ import java.util.*
 import javax.inject.Inject
 
 // Todo: Internet connection check
-// Todo: disable permission snackbar on first time launch
 const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
@@ -73,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         sharedPref = getPreferences(Context.MODE_PRIVATE)
-        getSavedLocation()
 
         createLocationRequest()
         // initialize location callback first for pass into requestlocationupdates at `startLocationUpdates`
@@ -88,13 +86,6 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
         setupWeeklyButton()
         loadFragment(TodayFragment())
-    }
-
-    private fun getSavedLocation() {
-        savedLatitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_latitude), 0))
-        savedLongitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_longitude), 0))
-        if(savedLatitude == 0.0) savedLatitude = null
-        if(savedLongitude == 0.0) savedLongitude = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -121,7 +112,6 @@ class MainActivity : AppCompatActivity() {
                 when(resultCode) {
                     Activity.RESULT_OK -> {
                         val place: Place = PlacePicker.getPlace(this, data)
-                        Log.d(TAG, PlacePicker.getLatLngBounds(data).toString())
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
                         setupToolbarTitle(place.latLng.latitude, place.latLng.longitude)
@@ -135,6 +125,7 @@ class MainActivity : AppCompatActivity() {
                 when(resultCode) {
                     Activity.RESULT_OK -> startLocationUpdates()
                     Activity.RESULT_CANCELED -> {
+                        getSavedLocation()
                         currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                         weatherForecastViewModel.setlatLng(savedLatitude, savedLongitude)
                         setupToolbarTitle(savedLatitude, savedLongitude)
@@ -150,6 +141,7 @@ class MainActivity : AppCompatActivity() {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationUpdates()
                 } else {
+                    getSavedLocation()
                     currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                     weatherForecastViewModel.setlatLng(savedLatitude, savedLongitude)
                     setupToolbarTitle(savedLatitude, savedLongitude)
@@ -220,18 +212,23 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
-            Snackbar.make(coordinator_layout, "Please Enable Location Permission", Snackbar.LENGTH_LONG)
-                    .setAction("Enable") {
-                        val intent = Intent()
-                        val uri = Uri.fromParts("package", packageName, null)
-                        intent.apply {
-                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            data = uri
+            if(getPermissionCheck()) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+                savePermissionCheck()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+                Snackbar.make(coordinator_layout, "Please Enable Location Permission", Snackbar.LENGTH_LONG)
+                        .setAction("Enable") {
+                            val intent = Intent()
+                            val uri = Uri.fromParts("package", packageName, null)
+                            intent.apply {
+                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                data = uri
+                            }
+                            startActivity(intent)
                         }
-                        startActivity(intent)
-                    }
-                    .show()
+                        .show()
+            }
         }
     }
 
@@ -290,6 +287,23 @@ class MainActivity : AppCompatActivity() {
             putLong(getString(R.string.saved_longitude), java.lang.Double.doubleToRawLongBits(lng))
             apply()
         }
+    }
+
+    private fun getSavedLocation() {
+        savedLatitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_latitude), 0))
+        savedLongitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_longitude), 0))
+        if(savedLatitude == 0.0) savedLatitude = null
+        if(savedLongitude == 0.0) savedLongitude = null
+    }
+
+    private fun savePermissionCheck() {
+        sharedPref.edit()
+                .putBoolean(getString(R.string.saved_permission), false)
+                .apply()
+    }
+
+    private fun getPermissionCheck(): Boolean {
+        return sharedPref.getBoolean(getString(R.string.saved_permission), true)
     }
 
     @SuppressLint("SetTextI18n")
