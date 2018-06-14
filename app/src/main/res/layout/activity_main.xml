@@ -9,22 +9,35 @@
     tools:context=".presentation.view.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:background="@android:color/transparent"
+        app:elevation="0dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:background="@android:color/background_light"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize" >
 
+            <ImageButton
+                android:id="@+id/weekly"
+                android:src="@drawable/ic_today_black_24dp"
+                android:background="@android:color/transparent"
+                android:layout_margin="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/city_name_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginRight="?android:attr/actionBarSize"
+                android:layout_marginLeft="?android:attr/actionBarSize"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                tools:text="BATAM, INDONESIA" />
+                android:textAllCaps="true"
+                tools:text="INDONESIA" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -35,13 +48,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <Button
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:id="@+id/weekly"
-        android:text="@string/show_weekly"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>

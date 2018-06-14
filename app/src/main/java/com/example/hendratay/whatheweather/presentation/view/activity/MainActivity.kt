@@ -113,10 +113,11 @@ class MainActivity : AppCompatActivity() {
                             val roadName = address[0].thoroughfare ?: ""
                             val locality = address[0].locality ?: ""
                             val countryName = address[0].countryName ?: ""
-                            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
-                                    "$roadName".capitalize()
+//                            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
+//                                    "$roadName".capitalize()
+                            city_name_text_view.text = "$countryName"
                         } catch (e: Exception) {
-                            city_name_text_view.text = "${place.address}"
+                            //city_name_text_view.text = "${place.address}"
                         }
                     }
                     Activity.RESULT_CANCELED -> {
@@ -258,8 +259,9 @@ class MainActivity : AppCompatActivity() {
                         val roadName = address[0].thoroughfare ?: ""
                         val locality = address[0].locality ?: ""
                         val countryName = address[0].countryName ?: ""
-                        city_name_text_view.text = "$locality, $countryName \n".capitalize() +
-                                "$roadName".capitalize()
+//                        city_name_text_view.text = "$locality, $countryName \n".capitalize() +
+//                                "$roadName".capitalize()
+                        city_name_text_view.text = "$countryName"
                     } catch (e: Exception) {
                         city_name_text_view.text = "No Address"
                     }

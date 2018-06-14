@@ -8,4 +8,8 @@
     <string name="error_button">Try again</string>
     <string name="show_weekly">show weekly</string>
     <string name="location">Location</string>
+    <string name="humidity">HUMIDITY</string>
+    <string name="pressure">PRESSURE</string>
+    <string name="wind">WIND</string>
+    <string name="cloud">CLOUDINESS</string>
 </resources>

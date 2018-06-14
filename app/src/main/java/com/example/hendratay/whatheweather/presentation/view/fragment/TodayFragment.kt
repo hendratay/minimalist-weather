@@ -27,6 +27,8 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecas
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.empty_view.*
+import kotlinx.android.synthetic.main.error_view.*
 import kotlinx.android.synthetic.main.fragment_today.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -137,21 +139,21 @@ class TodayFragment: Fragment() {
         error_view.visibility = View.GONE
         if (it != null) {
             weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
-            temp_text_view.text = it.main.temp.roundToInt().toString() + " \u2103"
+            temp_text_view.text = it.main.temp.roundToInt().toString() + "\u00b0"
             weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
             pressure_text_view.text = "${it.main.pressure.roundToInt()} hPa"
             humidity_text_view.text = "${it.main.humidity}  %"
             cloud_text_view.text = it.clouds.cloudiness.toString() + " %"
-            val tempMin = it.main.tempMin.toString() + " \u2103"
-            val tempMax = it.main.tempMax.toString() + " \u2103"
-            min_max_temp_text_view.text = "$tempMin / $tempMax"
+            min_temp_text_view.text = "\u25bc" + it.main.tempMin.roundToInt() + "\u00b0"
+            max_temp_text_view.text = "\u25b2" + it.main.tempMax.roundToInt() + "\u00b0"
             wind_text_view.text = it.wind.speed.toString() + " m/s"
             val sunrise = it.sys.sunriseTime
             val sunset = it.sys.sunsetTime
             val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
             val sunriseTime = sdf.format(Date(sunrise * 1000))
             val sunsetTime = sdf.format(Date(sunset * 1000))
-            sunrise_sunset_text_view.text = "$sunriseTime / $sunsetTime"
+            sunset_text_view.text = "$sunsetTime"
+            sunrise_text_view.text = "$sunriseTime"
 
             activity?.city_name_text_view?.visibility = View.VISIBLE
             data_view.visibility = View.VISIBLE
