@@ -28,7 +28,7 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
 
     fun getWeatherForecast() = forecastLiveData
 
-    fun setlatLng(lat: Double?, lng: Double?) {
+    fun setLatLng(lat: Double?, lng: Double?) {
         latitude = lat
         longitude =  lng
         if(latitude == null && longitude == null) {

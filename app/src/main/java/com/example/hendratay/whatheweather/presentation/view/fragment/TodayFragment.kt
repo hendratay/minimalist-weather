@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
@@ -86,24 +87,33 @@ class TodayFragment: Fragment() {
 
     private fun setupEmptyErrorButtonClick() {
         empty_button.setOnClickListener {
-            checkGpsEnabled()
             setupScreenForLoadingState()
+            checkGpsEnabled()
         }
         error_button.setOnClickListener {
-            checkGpsEnabled()
             setupScreenForLoadingState()
+            checkGpsEnabled()
         }
         location_button.setOnClickListener {
-            (activity as MainActivity).placePickerIntent()
+            if((activity as MainActivity).connectivityStatus()) {
+                (activity as MainActivity).placePickerIntent()
+            } else {
+                Toast.makeText(activity, "It's looks like there is no network", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun checkGpsEnabled() {
-        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            (activity as MainActivity).startLocationUpdates()
+        if((activity as MainActivity).connectivityStatus()) {
+            val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                (activity as MainActivity).startLocationUpdates()
+            } else {
+                (activity as MainActivity).createLocationRequest()
+            }
         } else {
-            (activity as MainActivity).createLocationRequest()
+            Toast.makeText(activity, "It's looks like there is no network", Toast.LENGTH_SHORT).show()
+            setupScreenForError("No Network")
         }
     }
 

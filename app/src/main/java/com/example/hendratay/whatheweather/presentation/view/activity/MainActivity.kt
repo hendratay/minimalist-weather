@@ -3,11 +3,14 @@ package com.example.hendratay.whatheweather.presentation.view.activity
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -34,14 +37,12 @@ import com.google.android.gms.location.places.ui.PlacePicker
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.Task
+import com.google.maps.android.SphericalUtil
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.IOException
 import java.util.*
 import javax.inject.Inject
 
-// Todo: Internet connection check
-// Todo: disable permission snackbar on first time launch
 const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
 
+    private lateinit var sharedPref: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
@@ -61,21 +63,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
     private lateinit var geocoder: Geocoder
     private var address: List<Address> = listOf()
+    private var savedLatitude: Double? = null
+    private var savedLongitude: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        createLocationRequest()
-        // initialize location callback first for pass into requestlocationupdates at `startLocationUpdates`
-        receiveLocationUpdates()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        geocoder = Geocoder(this, Locale.getDefault())
-        startLocationUpdates()
-
+        sharedPref = getPreferences(Context.MODE_PRIVATE)
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory)[CurrentWeatherViewModel::class.java]
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory)[WeatherForecastViewModel::class.java]
+
+        if(connectivityStatus()) {
+            createLocationRequest()
+            // initialize location callback first for pass into requestlocationupdates at `startLocationUpdates`
+            receiveLocationUpdates()
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            geocoder = Geocoder(this, Locale.getDefault())
+            startLocationUpdates()
+        } else {
+            currentWeatherViewModel.setLatLng(null, null)
+            weatherForecastViewModel.setLatLng(null, null)
+        }
 
         setupToolbar()
         setupWeeklyButton()
@@ -107,18 +117,9 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_OK -> {
                         val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
-                        weatherForecastViewModel.setlatLng(place.latLng.latitude, place.latLng.longitude)
-                        try {
-                            address = geocoder.getFromLocation(place.latLng.latitude, place.latLng.longitude, 1)
-                            val roadName = address[0].thoroughfare ?: ""
-                            val locality = address[0].locality ?: ""
-                            val countryName = address[0].countryName ?: ""
-//                            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
-//                                    "$roadName".capitalize()
-                            city_name_text_view.text = "$countryName"
-                        } catch (e: Exception) {
-                            //city_name_text_view.text = "${place.address}"
-                        }
+                        weatherForecastViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
+                        setupToolbarTitle(place.latLng.latitude, place.latLng.longitude)
+                        saveLocation(place.latLng.latitude,place.latLng.longitude)
                     }
                     Activity.RESULT_CANCELED -> {
                     }
@@ -128,8 +129,10 @@ class MainActivity : AppCompatActivity() {
                 when(resultCode) {
                     Activity.RESULT_OK -> startLocationUpdates()
                     Activity.RESULT_CANCELED -> {
-                        currentWeatherViewModel.setLatLng(null,null)
-                        weatherForecastViewModel.setlatLng(null, null)
+                        getSavedLocation()
+                        currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
+                        weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                        setupToolbarTitle(savedLatitude, savedLongitude)
                     }
                 }
             }
@@ -142,8 +145,10 @@ class MainActivity : AppCompatActivity() {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationUpdates()
                 } else {
-                    currentWeatherViewModel.setLatLng(null, null)
-                    weatherForecastViewModel.setlatLng(null, null)
+                    getSavedLocation()
+                    currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
+                    weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                    setupToolbarTitle(savedLatitude, savedLongitude)
                 }
             }
         }
@@ -174,6 +179,21 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun setupToolbarTitle(lat: Double?, lng: Double?) {
+        lat ?: return; lng ?: return
+        try {
+            address = geocoder.getFromLocation(lat, lng, 1)
+            val roadName = address[0].thoroughfare ?: ""
+            val locality = address[0].locality ?: ""
+            val countryName = address[0].countryName ?: ""
+            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
+                    roadName.capitalize()
+        } catch (e: Exception) {
+            city_name_text_view.text = "No Address"
+        }
+    }
+
     private fun setupWeeklyButton() {
         weekly.setOnClickListener {
             loadFragment(WeeklyFragment())
@@ -183,8 +203,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun placePickerIntent() {
-        // Todo: setlatlngbounds
-        val builder = PlacePicker.IntentBuilder()
+        getSavedLocation()
+        val latLng = LatLng(savedLatitude ?: 0.0, savedLongitude ?: 0.0)
+        val distance = 200.0
+        val heading = arrayOf(0, 90, 180, 270)
+        val latLngBuilder = LatLngBounds.Builder()
+        lateinit var point: LatLng
+        for(i in heading.indices) {
+            point = SphericalUtil.computeOffset(latLng, distance, heading[i].toDouble())
+            latLngBuilder.include(point)
+        }
+        val builder = PlacePicker.IntentBuilder().setLatLngBounds(latLngBuilder.build())
         startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST_CODE)
     }
 
@@ -202,18 +231,23 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
-            Snackbar.make(coordinator_layout, "Please Enable Location Permission", Snackbar.LENGTH_LONG)
-                    .setAction("Enable") {
-                        val intent = Intent()
-                        val uri = Uri.fromParts("package", packageName, null)
-                        intent.apply {
-                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            data = uri
+            if(getPermissionCheck()) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+                savePermissionCheck()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
+                Snackbar.make(coordinator_layout, "Please Enable Location Permission", Snackbar.LENGTH_LONG)
+                        .setAction("Enable") {
+                            val intent = Intent()
+                            val uri = Uri.fromParts("package", packageName, null)
+                            intent.apply {
+                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                data = uri
+                            }
+                            startActivity(intent)
                         }
-                        startActivity(intent)
-                    }
-                    .show()
+                        .show()
+            }
         }
     }
 
@@ -253,18 +287,9 @@ class MainActivity : AppCompatActivity() {
                 p0 ?: return
                 for(location in p0.locations) {
                     currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
-                    weatherForecastViewModel.setlatLng(location.latitude, location.longitude)
-                    try {
-                        address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                        val roadName = address[0].thoroughfare ?: ""
-                        val locality = address[0].locality ?: ""
-                        val countryName = address[0].countryName ?: ""
-//                        city_name_text_view.text = "$locality, $countryName \n".capitalize() +
-//                                "$roadName".capitalize()
-                        city_name_text_view.text = "$countryName"
-                    } catch (e: Exception) {
-                        city_name_text_view.text = "No Address"
-                    }
+                    weatherForecastViewModel.setLatLng(location.latitude, location.longitude)
+                    setupToolbarTitle(location.latitude, location.longitude)
+                    saveLocation(location.latitude,location.longitude)
                 }
                 stopLocationUpdates()
             }
@@ -273,6 +298,37 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    fun connectivityStatus(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        return activeNetwork?.isConnectedOrConnecting ?: false
+    }
+
+    private fun saveLocation(lat: Double, lng: Double) {
+        with(sharedPref.edit()) {
+            putLong(getString(R.string.saved_latitude), java.lang.Double.doubleToRawLongBits(lat))
+            putLong(getString(R.string.saved_longitude), java.lang.Double.doubleToRawLongBits(lng))
+            apply()
+        }
+    }
+
+    private fun getSavedLocation() {
+        savedLatitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_latitude), 0))
+        savedLongitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_longitude), 0))
+        if(savedLatitude == 0.0) savedLatitude = null
+        if(savedLongitude == 0.0) savedLongitude = null
+    }
+
+    private fun savePermissionCheck() {
+        sharedPref.edit()
+                .putBoolean(getString(R.string.saved_permission), false)
+                .apply()
+    }
+
+    private fun getPermissionCheck(): Boolean {
+        return sharedPref.getBoolean(getString(R.string.saved_permission), true)
     }
 
 }
