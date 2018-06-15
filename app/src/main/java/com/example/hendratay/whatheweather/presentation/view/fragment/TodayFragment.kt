@@ -148,6 +148,7 @@ class TodayFragment: Fragment() {
         progress_bar.visibility = View.GONE
         error_view.visibility = View.GONE
         if (it != null) {
+            activity?.city_name_text_view?.text = it.cityName
             weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
             temp_text_view.text = it.main.temp.roundToInt().toString() + "\u00b0"
             weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()

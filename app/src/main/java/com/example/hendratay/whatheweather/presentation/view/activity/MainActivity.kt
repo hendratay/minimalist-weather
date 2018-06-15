@@ -109,7 +109,6 @@ class MainActivity : AppCompatActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode) {
             PLACE_PICKER_REQUEST_CODE -> {
@@ -118,7 +117,6 @@ class MainActivity : AppCompatActivity() {
                         val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         weatherForecastViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
-                        setupToolbarTitle(place.latLng.latitude, place.latLng.longitude)
                         saveLocation(place.latLng.latitude,place.latLng.longitude)
                     }
                     Activity.RESULT_CANCELED -> {
@@ -132,7 +130,6 @@ class MainActivity : AppCompatActivity() {
                         getSavedLocation()
                         currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                         weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
-                        setupToolbarTitle(savedLatitude, savedLongitude)
                     }
                 }
             }
@@ -148,7 +145,6 @@ class MainActivity : AppCompatActivity() {
                     getSavedLocation()
                     currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                     weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
-                    setupToolbarTitle(savedLatitude, savedLongitude)
                 }
             }
         }
@@ -177,21 +173,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         // remove App Title (Whathe Weather)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupToolbarTitle(lat: Double?, lng: Double?) {
-        lat ?: return; lng ?: return
-        try {
-            address = geocoder.getFromLocation(lat, lng, 1)
-            val roadName = address[0].thoroughfare ?: ""
-            val locality = address[0].locality ?: ""
-            val countryName = address[0].countryName ?: ""
-            city_name_text_view.text = "$locality, $countryName \n".capitalize() +
-                    roadName.capitalize()
-        } catch (e: Exception) {
-            city_name_text_view.text = "No Address"
-        }
     }
 
     private fun setupWeeklyButton() {
@@ -288,7 +269,6 @@ class MainActivity : AppCompatActivity() {
                 for(location in p0.locations) {
                     currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
                     weatherForecastViewModel.setLatLng(location.latitude, location.longitude)
-                    setupToolbarTitle(location.latitude, location.longitude)
                     saveLocation(location.latitude,location.longitude)
                 }
                 stopLocationUpdates()

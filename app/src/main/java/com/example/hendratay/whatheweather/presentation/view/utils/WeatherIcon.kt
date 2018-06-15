@@ -4,7 +4,7 @@ import com.example.hendratay.whatheweather.R
 
 object WeatherIcon {
     fun getWeatherId(id: Int, icon: String)= when (id){
-        200, 201, 202, 230, 231, 232 -> { R.drawable.wi_storm_showers }
+/*        200, 201, 202, 230, 231, 232 -> { R.drawable.wi_storm_showers }
         210, 211, 212, 221 -> { R.drawable.wi_thunderstorm }
         300, 301, 302, 310, 311, 312, 313, 314, 321 -> { R.drawable.wi_showers}
         500, 501, 502, 503, 504 -> { R.drawable.wi_rain }
@@ -18,11 +18,11 @@ object WeatherIcon {
         771, 781 -> { R.drawable.wi_tornado }
         800 -> {
             if (icon.takeLast(1) == "d") {
-                R.drawable.wi_day_sunny
+                R.drawable.wi_sunny
             } else {
                 R.drawable.wi_night_clear
             }
-        }
-        else -> { R.drawable.wi_na }
+        }*/
+        else -> { R.drawable.wi_sunny }
     }
 }

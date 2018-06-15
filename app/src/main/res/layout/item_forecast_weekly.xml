@@ -9,14 +9,14 @@
     app:cardElevation="4dp" >
 
     <LinearLayout
-        android:id="@+id/ll_item_forecast"
+        android:id="@+id/item_forecast_layout"
         android:orientation="horizontal"
         android:background="@android:color/background_light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/wi_cloudy"
+                tools:src="@drawable/wi_sunny"
                 android:id="@+id/weekly_weather_icon_image_view"
                 android:layout_gravity="center"
                 android:layout_width="48dp"
@@ -25,6 +25,7 @@
             <TextView
                 tools:text="Clear Sky"
                 android:id="@+id/weekly_weather_desc_text_view"
+                android:fontFamily="monospace"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -33,6 +34,7 @@
             <TextView
                 tools:text="30 \u2103"
                 android:id="@+id/weekly_temp_text_view"
+                android:fontFamily="monospace"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

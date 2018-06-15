@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
+    android:layout_marginTop="24dp"
     app:cardCornerRadius="0dp"
     app:cardElevation="4dp" >
 
@@ -16,8 +16,9 @@
         <TextView
             tools:text="Monday, 27 Januari 2017"
             android:id="@+id/item_date_text_view"
-            android:padding="16dp"
+            android:fontFamily="monospace"
             android:textStyle="bold"
+            android:padding="16dp"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
