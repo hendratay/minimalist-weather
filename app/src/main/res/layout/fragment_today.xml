@@ -23,8 +23,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="4dp"
                 android:layout_marginTop="16dp"
                 android:textAllCaps="true"
+                android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:fontFamily="monospace"
@@ -32,6 +34,7 @@
 
             <ImageView
                 android:id="@+id/weather_icon_image_view"
+                android:layout_marginLeft="4dp"
                 android:layout_width="240dp"
                 android:layout_height="240dp"
                 android:layout_gravity="center"
@@ -47,18 +50,18 @@
                          android:layout_height="match_parent"
                          android:layout_weight="0.8">
 
-                         <TextView
+                     <TextView
                          android:id="@+id/temp_text_view"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_marginEnd="8dp"
-                         android:layout_marginLeft="8dp"
+                         android:layout_marginLeft="16dp"
                          android:layout_marginRight="8dp"
-                         android:layout_marginStart="8dp"
+                         android:layout_marginStart="16dp"
+                         android:textColor="@android:color/black"
                          android:textSize="80sp"
                          app:fontFamily="monospace"
                          app:layout_constraintEnd_toEndOf="parent"
-                         app:layout_constraintHorizontal_bias="0.9"
                          app:layout_constraintStart_toStartOf="parent"
                          app:layout_constraintTop_toTopOf="parent"
                          tools:text="50\u00b0" />
@@ -99,6 +102,7 @@
                          android:layout_marginTop="8dp"
                          android:text="@string/details"
                          android:textAllCaps="true"
+                         android:textColor="@android:color/black"
                          android:textStyle="bold"
                          app:fontFamily="monospace"
                          app:layout_constraintStart_toStartOf="parent"
@@ -228,17 +232,6 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_weather_forecast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="32dp"
-        android:layout_gravity="bottom" >
-    </android.support.v7.widget.RecyclerView>
-
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
@@ -249,5 +242,53 @@
     <include layout="@layout/empty_view"/>
 
     <include layout="@layout/error_view"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_weather_forecast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="32dp"
+        android:layout_gravity="bottom" >
+    </android.support.v7.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/empty_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:text="It's look we got no forecast for today \n You can see tommorow forecast \n from calendar icon"/>
+
+    <TextView
+        android:id="@+id/error_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="112dp"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:text="Error retrieving weather forecast"/>
+
+    <Button
+        android:id="@+id/button_recycler_view"
+        android:text="@string/error_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:gravity="center"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

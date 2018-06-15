@@ -8,7 +8,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,8 +61,8 @@ class TodayFragment: Fragment() {
         setupSwipeRefresh()
         setupEmptyErrorButtonClick()
 
-        currentWeatherViewModel = ViewModelProviders.of(activity as MainActivity, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
         // using `activity as MainActivity` because it can share between fragment
+        currentWeatherViewModel = ViewModelProviders.of(activity as MainActivity, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
         weatherForecastViewModel = ViewModelProviders.of(activity as MainActivity, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
     }
 
@@ -138,7 +137,7 @@ class TodayFragment: Fragment() {
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.GONE
-        activity?.city_name_text_view?.visibility = View.GONE
+        activity?.toolbar?.visibility = View.GONE
         activity?.weekly?.visibility = View.GONE
     }
 
@@ -147,7 +146,8 @@ class TodayFragment: Fragment() {
         swipe_refresh_layout.isEnabled = true
         progress_bar.visibility = View.GONE
         error_view.visibility = View.GONE
-        if (it != null) {
+        empty_view.visibility = View.VISIBLE
+        it?.let {
             activity?.city_name_text_view?.text = it.cityName
             weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
             temp_text_view.text = it.main.temp.roundToInt().toString() + "\u00b0"
@@ -166,28 +166,23 @@ class TodayFragment: Fragment() {
             sunset_text_view.text = "$sunsetTime"
             sunrise_text_view.text = "$sunriseTime"
 
-            activity?.city_name_text_view?.visibility = View.VISIBLE
-            data_view.visibility = View.VISIBLE
-            (activity as MainActivity).supportActionBar?.show()
-            activity?.city_name_text_view?.visibility = View.VISIBLE
-            activity?.weekly?.visibility = View.VISIBLE
             swipe_refresh_layout.isRefreshing = false
-        } else {
-            empty_view.visibility = View.VISIBLE
+            data_view.visibility = View.VISIBLE
+            empty_view.visibility = View.GONE
+            activity?.toolbar?.visibility = View.VISIBLE
+            activity?.weekly?.visibility = View.VISIBLE
         }
     }
 
     private fun setupScreenForError(message: String?) {
         swipe_refresh_layout.isEnabled = false
+        swipe_refresh_layout.isRefreshing = false
         progress_bar.visibility = View.GONE
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.VISIBLE
-        (activity as MainActivity).supportActionBar?.hide()
-        activity?.city_name_text_view?.visibility = View.GONE
+        activity?.toolbar?.visibility = View.GONE
         activity?.weekly?.visibility = View.GONE
-        swipe_refresh_layout.isRefreshing = false
-        Log.e(TAG, message)
     }
 
     private fun getTodayWeatherForecast() {
@@ -206,10 +201,19 @@ class TodayFragment: Fragment() {
     }
 
     private fun setupRecyclerForLoadingState() {
+        progress_bar_recycler_view.visibility = if(swipe_refresh_layout.isRefreshing) View.GONE else View.VISIBLE
+        progress_bar_recycler_view.visibility = if(progress_bar.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        rv_weather_forecast.visibility = View.GONE
+        error_recycler_view.visibility = View.GONE
+        button_recycler_view.visibility = View.GONE
     }
 
     private fun setupRecyclerForSuccess(it: WeatherForecastView?) {
+        progress_bar_recycler_view.visibility = View.GONE
+        error_recycler_view.visibility = View.GONE
+        button_recycler_view.visibility = View.GONE
         it?.let {
+            rv_weather_forecast.visibility = View.VISIBLE
             forecastList.clear()
             it.forecastList.forEach {
                 val sdf = SimpleDateFormat("dd MM yyyy", Locale.getDefault())
@@ -218,13 +222,24 @@ class TodayFragment: Fragment() {
                 if (dateTime == currentDateTime) {
                     forecastList.add(it)
                 }
+
+            }
+            if(forecastList.isEmpty()) {
+                empty_recycler_view.text = "It's look we got no forecast for today\n" +
+                        "You can see tommorow forecast\n" +
+                        "from calendar icon"
             }
             adapter.notifyDataSetChanged()
         }
     }
 
     private fun setupRecyclerForError(message: String?) {
-        Log.e(TAG, message)
+        progress_bar_recycler_view.visibility = View.GONE
+        rv_weather_forecast.visibility = View.GONE
+        empty_view.visibility = View.GONE
+        error_recycler_view.visibility = View.VISIBLE
+        button_recycler_view.visibility = View.VISIBLE
+        error_recycler_view.text = message
     }
 
 }
