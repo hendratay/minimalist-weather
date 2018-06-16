@@ -2,6 +2,7 @@ package com.example.hendratay.whatheweather.presentation.view.fragment
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -54,10 +55,7 @@ class WeeklyFragment: Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val layoutManager = LinearLayoutManager(activity as MainActivity)
-        //val dividerItemDecoration = DividerItemDecoration(activity, layoutManager.orientation)
-        rv_forecast_weekly.layoutManager = layoutManager
-        //rv_forecast_weekly.addItemDecoration(dividerItemDecoration)
+        rv_forecast_weekly.layoutManager = LinearLayoutManager(activity as MainActivity)
         adapter = ForecastWeeklyAdapter(consolidatedList)
         rv_forecast_weekly.adapter = adapter
     }
@@ -65,7 +63,9 @@ class WeeklyFragment: Fragment() {
     private fun getWeeklyForecast() {
         weatherForecastViewModel.getWeatherForecast().observe(activity as MainActivity,
                 Observer<Resource<WeatherForecastView>> {
-                    it?.let { handleWeatherForecastState(it.status, it.data, it.message) }
+                    if(view?.parent != null) {
+                        it?.let { handleWeatherForecastState(it.status, it.data, it.message) }
+                    }
                 })
     }
 
@@ -78,9 +78,17 @@ class WeeklyFragment: Fragment() {
     }
 
     private fun setupRecyclerForLoadingState() {
+        progress_bar_weekly.visibility = View.VISIBLE
+        rv_forecast_weekly.visibility = View.GONE
+        empty_weekly.visibility = View.GONE
+        error_weekly.visibility = View.GONE
+        button_weekly.visibility = View.GONE
     }
 
     private fun setupRecyclerForSuccess(it: WeatherForecastView?) {
+        progress_bar_weekly.visibility = View.GONE
+        error_weekly.visibility = View.GONE
+        button_weekly.visibility = View.GONE
         it?.let {
             consolidatedList.clear()
             val groupedHashMap: Map<String, MutableList<ForecastView>> = groupDataIntoHashMap(it.forecastList.toMutableList())
@@ -93,11 +101,18 @@ class WeeklyFragment: Fragment() {
                 }
             }
             adapter.notifyDataSetChanged()
+            if(consolidatedList.isEmpty()) empty_weekly.visibility = View.VISIBLE
+            rv_forecast_weekly.visibility = View.VISIBLE
         }
     }
 
     private fun setupRecyclerForError(message: String?) {
-        Log.e(TAG, message)
+        progress_bar_weekly.visibility = View.GONE
+        rv_forecast_weekly.visibility = View.GONE
+        empty_weekly.visibility = View.GONE
+        error_weekly.text = message
+        error_weekly.visibility = View.VISIBLE
+        button_weekly.visibility = View.VISIBLE
     }
 
     private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): Map<String, MutableList<ForecastView>> {
