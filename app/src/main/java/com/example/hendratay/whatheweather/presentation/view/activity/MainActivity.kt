@@ -2,13 +2,13 @@ package com.example.hendratay.whatheweather.presentation.view.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -24,6 +24,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.hendratay.whatheweather.R
+import com.example.hendratay.whatheweather.presentation.data.Resource
+import com.example.hendratay.whatheweather.presentation.data.ResourceState
+import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModel
@@ -40,9 +43,10 @@ import com.google.android.gms.tasks.Task
 import com.google.maps.android.SphericalUtil
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
+// Todo: Weathericon
 const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
@@ -62,7 +66,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
     private lateinit var geocoder: Geocoder
-    private var address: List<Address> = listOf()
     private var savedLatitude: Double? = null
     private var savedLongitude: Double? = null
 
@@ -167,6 +170,38 @@ class MainActivity : AppCompatActivity() {
         } else {
             finish()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        currentWeatherViewModel.getCurrentWeather().observe(this,
+                Observer<Resource<CurrentWeatherView>> {
+                    it?.let { handleCurrentWeatherViewState(it.status, it.data) }
+                })
+    }
+
+    private fun handleCurrentWeatherViewState(status: ResourceState, data: CurrentWeatherView?) {
+        when(status) {
+            ResourceState.LOADING -> setupScreenForLoadingState()
+            ResourceState.SUCCESS -> setupScreenForSuccess(data)
+            ResourceState.ERROR -> setupScreenForError()
+        }
+    }
+
+    private fun setupScreenForLoadingState() {
+        toolbar.visibility = View.GONE
+        weekly.visibility = View.GONE
+    }
+
+    private fun setupScreenForSuccess(data: CurrentWeatherView?) {
+        toolbar.visibility = View.VISIBLE
+        weekly.visibility = if(supportFragmentManager.findFragmentByTag(WeeklyFragment::class.simpleName) != null) View.GONE else View.VISIBLE
+        city_name_text_view.text = data?.cityName
+    }
+
+    private fun setupScreenForError() {
+        toolbar.visibility = View.GONE
+        weekly.visibility = View.GONE
     }
 
     private fun setupToolbar() {

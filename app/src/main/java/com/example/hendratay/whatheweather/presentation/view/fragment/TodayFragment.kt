@@ -113,13 +113,16 @@ class TodayFragment: Fragment() {
         } else {
             Toast.makeText(activity, "It's looks like there is no network", Toast.LENGTH_SHORT).show()
             setupScreenForError("No Network")
+            setupRecyclerForError("No Network")
         }
     }
 
     private fun getCurrentWeather() {
         currentWeatherViewModel.getCurrentWeather().observe(this,
                 Observer<Resource<CurrentWeatherView>> {
-                    it?.let { handleCurrentWeatherViewState(it.status, it.data, it.message) }
+                    if(view?.parent != null) {
+                        it?.let { handleCurrentWeatherViewState(it.status, it.data, it.message) }
+                    }
                 })
     }
 
@@ -137,8 +140,6 @@ class TodayFragment: Fragment() {
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.GONE
-        activity?.toolbar?.visibility = View.GONE
-        activity?.weekly?.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")
@@ -148,7 +149,6 @@ class TodayFragment: Fragment() {
         error_view.visibility = View.GONE
         empty_view.visibility = View.VISIBLE
         it?.let {
-            activity?.city_name_text_view?.text = it.cityName
             weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
             temp_text_view.text = it.main.temp.roundToInt().toString() + "\u00b0"
             weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
@@ -169,8 +169,6 @@ class TodayFragment: Fragment() {
             swipe_refresh_layout.isRefreshing = false
             data_view.visibility = View.VISIBLE
             empty_view.visibility = View.GONE
-            activity?.toolbar?.visibility = View.VISIBLE
-            activity?.weekly?.visibility = View.VISIBLE
         }
     }
 
@@ -181,14 +179,14 @@ class TodayFragment: Fragment() {
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.VISIBLE
-        activity?.toolbar?.visibility = View.GONE
-        activity?.weekly?.visibility = View.GONE
     }
 
     private fun getTodayWeatherForecast() {
         weatherForecastViewModel.getWeatherForecast().observe(this,
                 Observer<Resource<WeatherForecastView>> {
-                    it?.let { handleWeatherForecastState(it.status, it.data, it.message) }
+                    if(view?.parent != null) {
+                        it?.let { handleWeatherForecastState(it.status, it.data, it.message) }
+                    }
                 })
     }
 
@@ -201,8 +199,7 @@ class TodayFragment: Fragment() {
     }
 
     private fun setupRecyclerForLoadingState() {
-        progress_bar_recycler_view.visibility = if(swipe_refresh_layout.isRefreshing) View.GONE else View.VISIBLE
-        progress_bar_recycler_view.visibility = if(progress_bar.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        progress_bar_recycler_view.visibility = View.VISIBLE
         rv_weather_forecast.visibility = View.GONE
         error_recycler_view.visibility = View.GONE
         button_recycler_view.visibility = View.GONE
@@ -213,7 +210,6 @@ class TodayFragment: Fragment() {
         error_recycler_view.visibility = View.GONE
         button_recycler_view.visibility = View.GONE
         it?.let {
-            rv_weather_forecast.visibility = View.VISIBLE
             forecastList.clear()
             it.forecastList.forEach {
                 val sdf = SimpleDateFormat("dd MM yyyy", Locale.getDefault())
@@ -224,12 +220,13 @@ class TodayFragment: Fragment() {
                 }
 
             }
+            adapter.notifyDataSetChanged()
             if(forecastList.isEmpty()) {
                 empty_recycler_view.text = "It's look we got no forecast for today\n" +
                         "You can see tommorow forecast\n" +
                         "from calendar icon"
             }
-            adapter.notifyDataSetChanged()
+            rv_weather_forecast.visibility = View.VISIBLE
         }
     }
 
@@ -237,9 +234,14 @@ class TodayFragment: Fragment() {
         progress_bar_recycler_view.visibility = View.GONE
         rv_weather_forecast.visibility = View.GONE
         empty_view.visibility = View.GONE
-        error_recycler_view.visibility = View.VISIBLE
-        button_recycler_view.visibility = View.VISIBLE
         error_recycler_view.text = message
+        if(error_view.visibility == View.VISIBLE) {
+            error_recycler_view.visibility = View.GONE
+            button_recycler_view.visibility = View.GONE
+        } else {
+            error_recycler_view.visibility = View.VISIBLE
+            button_recycler_view.visibility = View.VISIBLE
+        }
     }
 
 }
