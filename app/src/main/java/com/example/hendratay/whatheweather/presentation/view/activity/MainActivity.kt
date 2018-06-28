@@ -46,7 +46,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.Locale
 import javax.inject.Inject
 
-// Todo: Weathericon
+// Todo: WeatherIcon
+// Todo: first launch get shared preference data else using zero
+// Todo: show a toast that using sharedpreference data, not real location updates
+// Todo: Empty View and Error View Text
 const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222

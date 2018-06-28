@@ -201,6 +201,7 @@ class TodayFragment: Fragment() {
     private fun setupRecyclerForLoadingState() {
         progress_bar_recycler_view.visibility = View.VISIBLE
         rv_weather_forecast.visibility = View.GONE
+        empty_recycler_view.visibility = View.GONE
         error_recycler_view.visibility = View.GONE
         button_recycler_view.visibility = View.GONE
     }
@@ -222,6 +223,7 @@ class TodayFragment: Fragment() {
             }
             adapter.notifyDataSetChanged()
             if(forecastList.isEmpty()) {
+                empty_recycler_view.visibility = View.VISIBLE
                 empty_recycler_view.text = "It's look we got no forecast for today\n" +
                         "You can see tommorow forecast\n" +
                         "from calendar icon"
@@ -233,7 +235,7 @@ class TodayFragment: Fragment() {
     private fun setupRecyclerForError(message: String?) {
         progress_bar_recycler_view.visibility = View.GONE
         rv_weather_forecast.visibility = View.GONE
-        empty_view.visibility = View.GONE
+        empty_recycler_view.visibility = View.GONE
         error_recycler_view.text = message
         if(error_view.visibility == View.VISIBLE) {
             error_recycler_view.visibility = View.GONE
