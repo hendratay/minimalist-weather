@@ -20,21 +20,22 @@
                 android:id="@+id/weekly_weather_icon_image_view"
                 android:layout_gravity="center"
                 android:layout_width="48dp"
-                android:layout_height="48dp" />
+                android:layout_height="48dp"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 tools:text="Clear Sky"
+                app:fontFamily="monospace"
                 android:id="@+id/weekly_weather_desc_text_view"
-                android:fontFamily="monospace"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5" />
 
             <TextView
-                tools:text="30 \u2103"
+                tools:text="30\u00b0"
+                app:fontFamily="monospace"
                 android:id="@+id/weekly_temp_text_view"
-                android:fontFamily="monospace"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

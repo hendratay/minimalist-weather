@@ -40,7 +40,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/wi_sunny" />
+        tools:src="@drawable/wi_sunny"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/item_date_time_text_view"

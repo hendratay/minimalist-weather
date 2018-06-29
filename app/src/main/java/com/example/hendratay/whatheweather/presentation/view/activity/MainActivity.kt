@@ -1,6 +1,5 @@
 package com.example.hendratay.whatheweather.presentation.view.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -19,10 +18,10 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
@@ -47,9 +46,8 @@ import java.util.Locale
 import javax.inject.Inject
 
 // Todo: WeatherIcon
-// Todo: first launch get shared preference data else using zero
-// Todo: show a toast that using sharedpreference data, not real location updates
 // Todo: Empty View and Error View Text
+// Todo: LocationRequest Priority
 const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
         if(connectivityStatus()) {
             createLocationRequest()
-            // initialize location callback first for pass into requestlocationupdates at `startLocationUpdates`
+            // initialize location callback first for pass into requestLocationUpdates at `startLocationUpdates`
             receiveLocationUpdates()
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             geocoder = Geocoder(this, Locale.getDefault())
@@ -134,6 +132,9 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_OK -> startLocationUpdates()
                     Activity.RESULT_CANCELED -> {
                         getSavedLocation()
+                        if(savedLatitude != null && savedLongitude != null) {
+                            Toast.makeText(this, R.string.notice_use_last_location, Toast.LENGTH_SHORT).show()
+                        }
                         currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                         weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
                     }
@@ -149,6 +150,9 @@ class MainActivity : AppCompatActivity() {
                     startLocationUpdates()
                 } else {
                     getSavedLocation()
+                    if(savedLatitude != null && savedLongitude != null) {
+                        Toast.makeText(this, R.string.notice_use_last_location, Toast.LENGTH_SHORT).show()
+                    }
                     currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                     weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
                 }
@@ -255,8 +259,8 @@ class MainActivity : AppCompatActivity() {
                 savePermissionCheck()
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
-                Snackbar.make(coordinator_layout, "Please Enable Location Permission", Snackbar.LENGTH_LONG)
-                        .setAction("Enable") {
+                Snackbar.make(coordinator_layout, R.string.notice_asking_enable_location_permission, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.notice_enable_location_permission) {
                             val intent = Intent()
                             val uri = Uri.fromParts("package", packageName, null)
                             intent.apply {
@@ -284,7 +288,7 @@ class MainActivity : AppCompatActivity() {
                 try {
                     it.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
                 } catch (sendEx: IntentSender.SendIntentException) {
-                    Log.e(TAG, "Error at LocationSettingsResponse.addOnFailureListener")
+                    Toast.makeText(this, R.string.notice_error_enable_location, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -301,7 +305,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun receiveLocationUpdates() {
         locationCallback = object : LocationCallback() {
-            @SuppressLint("SetTextI18n")
             override fun onLocationResult(p0: LocationResult?) {
                 p0 ?: return
                 for(location in p0.locations) {

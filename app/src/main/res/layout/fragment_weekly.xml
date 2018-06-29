@@ -11,7 +11,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_forecast_weekly"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar_weekly"
@@ -31,6 +31,7 @@
 
     <TextView
         android:id="@+id/empty_weekly"
+        android:text="@string/empty_weekly_alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -43,11 +44,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="It's look we got no forecast for today \n You can see tommorow forecast \n from calendar icon" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/error_weekly"
+        android:text="@string/error_weekly_alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -58,8 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Error retrieving weather forecast" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/button_weekly"

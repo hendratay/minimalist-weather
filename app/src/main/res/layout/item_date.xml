@@ -15,8 +15,8 @@
 
         <TextView
             tools:text="Monday, 27 Januari 2017"
+            app:fontFamily="monospace"
             android:id="@+id/item_date_text_view"
-            android:fontFamily="monospace"
             android:textStyle="bold"
             android:padding="16dp"
             android:gravity="center"

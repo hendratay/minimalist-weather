@@ -26,9 +26,9 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeather
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.error_view.*
+import kotlinx.android.synthetic.main.error_view.view.*
 import kotlinx.android.synthetic.main.fragment_today.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -97,7 +97,7 @@ class TodayFragment: Fragment() {
             if((activity as MainActivity).connectivityStatus()) {
                 (activity as MainActivity).placePickerIntent()
             } else {
-                Toast.makeText(activity, "It's looks like there is no network", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -111,9 +111,9 @@ class TodayFragment: Fragment() {
                 (activity as MainActivity).createLocationRequest()
             }
         } else {
-            Toast.makeText(activity, "It's looks like there is no network", Toast.LENGTH_SHORT).show()
-            setupScreenForError("No Network")
-            setupRecyclerForError("No Network")
+            Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
+            setupScreenForError(getString(R.string.notice_asking_enable_network))
+            setupRecyclerForError(getString(R.string.notice_asking_enable_network))
         }
     }
 
@@ -149,22 +149,18 @@ class TodayFragment: Fragment() {
         error_view.visibility = View.GONE
         empty_view.visibility = View.VISIBLE
         it?.let {
-            weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
-            temp_text_view.text = it.main.temp.roundToInt().toString() + "\u00b0"
             weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
+            weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
+            temp_text_view.text = "${it.main.temp.roundToInt()}\u00b0"
+            min_temp_text_view.text = "\u25bc ${it.main.tempMin.roundToInt()} \u00b0"
+            max_temp_text_view.text = "\u25b2 ${it.main.tempMax.roundToInt()} \u00b0"
+            wind_text_view.text = "${it.wind.speed} m/s"
             pressure_text_view.text = "${it.main.pressure.roundToInt()} hPa"
             humidity_text_view.text = "${it.main.humidity}  %"
-            cloud_text_view.text = it.clouds.cloudiness.toString() + " %"
-            min_temp_text_view.text = "\u25bc" + it.main.tempMin.roundToInt() + "\u00b0"
-            max_temp_text_view.text = "\u25b2" + it.main.tempMax.roundToInt() + "\u00b0"
-            wind_text_view.text = it.wind.speed.toString() + " m/s"
-            val sunrise = it.sys.sunriseTime
-            val sunset = it.sys.sunsetTime
+            cloud_text_view.text = "${it.clouds.cloudiness}  %"
             val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
-            val sunriseTime = sdf.format(Date(sunrise * 1000))
-            val sunsetTime = sdf.format(Date(sunset * 1000))
-            sunset_text_view.text = "$sunsetTime"
-            sunrise_text_view.text = "$sunriseTime"
+            sunset_text_view.text = sdf.format(Date(it.sys.sunriseTime * 1000))
+            sunrise_text_view.text = sdf.format(Date(it.sys.sunsetTime * 1000))
 
             swipe_refresh_layout.isRefreshing = false
             data_view.visibility = View.VISIBLE
@@ -179,6 +175,7 @@ class TodayFragment: Fragment() {
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.VISIBLE
+        error_view.textView.text = message
     }
 
     private fun getTodayWeatherForecast() {
@@ -224,9 +221,7 @@ class TodayFragment: Fragment() {
             adapter.notifyDataSetChanged()
             if(forecastList.isEmpty()) {
                 empty_recycler_view.visibility = View.VISIBLE
-                empty_recycler_view.text = "It's look we got no forecast for today\n" +
-                        "You can see tommorow forecast\n" +
-                        "from calendar icon"
+                empty_recycler_view.text = getString(R.string.empty_weekly_alert)
             }
             rv_weather_forecast.visibility = View.VISIBLE
         }
