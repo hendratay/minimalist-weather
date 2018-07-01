@@ -19,8 +19,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_if_weather_01_1530392" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/if_weather-01_1530392.svg" />
+                            <entry key="outputName" value="wi_sunny_cloudy" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/weather_icon_svg/if_weather-06_1530386.svg" />
                           </map>
                         </option>
                       </PersistentState>

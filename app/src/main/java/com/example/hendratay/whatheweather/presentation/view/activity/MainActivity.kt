@@ -45,7 +45,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.Locale
 import javax.inject.Inject
 
-// Todo: WeatherIcon
 // Todo: Empty View and Error View Text
 // Todo: LocationRequest Priority
 const val PLACE_PICKER_REQUEST_CODE = 1
