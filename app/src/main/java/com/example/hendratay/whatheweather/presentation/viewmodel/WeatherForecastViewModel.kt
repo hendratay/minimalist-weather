@@ -32,7 +32,7 @@ class WeatherForecastViewModel @Inject constructor(val getWeatherForecast: GetWe
         latitude = lat
         longitude =  lng
         if(latitude == null && longitude == null) {
-            forecastLiveData.postValue(Resource(ResourceState.ERROR, null, "No Location Provided"))
+            forecastLiveData.postValue(Resource(ResourceState.ERROR, null, null))
         } else {
             fetchWeatherForecast()
         }

@@ -6,12 +6,13 @@
     <string name="saved_permission">Saved Permission</string>
 
     <string name="empty_text_view">Oops, there is no result to display</string>
-    <string name="error_text_view">Oops, there was an error fetching the data \n
-        Please turn on location if is not turn on</string>
-    <string name="empty_weekly_alert">It\'s look we got no forecast for today.\nYou can see tomorrow forecast from calendar icon</string>
-    <string name="error_weekly_alert">Error retrieving weather forecast</string>
+    <string name="error_text_view">Oops, there was an error fetching the data\nPlease turn on location if is not turn on</string>
+    <string name="error_asking_enable_network">It\'s looks like there is no network\nPlease turn on network if is not turn on</string>
+    <string name="empty_weekly_alert">It\'s look we got no forecast for today\nYou can see tomorrow forecast by clicking calendar icon</string>
+    <string name="error_weekly_alert">Oops, there was an error fetching the data</string>
     <string name="empty_button">Check again</string>
     <string name="error_button">Try again</string>
+    <string name="pick_location_button">Pick Location</string>
 
     <string name="location">No Location</string>
     <string name="humidity">HUMIDITY</string>
@@ -34,11 +35,10 @@
     <string name="placeholder_sunset">5 pm</string>
     <string name="placeholder_location">No Location</string>
 
-    <string name="notice_use_last_location">Use Last Location</string>
+    <string name="notice_use_last_location">Using Last Location</string>
     <string name="notice_asking_enable_location_permission">Please Enable Location Permission</string>
     <string name="notice_enable_location_permission">Enable</string>
     <string name="notice_error_enable_location">Some Error Occur when Enable Location</string>
     <string name="notice_no_network">No Network</string>
-    <string name="notice_asking_enable_network">It\'s looks like there is no network.\nPlease Enable Network if not Enabled</string>
 
 </resources>

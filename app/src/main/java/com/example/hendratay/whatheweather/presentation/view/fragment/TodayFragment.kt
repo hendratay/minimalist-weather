@@ -98,6 +98,7 @@ class TodayFragment: Fragment() {
                 (activity as MainActivity).placePickerIntent()
             } else {
                 Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
+                setupScreenForError(getString(R.string.error_asking_enable_network))
             }
         }
     }
@@ -112,8 +113,7 @@ class TodayFragment: Fragment() {
             }
         } else {
             Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
-            setupScreenForError(getString(R.string.notice_asking_enable_network))
-            setupRecyclerForError(getString(R.string.notice_asking_enable_network))
+            setupScreenForError(getString(R.string.error_asking_enable_network))
         }
     }
 
@@ -175,23 +175,23 @@ class TodayFragment: Fragment() {
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.VISIBLE
-        error_view.textView.text = message
+        error_view.textView.text = if(message == null) getString(R.string.error_text_view) else message
     }
 
     private fun getTodayWeatherForecast() {
         weatherForecastViewModel.getWeatherForecast().observe(this,
                 Observer<Resource<WeatherForecastView>> {
                     if(view?.parent != null) {
-                        it?.let { handleWeatherForecastState(it.status, it.data, it.message) }
+                        it?.let { handleWeatherForecastState(it.status, it.data) }
                     }
                 })
     }
 
-    private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?, message: String?) {
+    private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?) {
         when(resourceState) {
             ResourceState.LOADING -> setupRecyclerForLoadingState()
             ResourceState.SUCCESS -> setupRecyclerForSuccess(data)
-            ResourceState.ERROR -> setupRecyclerForError(message)
+            ResourceState.ERROR -> setupRecyclerForError()
         }
     }
 
@@ -227,11 +227,10 @@ class TodayFragment: Fragment() {
         }
     }
 
-    private fun setupRecyclerForError(message: String?) {
+    private fun setupRecyclerForError() {
         progress_bar_recycler_view.visibility = View.GONE
         rv_weather_forecast.visibility = View.GONE
         empty_recycler_view.visibility = View.GONE
-        error_recycler_view.text = message
         if(error_view.visibility == View.VISIBLE) {
             error_recycler_view.visibility = View.GONE
             button_recycler_view.visibility = View.GONE
