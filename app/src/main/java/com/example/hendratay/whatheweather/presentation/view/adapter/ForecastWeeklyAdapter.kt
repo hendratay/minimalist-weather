@@ -12,14 +12,17 @@ import com.example.hendratay.whatheweather.presentation.model.ListItem
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import kotlinx.android.synthetic.main.item_date.view.*
 import kotlinx.android.synthetic.main.item_forecast_weekly.view.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.roundToInt
 
 
-class ForecastWeeklyAdapter(val forecastList: List<ListItem>):
+class ForecastWeeklyAdapter(private val forecastList: List<ListItem>):
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount() = forecastList.size
 
-    override fun getItemViewType(position: Int) = forecastList.get(position).getType()
+    override fun getItemViewType(position: Int) = forecastList[position].getType()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         lateinit var viewHolder: RecyclerView.ViewHolder
@@ -48,9 +51,11 @@ class ForecastWeeklyAdapter(val forecastList: List<ListItem>):
             ListItem.TYPE_GENERAL -> {
                 val generalItem: GeneralItem = forecastList[position] as GeneralItem
                 val generalViewHolder: GeneralViewHolder = holder as GeneralViewHolder
-                generalViewHolder.weatherDescTextView.text = generalItem.forecastView.weatherList[0].description
                 generalViewHolder.weatherIconImageView.setImageResource(WeatherIcon.getWeatherId(generalItem.forecastView.weatherList[0].id,generalItem.forecastView.weatherList[0].icon))
-                generalViewHolder.tempTextView.text = "${generalItem.forecastView.main.temp}\u00b0"
+                generalViewHolder.weatherDescTextView.text = generalItem.forecastView.weatherList[0].description
+                val sdf = SimpleDateFormat("K a", Locale.getDefault())
+                generalViewHolder.timeTextView.text = "(${sdf.format(Date(generalItem.forecastView.dateTime * 1000)).toLowerCase()})"
+                generalViewHolder.tempTextView.text = "${generalItem.forecastView.main.temp.roundToInt()}\u00b0"
             }
         }
 
@@ -64,6 +69,7 @@ class ForecastWeeklyAdapter(val forecastList: List<ListItem>):
         var weatherDescTextView = itemView.weekly_weather_desc_text_view
         var weatherIconImageView = itemView.weekly_weather_icon_image_view
         var tempTextView = itemView.weekly_temp_text_view
+        var timeTextView = itemView.weekly_time_text_view
     }
 
 }

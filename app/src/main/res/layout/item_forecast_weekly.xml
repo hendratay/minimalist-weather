@@ -15,31 +15,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-            <ImageView
-                tools:src="@drawable/wi_sunny"
-                android:id="@+id/weekly_weather_icon_image_view"
-                android:layout_gravity="center"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                tools:ignore="ContentDescription" />
+        <ImageView
+            tools:src="@drawable/wi_sunny"
+            android:id="@+id/weekly_weather_icon_image_view"
+            android:layout_gravity="center"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            tools:ignore="ContentDescription" />
 
-            <TextView
-                tools:text="Clear Sky"
-                app:fontFamily="monospace"
-                android:id="@+id/weekly_weather_desc_text_view"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5" />
+        <TextView
+            tools:text="Clear Sky"
+            app:fontFamily="monospace"
+            android:id="@+id/weekly_weather_desc_text_view"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
 
-            <TextView
-                tools:text="30\u00b0"
-                app:fontFamily="monospace"
-                android:id="@+id/weekly_temp_text_view"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+        <TextView
+            tools:text="(10 pm)"
+            app:fontFamily="monospace"
+            android:id="@+id/weekly_time_text_view"
+            android:layout_gravity="center|end"
+            android:gravity="end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            tools:text="30\u00b0"
+            app:fontFamily="monospace"
+            android:id="@+id/weekly_temp_text_view"
+            android:layout_gravity="center"
+            android:gravity="end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp" />
 
     </LinearLayout>
 

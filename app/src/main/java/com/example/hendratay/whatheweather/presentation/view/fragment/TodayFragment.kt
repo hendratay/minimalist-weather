@@ -156,9 +156,9 @@ class TodayFragment: Fragment() {
             max_temp_text_view.text = "\u25b2 ${it.main.tempMax.roundToInt()}\u00b0"
             wind_text_view.text = "${it.wind.speed} m/s"
             pressure_text_view.text = "${it.main.pressure.roundToInt()} hPa"
-            humidity_text_view.text = "${it.main.humidity}  %"
-            cloud_text_view.text = "${it.clouds.cloudiness}  %"
-            val sdf = SimpleDateFormat("H:mm", Locale.getDefault())
+            humidity_text_view.text = "${it.main.humidity} %"
+            cloud_text_view.text = "${it.clouds.cloudiness} %"
+            val sdf = SimpleDateFormat("H : mm", Locale.getDefault())
             sunset_text_view.text = sdf.format(Date(it.sys.sunriseTime * 1000))
             sunrise_text_view.text = sdf.format(Date(it.sys.sunsetTime * 1000))
 
