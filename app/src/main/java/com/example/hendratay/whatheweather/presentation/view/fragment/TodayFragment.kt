@@ -152,8 +152,8 @@ class TodayFragment: Fragment() {
             weather_desc_text_view.text = it.weatherList[0].description.toUpperCase()
             weather_icon_image_view.setImageResource(WeatherIcon.getWeatherId(it.weatherList[0].id, it.weatherList[0].icon))
             temp_text_view.text = "${it.main.temp.roundToInt()}\u00b0"
-            min_temp_text_view.text = "\u25bc ${it.main.tempMin.roundToInt()} \u00b0"
-            max_temp_text_view.text = "\u25b2 ${it.main.tempMax.roundToInt()} \u00b0"
+            min_temp_text_view.text = "\u25bc ${it.main.tempMin.roundToInt()}\u00b0"
+            max_temp_text_view.text = "\u25b2 ${it.main.tempMax.roundToInt()}\u00b0"
             wind_text_view.text = "${it.wind.speed} m/s"
             pressure_text_view.text = "${it.main.pressure.roundToInt()} hPa"
             humidity_text_view.text = "${it.main.humidity}  %"
