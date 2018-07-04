@@ -6,7 +6,7 @@
     android:id="@+id/item_forecast_layout"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:layout_width="70dp"
+    android:layout_width="80dp"
     android:layout_height="wrap_content">
 
     <TextView
