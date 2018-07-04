@@ -1,20 +1,19 @@
 <resources>
     <string name="app_name">Whathe Weather</string>
+    <string name="gps">Gps</string>
     <!--sharedprefrence-->
     <string name="saved_latitude">Saved Latitude</string>
     <string name="saved_longitude">Saved Longitude</string>
     <string name="saved_permission">Saved Permission</string>
 
     <string name="empty_text_view">Oops, there is no result to display</string>
-    <string name="error_text_view">Oops, there was an error fetching the data\nPlease turn on location if is not turn on</string>
-    <string name="error_asking_enable_network">It\'s looks like there is no network\nPlease turn on network if is not turn on</string>
+    <string name="error_text_view">Oops, there was an error fetching the data\nPlease turn on location or network if is not turn on</string>
     <string name="empty_weekly_alert">It\'s look we got no forecast for today\nYou can see tomorrow forecast by clicking calendar icon</string>
     <string name="error_weekly_alert">Oops, there was an error fetching the data</string>
     <string name="empty_button">Check again</string>
     <string name="error_button">Try again</string>
     <string name="pick_location_button">Pick Location</string>
 
-    <string name="location">No Location</string>
     <string name="humidity">HUMIDITY</string>
     <string name="pressure">PRESSURE</string>
     <string name="wind">WIND</string>
@@ -34,6 +33,7 @@
     <string name="placeholder_sunrise">5 am</string>
     <string name="placeholder_sunset">5 pm</string>
     <string name="placeholder_location">No Location</string>
+    <string name="placeholder_address">No Address</string>
 
     <string name="notice_use_last_location">Using Last Location</string>
     <string name="notice_asking_enable_location_permission">Please Enable Location Permission</string>

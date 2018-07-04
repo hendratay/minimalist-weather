@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -63,7 +64,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
-    private lateinit var geocoder: Geocoder
     private var savedLatitude: Double? = null
     private var savedLongitude: Double? = null
 
@@ -81,7 +81,6 @@ class MainActivity : AppCompatActivity() {
             // initialize location callback first for pass into requestLocationUpdates at `startLocationUpdates`
             receiveLocationUpdates()
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            geocoder = Geocoder(this, Locale.getDefault())
             startLocationUpdates()
         } else {
             currentWeatherViewModel.setLatLng(null, null)
@@ -103,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             onBackPressed()
             true
         }
-        R.id.location -> {
+        R.id.gps -> {
             placePickerIntent()
             true
         }
@@ -200,7 +199,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupScreenForSuccess(data: CurrentWeatherView?) {
         toolbar.visibility = View.VISIBLE
         weekly.visibility = if(supportFragmentManager.findFragmentByTag(WeeklyFragment::class.simpleName) != null) View.GONE else View.VISIBLE
-        city_name_text_view.text = data?.cityName
+        city_name_text_view.text = if(data?.cityName == "") getString(R.string.placeholder_address) else data?.cityName
     }
 
     private fun setupScreenForError() {
