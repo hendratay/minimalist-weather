@@ -159,8 +159,8 @@ class TodayFragment: Fragment() {
             humidity_text_view.text = "${it.main.humidity} %"
             cloud_text_view.text = "${it.clouds.cloudiness} %"
             val sdf = SimpleDateFormat("H : mm", Locale.getDefault())
-            sunset_text_view.text = sdf.format(Date(it.sys.sunriseTime * 1000))
-            sunrise_text_view.text = sdf.format(Date(it.sys.sunsetTime * 1000))
+            sunrise_text_view.text = sdf.format(Date(it.sys.sunriseTime * 1000))
+            sunset_text_view.text = sdf.format(Date(it.sys.sunsetTime * 1000))
 
             swipe_refresh_layout.isRefreshing = false
             data_view.visibility = View.VISIBLE
