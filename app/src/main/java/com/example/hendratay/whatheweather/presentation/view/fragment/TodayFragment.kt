@@ -93,12 +93,15 @@ class TodayFragment: Fragment() {
             setupScreenForLoadingState()
             checkGpsEnabled()
         }
+        button_recycler_view.setOnClickListener {
+            weatherForecastViewModel.fetchWeatherForecast()
+        }
         location_button.setOnClickListener {
             if((activity as MainActivity).connectivityStatus()) {
                 (activity as MainActivity).placePickerIntent()
             } else {
                 Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
-                setupScreenForError(getString(R.string.error_asking_enable_network))
+                setupScreenForError()
             }
         }
     }
@@ -113,7 +116,7 @@ class TodayFragment: Fragment() {
             }
         } else {
             Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
-            setupScreenForError(getString(R.string.error_asking_enable_network))
+            setupScreenForError()
         }
     }
 
@@ -121,16 +124,16 @@ class TodayFragment: Fragment() {
         currentWeatherViewModel.getCurrentWeather().observe(this,
                 Observer<Resource<CurrentWeatherView>> {
                     if(view?.parent != null) {
-                        it?.let { handleCurrentWeatherViewState(it.status, it.data, it.message) }
+                        it?.let { handleCurrentWeatherViewState(it.status, it.data) }
                     }
                 })
     }
 
-    private fun handleCurrentWeatherViewState(resourceState: ResourceState, data: CurrentWeatherView?, message: String?) {
+    private fun handleCurrentWeatherViewState(resourceState: ResourceState, data: CurrentWeatherView?) {
         when(resourceState) {
             ResourceState.LOADING -> setupScreenForLoadingState()
             ResourceState.SUCCESS -> setupScreenForSuccess(data)
-            ResourceState.ERROR -> setupScreenForError(message)
+            ResourceState.ERROR -> setupScreenForError()
         }
     }
 
@@ -168,14 +171,14 @@ class TodayFragment: Fragment() {
         }
     }
 
-    private fun setupScreenForError(message: String?) {
+    private fun setupScreenForError() {
         swipe_refresh_layout.isEnabled = false
         swipe_refresh_layout.isRefreshing = false
         progress_bar.visibility = View.GONE
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
         error_view.visibility = View.VISIBLE
-        error_view.textView.text = if(message == null) getString(R.string.error_text_view) else message
+        error_view.textView.text = getString(R.string.error_text_view)
     }
 
     private fun getTodayWeatherForecast() {

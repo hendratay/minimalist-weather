@@ -43,6 +43,7 @@ class WeeklyFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setupRecyclerView()
+        setupEmptyErrorButtonClick()
 
         weatherForecastViewModel = ViewModelProviders.of(activity as MainActivity, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
     }
@@ -58,20 +59,26 @@ class WeeklyFragment: Fragment() {
         rv_forecast_weekly.adapter = adapter
     }
 
+    private fun setupEmptyErrorButtonClick() {
+        button_weekly.setOnClickListener {
+            weatherForecastViewModel.fetchWeatherForecast()
+        }
+    }
+
     private fun getWeeklyForecast() {
         weatherForecastViewModel.getWeatherForecast().observe(activity as MainActivity,
                 Observer<Resource<WeatherForecastView>> {
                     if(view?.parent != null) {
-                        it?.let { handleWeatherForecastState(it.status, it.data, it.message) }
+                        it?.let { handleWeatherForecastState(it.status, it.data) }
                     }
                 })
     }
 
-    private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?, message: String?) {
+    private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?) {
         when(resourceState) {
             ResourceState.LOADING -> setupRecyclerForLoadingState()
             ResourceState.SUCCESS -> setupRecyclerForSuccess(data)
-            ResourceState.ERROR -> setupRecyclerForError(message)
+            ResourceState.ERROR -> setupRecyclerForError()
         }
     }
 
@@ -104,11 +111,10 @@ class WeeklyFragment: Fragment() {
         }
     }
 
-    private fun setupRecyclerForError(message: String?) {
+    private fun setupRecyclerForError() {
         progress_bar_weekly.visibility = View.GONE
         rv_forecast_weekly.visibility = View.GONE
         empty_weekly.visibility = View.GONE
-        error_weekly.text = message
         error_weekly.visibility = View.VISIBLE
         button_weekly.visibility = View.VISIBLE
     }
