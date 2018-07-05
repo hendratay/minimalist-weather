@@ -3,16 +3,14 @@ package com.example.hendratay.whatheweather.di
 import android.app.Application
 import android.content.Context
 import com.example.hendratay.whatheweather.data.entity.mapper.CurrentWeatherMapper
+import com.example.hendratay.whatheweather.data.entity.mapper.TimeZoneMapper
 import com.example.hendratay.whatheweather.data.entity.mapper.WeatherForecastMapper
+import com.example.hendratay.whatheweather.data.repository.TimeZoneDataRepository
 import com.example.hendratay.whatheweather.data.repository.WeatherDataRepository
+import com.example.hendratay.whatheweather.data.repository.datasource.TimeZoneDataStoreFactory
 import com.example.hendratay.whatheweather.data.repository.datasource.WeatherDataStoreFactory
-import com.example.hendratay.whatheweather.domain.interactor.GetCurrentWeather
-import com.example.hendratay.whatheweather.domain.interactor.GetWeatherForecast
+import com.example.hendratay.whatheweather.domain.repository.TimeZoneRepository
 import com.example.hendratay.whatheweather.domain.repository.WeatherRepository
-import com.example.hendratay.whatheweather.presentation.model.mapper.CurrentWeatherViewMapper
-import com.example.hendratay.whatheweather.presentation.model.mapper.WeatherForecastViewMapper
-import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
-import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
 import dagger.Module
 import dagger.Provides
 
@@ -29,6 +27,12 @@ class ApplicationModule {
                                  currentWeatherMapper: CurrentWeatherMapper,
                                  weatherForecastMapper: WeatherForecastMapper): WeatherRepository {
         return WeatherDataRepository(weatherDataStoreFactory, currentWeatherMapper, weatherForecastMapper)
+    }
+
+    @Provides
+    fun provideTimeZoneRepository(timeZoneDataStoreFactory: TimeZoneDataStoreFactory,
+                                  timeZoneMapper: TimeZoneMapper): TimeZoneRepository {
+        return TimeZoneDataRepository(timeZoneDataStoreFactory, timeZoneMapper)
     }
 
 }

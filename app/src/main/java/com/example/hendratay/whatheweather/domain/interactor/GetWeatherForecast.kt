@@ -23,4 +23,3 @@ class GetWeatherForecast @Inject constructor(val weatherRepository: WeatherRepos
     }
 
 }
-
