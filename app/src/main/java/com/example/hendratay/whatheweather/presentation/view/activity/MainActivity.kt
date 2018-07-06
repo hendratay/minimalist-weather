@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
         setupWeeklyButton()
         loadFragment(TodayFragment())
-        timeZoneViewModel.fetchCurrentWeather()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -118,6 +117,7 @@ class MainActivity : AppCompatActivity() {
                         val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         weatherForecastViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
+                        timeZoneViewModel.setQuery(place.latLng.latitude, place.latLng.longitude)
                         saveLocation(place.latLng.latitude,place.latLng.longitude)
                     }
                     Activity.RESULT_CANCELED -> {
@@ -134,6 +134,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                         weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                        timeZoneViewModel.setQuery(savedLatitude, savedLongitude)
                     }
                 }
             }
@@ -152,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                     weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                    timeZoneViewModel.setQuery(savedLatitude, savedLongitude)
                 }
             }
         }
@@ -307,6 +309,7 @@ class MainActivity : AppCompatActivity() {
                 for(location in p0.locations) {
                     currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
                     weatherForecastViewModel.setLatLng(location.latitude, location.longitude)
+                    timeZoneViewModel.setQuery(location.latitude, location.longitude)
                     saveLocation(location.latitude,location.longitude)
                 }
                 stopLocationUpdates()

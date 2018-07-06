@@ -16,6 +16,8 @@ class TimeZoneViewModel @Inject constructor(private val getTimeZone: GetTimeZone
         ViewModel() {
 
     private val timeZoneLiveData: MutableLiveData<TimeZoneView> = MutableLiveData()
+    private var latitude: Double? = null
+    private var longitude: Double? = null
 
     override fun onCleared() {
         getTimeZone.dispose()
@@ -24,8 +26,14 @@ class TimeZoneViewModel @Inject constructor(private val getTimeZone: GetTimeZone
 
     fun getTimeZone() = timeZoneLiveData
 
-    fun fetchCurrentWeather() {
-        getTimeZone.execute(TimeZoneObserver(), GetTimeZone.Params.forTimeZone("38.908133,-77.047119", 1530776620))
+    fun setQuery(lat: Double?, lng: Double?) {
+        latitude = lat
+        longitude = lng
+        fetchTimeZone()
+    }
+
+    private fun fetchTimeZone() {
+        getTimeZone.execute(TimeZoneObserver(), GetTimeZone.Params.forTimeZone("$latitude,$longitude", System.currentTimeMillis()/1000))
     }
 
     inner class TimeZoneObserver: SingleObserver<TimeZone>() {

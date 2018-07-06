@@ -17,14 +17,12 @@ import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.model.ForecastView
+import com.example.hendratay.whatheweather.presentation.model.TimeZoneView
 import com.example.hendratay.whatheweather.presentation.model.WeatherForecastView
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastAdapter
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
-import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModel
-import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
-import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
-import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
+import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.error_view.*
@@ -43,11 +41,15 @@ class TodayFragment: Fragment() {
 
     @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
+    @Inject lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
 
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
+    private lateinit var timeZoneViewModel: TimeZoneViewModel
     private lateinit var adapter: ForecastAdapter
     private var forecastList: MutableList<ForecastView> = ArrayList()
+    private var sunriseTime: Long? = null
+    private var sunsetTime: Long? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_today, container, false)
@@ -64,12 +66,14 @@ class TodayFragment: Fragment() {
         // using `activity as MainActivity` because it can share between fragment
         currentWeatherViewModel = ViewModelProviders.of(activity as MainActivity, currentWeatherViewModelFactory).get(CurrentWeatherViewModel::class.java)
         weatherForecastViewModel = ViewModelProviders.of(activity as MainActivity, weatherForecastViewModelFactory).get(WeatherForecastViewModel::class.java)
+        timeZoneViewModel = ViewModelProviders.of(activity as MainActivity, timeZoneViewModelFactory)[TimeZoneViewModel::class.java]
     }
 
     override fun onStart() {
         super.onStart()
         getCurrentWeather()
         getTodayWeatherForecast()
+        getTimeZone()
     }
 
     private fun setupRecyclerView() {
@@ -161,9 +165,8 @@ class TodayFragment: Fragment() {
             pressure_text_view.text = "${it.main.pressure.roundToInt()} hPa"
             humidity_text_view.text = "${it.main.humidity} %"
             cloud_text_view.text = "${it.clouds.cloudiness} %"
-            val sdf = SimpleDateFormat("H : mm", Locale.getDefault())
-            sunrise_text_view.text = sdf.format(Date(it.sys.sunriseTime * 1000))
-            sunset_text_view.text = sdf.format(Date(it.sys.sunsetTime * 1000))
+            sunriseTime = it.sys.sunriseTime * 1000
+            sunsetTime = it.sys.sunsetTime * 1000
 
             swipe_refresh_layout.isRefreshing = false
             data_view.visibility = View.VISIBLE
@@ -241,6 +244,20 @@ class TodayFragment: Fragment() {
             error_recycler_view.visibility = View.VISIBLE
             button_recycler_view.visibility = View.VISIBLE
         }
+    }
+
+    private fun getTimeZone() {
+        timeZoneViewModel.getTimeZone().observe(this,
+                Observer<TimeZoneView> {
+                    it?.let {
+                        val sdf = SimpleDateFormat("H : mm", Locale.getDefault())
+                        sdf.timeZone = TimeZone.getTimeZone(it.timeZoneId)
+                        if(sunriseTime != null || sunsetTime != null) {
+                            sunrise_text_view.text = sdf.format(Date(sunriseTime!!))
+                            sunset_text_view.text = sdf.format(Date(sunsetTime!!))
+                        }
+                    }
+                })
     }
 
 }
