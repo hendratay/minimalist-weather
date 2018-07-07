@@ -29,10 +29,7 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
-import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModel
-import com.example.hendratay.whatheweather.presentation.viewmodel.CurrentWeatherViewModelFactory
-import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
-import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
+import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.location.places.Place
@@ -57,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
+    @Inject lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
 
     private lateinit var sharedPref: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -64,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
+    private lateinit var timeZoneViewModel: TimeZoneViewModel
     private var savedLatitude: Double? = null
     private var savedLongitude: Double? = null
 
@@ -75,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         sharedPref = getPreferences(Context.MODE_PRIVATE)
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory)[CurrentWeatherViewModel::class.java]
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory)[WeatherForecastViewModel::class.java]
+        timeZoneViewModel = ViewModelProviders.of(this, timeZoneViewModelFactory)[TimeZoneViewModel::class.java]
 
         if(connectivityStatus()) {
             createLocationRequest()
@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity() {
                         val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         weatherForecastViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
+                        timeZoneViewModel.setQuery(place.latLng.latitude, place.latLng.longitude)
                         saveLocation(place.latLng.latitude,place.latLng.longitude)
                     }
                     Activity.RESULT_CANCELED -> {
@@ -133,6 +134,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                         weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                        timeZoneViewModel.setQuery(savedLatitude, savedLongitude)
                     }
                 }
             }
@@ -151,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
                     weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                    timeZoneViewModel.setQuery(savedLatitude, savedLongitude)
                 }
             }
         }
@@ -306,6 +309,7 @@ class MainActivity : AppCompatActivity() {
                 for(location in p0.locations) {
                     currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
                     weatherForecastViewModel.setLatLng(location.latitude, location.longitude)
+                    timeZoneViewModel.setQuery(location.latitude, location.longitude)
                     saveLocation(location.latitude,location.longitude)
                 }
                 stopLocationUpdates()

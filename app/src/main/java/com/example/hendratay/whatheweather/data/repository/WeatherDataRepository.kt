@@ -10,8 +10,8 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class WeatherDataRepository @Inject constructor(val factory: WeatherDataStoreFactory,
-                                                val currentWeatherMapper: CurrentWeatherMapper,
-                                                val weatherForecastMapper: WeatherForecastMapper):
+                                                private val currentWeatherMapper: CurrentWeatherMapper,
+                                                private val weatherForecastMapper: WeatherForecastMapper):
         WeatherRepository {
 
     override fun getCurrentWeather(latitude: Double, longitude: Double): Observable<CurrentWeather> {
