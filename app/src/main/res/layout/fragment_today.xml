@@ -272,6 +272,7 @@
                     android:visibility="gone"/>
 
                 <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:id="@+id/button_recycler_view"
                     android:text="@string/error_button"
                     android:layout_width="wrap_content"

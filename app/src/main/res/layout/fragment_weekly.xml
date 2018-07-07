@@ -62,6 +62,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
+        style="@style/Widget.AppCompat.Button.Colored"
         android:id="@+id/button_weekly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
