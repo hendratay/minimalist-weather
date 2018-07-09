@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.hendratay.whatheweather.R
+import com.example.hendratay.whatheweather.domain.model.Main
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
@@ -25,6 +26,7 @@ import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.error_view.*
 import kotlinx.android.synthetic.main.error_view.view.*
@@ -120,6 +122,8 @@ class TodayFragment: Fragment() {
             }
         } else {
             Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
+            (activity as MainActivity).toolbar.visibility = View.GONE
+            (activity as MainActivity).weekly.visibility = View.GONE
             setupScreenForError()
         }
     }
