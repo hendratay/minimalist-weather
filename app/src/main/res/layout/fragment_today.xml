@@ -241,7 +241,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:paddingTop="16dp"
+                    android:paddingTop="32dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:paddingBottom="8dp"/>
@@ -250,7 +250,7 @@
                     android:id="@+id/progress_bar_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="64dp"
                     android:visibility="gone" />
 
                 <TextView
@@ -259,7 +259,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="64dp"
                     android:visibility="gone"/>
 
                 <TextView
@@ -268,7 +268,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="64dp"
                     android:visibility="gone"/>
 
                 <Button
