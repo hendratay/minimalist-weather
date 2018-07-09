@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.model.ForecastView
+import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import kotlinx.android.synthetic.main.item_forecast.view.*
 import java.text.SimpleDateFormat
@@ -24,9 +25,7 @@ class ForecastAdapter(val forecastList: List<ForecastView>):
         val forecast = forecastList.get(position)
         holder.weatherDescTextView.text = forecast.weatherList[0].description
         holder.weatherIconImageView.setImageResource(WeatherIcon.getWeatherId(forecast.weatherList[0].id, forecast.weatherList[0].icon))
-        val sdf = SimpleDateFormat("K a")
-        val dateTime = sdf.format(Date(forecast.dateTime * 1000))
-        holder.dateTimeTextview.text = dateTime.toLowerCase()
+        holder.dateTimeTextview.text = TimeFormat.todayForecastTime(forecast.dateTime * 1000).toLowerCase()
     }
 
     inner class ForecastViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

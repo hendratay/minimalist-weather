@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity() {
                         val place: Place = PlacePicker.getPlace(this, data)
                         currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
                         weatherForecastViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
+                        weatherForecastViewModel.getWeatherForecast()
                         timeZoneViewModel.setQuery(place.latLng.latitude, place.latLng.longitude)
                         saveLocation(place.latLng.latitude,place.latLng.longitude)
                     }

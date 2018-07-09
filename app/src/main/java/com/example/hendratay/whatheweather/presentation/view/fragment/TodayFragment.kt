@@ -21,6 +21,7 @@ import com.example.hendratay.whatheweather.presentation.model.TimeZoneView
 import com.example.hendratay.whatheweather.presentation.model.WeatherForecastView
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastAdapter
+import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import dagger.android.support.AndroidSupportInjection
@@ -28,7 +29,6 @@ import kotlinx.android.synthetic.main.empty_view.*
 import kotlinx.android.synthetic.main.error_view.*
 import kotlinx.android.synthetic.main.error_view.view.*
 import kotlinx.android.synthetic.main.fragment_today.*
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -71,9 +71,9 @@ class TodayFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
+        getTimeZone()
         getCurrentWeather()
         getTodayWeatherForecast()
-        getTimeZone()
     }
 
     private fun setupRecyclerView() {
@@ -167,6 +167,8 @@ class TodayFragment: Fragment() {
             cloud_text_view.text = "${it.clouds.cloudiness} %"
             sunriseTime = it.sys.sunriseTime * 1000
             sunsetTime = it.sys.sunsetTime * 1000
+            sunrise_text_view.text = TimeFormat.sunriseTime(sunriseTime!!)
+            sunset_text_view.text = TimeFormat.sunsetTime(sunsetTime!!)
 
             swipe_refresh_layout.isRefreshing = false
             data_view.visibility = View.VISIBLE
@@ -216,13 +218,10 @@ class TodayFragment: Fragment() {
         it?.let {
             forecastList.clear()
             it.forecastList.forEach {
-                val sdf = SimpleDateFormat("dd MM yyyy", Locale.getDefault())
-                val dateTime = sdf.format(Date(it.dateTime * 1000))
-                val currentDateTime = sdf.format(Calendar.getInstance().time)
-                if (dateTime == currentDateTime) {
+                val pairTime = TimeFormat.todayForecastGroupTime(it.dateTime * 1000)
+                if(pairTime.first == pairTime.second) {
                     forecastList.add(it)
                 }
-
             }
             adapter.notifyDataSetChanged()
             if(forecastList.isEmpty()) {
@@ -249,14 +248,9 @@ class TodayFragment: Fragment() {
     private fun getTimeZone() {
         timeZoneViewModel.getTimeZone().observe(this,
                 Observer<TimeZoneView> {
-                    it?.let {
-                        val sdf = SimpleDateFormat("H : mm", Locale.getDefault())
-                        sdf.timeZone = TimeZone.getTimeZone(it.timeZoneId)
-                        if(sunriseTime != null || sunsetTime != null) {
-                            sunrise_text_view.text = sdf.format(Date(sunriseTime!!))
-                            sunset_text_view.text = sdf.format(Date(sunsetTime!!))
-                        }
-                    }
+                    TimeFormat.timeZoneId = it?.timeZoneId
+                    getCurrentWeather()
+                    getTodayWeatherForecast()
                 })
     }
 

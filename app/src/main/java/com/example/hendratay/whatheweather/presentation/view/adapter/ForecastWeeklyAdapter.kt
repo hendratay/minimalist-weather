@@ -9,6 +9,7 @@ import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.model.DateItem
 import com.example.hendratay.whatheweather.presentation.model.GeneralItem
 import com.example.hendratay.whatheweather.presentation.model.ListItem
+import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import kotlinx.android.synthetic.main.item_date.view.*
 import kotlinx.android.synthetic.main.item_forecast_weekly.view.*
@@ -53,8 +54,7 @@ class ForecastWeeklyAdapter(private val forecastList: List<ListItem>):
                 val generalViewHolder: GeneralViewHolder = holder as GeneralViewHolder
                 generalViewHolder.weatherIconImageView.setImageResource(WeatherIcon.getWeatherId(generalItem.forecastView.weatherList[0].id,generalItem.forecastView.weatherList[0].icon))
                 generalViewHolder.weatherDescTextView.text = generalItem.forecastView.weatherList[0].description
-                val sdf = SimpleDateFormat("K a", Locale.getDefault())
-                generalViewHolder.timeTextView.text = "(${sdf.format(Date(generalItem.forecastView.dateTime * 1000)).toLowerCase()})"
+                generalViewHolder.timeTextView.text = TimeFormat.forecastTime(generalItem.forecastView.dateTime * 1000).toLowerCase()
                 generalViewHolder.tempTextView.text = "${generalItem.forecastView.main.temp.roundToInt()}\u00b0"
             }
         }

@@ -32,6 +32,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"${getProperty("local.properties", "openweathermap_api_key")}\""
         buildConfigField "String", "TIMEZONE_API_KEY", "\"${getProperty("local.properties", "timezone_api_key")}\""
+        multiDexEnabled true
     }
     buildTypes {
         release {

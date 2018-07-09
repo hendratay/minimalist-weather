@@ -14,6 +14,7 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastWeeklyAdapter
+import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
 import dagger.android.support.AndroidSupportInjection
@@ -122,8 +123,7 @@ class WeeklyFragment: Fragment() {
     private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): Map<String, MutableList<ForecastView>> {
         val groupedHashMap: HashMap<String, MutableList<ForecastView>> = HashMap()
         for(forecastView: ForecastView in forecastList) {
-            val sdf = SimpleDateFormat("dd MMM y, EEE", Locale.getDefault())
-            val date = sdf.format(Date(forecastView.dateTime * 1000))
+            val date = TimeFormat.forecastGroupTime(forecastView.dateTime * 1000)
             if(groupedHashMap.containsKey(date)) {
                 groupedHashMap[date]?.add(forecastView)
             } else {
