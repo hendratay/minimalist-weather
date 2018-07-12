@@ -20,8 +20,8 @@
             android:layout_height="?android:attr/actionBarSize" >
 
             <ImageButton
-                android:id="@+id/weekly"
-                android:src="@drawable/ic_today_black_24dp"
+                android:id="@+id/settings"
+                android:src="@drawable/ic_settings_black_24dp"
                 android:background="@android:color/transparent"
                 android:layout_margin="16dp"
                 android:layout_width="wrap_content"

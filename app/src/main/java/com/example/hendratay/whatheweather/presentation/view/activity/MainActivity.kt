@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +17,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,7 +26,6 @@ import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
-import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -40,7 +37,6 @@ import com.google.android.gms.tasks.Task
 import com.google.maps.android.SphericalUtil
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.Locale
 import javax.inject.Inject
 
 const val PLACE_PICKER_REQUEST_CODE = 1
@@ -88,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupToolbar()
-        setupWeeklyButton()
+        setupSettingsButton()
         loadFragment(TodayFragment())
     }
 
@@ -165,15 +161,6 @@ class MainActivity : AppCompatActivity() {
         if(supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
-                is TodayFragment -> {
-                    weekly.visibility = View.VISIBLE
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                }
-                is WeeklyFragment -> {
-                    weekly.visibility = View.GONE
-                }
-            }
         } else {
             finish()
         }
@@ -197,18 +184,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupScreenForLoadingState() {
         toolbar.visibility = View.GONE
-        weekly.visibility = View.GONE
     }
 
     private fun setupScreenForSuccess(data: CurrentWeatherView?) {
         toolbar.visibility = View.VISIBLE
-        weekly.visibility = if(supportFragmentManager.findFragmentByTag(WeeklyFragment::class.simpleName) != null) View.GONE else View.VISIBLE
         city_name_text_view.text = if(data?.cityName == "") getString(R.string.placeholder_address) else data?.cityName
     }
 
     private fun setupScreenForError() {
         toolbar.visibility = View.GONE
-        weekly.visibility = View.GONE
     }
 
     private fun setupToolbar() {
@@ -217,11 +201,8 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
-    private fun setupWeeklyButton() {
-        weekly.setOnClickListener {
-            loadFragment(WeeklyFragment())
-            weekly.visibility = View.GONE
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    private fun setupSettingsButton() {
+        settings.setOnClickListener {
         }
     }
 
@@ -240,7 +221,7 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST_CODE)
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    fun loadFragment(fragment: Fragment) {
         val newFragment: Fragment? = supportFragmentManager.findFragmentByTag(fragment::class.simpleName)
         supportFragmentManager
                 .beginTransaction()

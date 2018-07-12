@@ -240,7 +240,7 @@
                     android:id="@+id/rv_weather_forecast"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:paddingTop="32dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
@@ -278,6 +278,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:id="@+id/weekly"
+                    android:gravity="center"
+                    android:text="@string/show_weekly_forecast"
+                    android:drawablePadding="8dp"
+                    android:drawableLeft="@drawable/ic_today_white_24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:visibility="gone" />
 
             </LinearLayout>

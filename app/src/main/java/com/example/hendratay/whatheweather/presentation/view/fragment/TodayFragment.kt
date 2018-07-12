@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.hendratay.whatheweather.R
-import com.example.hendratay.whatheweather.domain.model.Main
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
@@ -62,6 +61,7 @@ class TodayFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         setupRecyclerView()
+        setupWeeklyButton()
         setupSwipeRefresh()
         setupEmptyErrorButtonClick()
 
@@ -82,6 +82,12 @@ class TodayFragment: Fragment() {
         rv_weather_forecast.layoutManager = LinearLayoutManager(activity as MainActivity, LinearLayoutManager.HORIZONTAL, false)
         adapter = ForecastAdapter(forecastList)
         rv_weather_forecast.adapter = adapter
+    }
+
+    private fun setupWeeklyButton() {
+        weekly.setOnClickListener {
+            (activity as MainActivity).loadFragment(WeeklyFragment())
+        }
     }
 
     private fun setupSwipeRefresh() {
@@ -123,7 +129,6 @@ class TodayFragment: Fragment() {
         } else {
             Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
             (activity as MainActivity).toolbar.visibility = View.GONE
-            (activity as MainActivity).weekly.visibility = View.GONE
             setupScreenForError()
         }
     }
@@ -213,6 +218,7 @@ class TodayFragment: Fragment() {
         empty_recycler_view.visibility = View.GONE
         error_recycler_view.visibility = View.GONE
         button_recycler_view.visibility = View.GONE
+        weekly.visibility = View.GONE
     }
 
     private fun setupRecyclerForSuccess(it: WeatherForecastView?) {
@@ -221,18 +227,14 @@ class TodayFragment: Fragment() {
         button_recycler_view.visibility = View.GONE
         it?.let {
             forecastList.clear()
-            it.forecastList.forEach {
-                val pairTime = TimeFormat.todayForecastGroupTime(it.dateTime * 1000)
-                if(pairTime.first == pairTime.second) {
-                    forecastList.add(it)
-                }
-            }
+            for(i in 0..6) forecastList.add(it.forecastList[i])
             adapter.notifyDataSetChanged()
             if(forecastList.isEmpty()) {
                 empty_recycler_view.visibility = View.VISIBLE
                 empty_recycler_view.text = getString(R.string.empty_weekly_alert)
             }
             rv_weather_forecast.visibility = View.VISIBLE
+            weekly.visibility = View.VISIBLE
         }
     }
 
@@ -240,6 +242,7 @@ class TodayFragment: Fragment() {
         progress_bar_recycler_view.visibility = View.GONE
         rv_weather_forecast.visibility = View.GONE
         empty_recycler_view.visibility = View.GONE
+        weekly.visibility = View.GONE
         if(error_view.visibility == View.VISIBLE) {
             error_recycler_view.visibility = View.GONE
             button_recycler_view.visibility = View.GONE

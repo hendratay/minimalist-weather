@@ -1,18 +1,19 @@
 <resources>
     <string name="app_name">Whathe Weather</string>
     <string name="gps">Gps</string>
-    <!--sharedprefrence-->
+    <!--Shared Preference-->
     <string name="saved_latitude">Saved Latitude</string>
     <string name="saved_longitude">Saved Longitude</string>
     <string name="saved_permission">Saved Permission</string>
 
     <string name="empty_text_view">Oops, there is no result to display</string>
     <string name="error_text_view">Oops, there was an error fetching the data\nPlease turn on location or network if is not turn on</string>
-    <string name="empty_weekly_alert">It\'s look we got no forecast for today\nYou can see tomorrow forecast by clicking calendar icon</string>
+    <string name="empty_weekly_alert">Oops, there is no forecast to display</string>
     <string name="error_weekly_alert">Oops, there was an error fetching the data</string>
     <string name="empty_button">Check again</string>
     <string name="error_button">Try again</string>
     <string name="pick_location_button">Pick Location</string>
+    <string name="show_weekly_forecast">Show Weekly Forecast</string>
 
     <string name="humidity">HUMIDITY</string>
     <string name="pressure">PRESSURE</string>
@@ -40,5 +41,4 @@
     <string name="notice_enable_location_permission">Enable</string>
     <string name="notice_error_enable_location">Some Error Occur when Enable Location</string>
     <string name="notice_no_network">No Network</string>
-
 </resources>
