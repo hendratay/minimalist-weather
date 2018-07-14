@@ -41,4 +41,8 @@
     <string name="notice_enable_location_permission">Enable</string>
     <string name="notice_error_enable_location">Some Error Occur when Enable Location</string>
     <string name="notice_no_network">No Network</string>
+
+    <string name="settings">SETTINGS</string>
+    <string name="about">About</string>
+    <string name="send_a_feedback">Send a feedback</string>
 </resources>

@@ -1,12 +1,10 @@
 package com.example.hendratay.whatheweather.presentation.view.activity
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
-import android.content.Intent
-import android.content.IntentSender
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -203,7 +201,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupSettingsButton() {
         settings.setOnClickListener {
+            openSettingsDialog()
         }
+    }
+
+    private fun openSettingsDialog() {
+        val builder = AlertDialog.Builder(this)
+        val view = this.layoutInflater.inflate(R.layout.dialog_settings, null)
+        builder.setView(view)
+        builder.show()
     }
 
     fun placePickerIntent() {
