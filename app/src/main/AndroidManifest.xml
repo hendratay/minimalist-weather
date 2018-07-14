@@ -18,10 +18,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyACFhKwXYU9MNO1D7vZcYN3fugF9JjsVPw"/>
 
-        <activity android:name=".presentation.view.activity.MainActivity">
+        <activity
+            android:name=".presentation.view.activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
