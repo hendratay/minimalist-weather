@@ -86,6 +86,7 @@ class WeeklyFragment: Fragment() {
     private fun setupRecyclerForLoadingState() {
         progress_bar_weekly.visibility = View.VISIBLE
         rv_forecast_weekly.visibility = View.GONE
+        error_cloud.visibility = View.GONE
         empty_weekly.visibility = View.GONE
         error_weekly.visibility = View.GONE
         button_weekly.visibility = View.GONE
@@ -93,6 +94,7 @@ class WeeklyFragment: Fragment() {
 
     private fun setupRecyclerForSuccess(it: WeatherForecastView?) {
         progress_bar_weekly.visibility = View.GONE
+        error_cloud.visibility = View.GONE
         error_weekly.visibility = View.GONE
         button_weekly.visibility = View.GONE
         it?.let {
@@ -107,7 +109,11 @@ class WeeklyFragment: Fragment() {
                 }
             }
             adapter.notifyDataSetChanged()
-            if(consolidatedList.isEmpty()) empty_weekly.visibility = View.VISIBLE
+            if(consolidatedList.isEmpty()) {
+                error_cloud.visibility = View.VISIBLE
+                empty_weekly.visibility = View.VISIBLE
+                button_weekly.visibility = View.VISIBLE
+            }
             rv_forecast_weekly.visibility = View.VISIBLE
         }
     }
@@ -115,6 +121,7 @@ class WeeklyFragment: Fragment() {
     private fun setupRecyclerForError() {
         progress_bar_weekly.visibility = View.GONE
         rv_forecast_weekly.visibility = View.GONE
+        error_cloud.visibility = View.VISIBLE
         empty_weekly.visibility = View.GONE
         error_weekly.visibility = View.VISIBLE
         button_weekly.visibility = View.VISIBLE

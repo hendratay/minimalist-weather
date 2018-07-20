@@ -215,6 +215,7 @@ class TodayFragment: Fragment() {
     private fun setupRecyclerForLoadingState() {
         progress_bar_recycler_view.visibility = View.VISIBLE
         rv_weather_forecast.visibility = View.GONE
+        today_error_cloud.visibility = View.GONE
         empty_recycler_view.visibility = View.GONE
         error_recycler_view.visibility = View.GONE
         button_recycler_view.visibility = View.GONE
@@ -223,6 +224,9 @@ class TodayFragment: Fragment() {
 
     private fun setupRecyclerForSuccess(it: WeatherForecastView?) {
         progress_bar_recycler_view.visibility = View.GONE
+        today_error_cloud.visibility = View.GONE
+        error_recycler_view.visibility = View.GONE
+        button_recycler_view.visibility = View.GONE
         error_recycler_view.visibility = View.GONE
         button_recycler_view.visibility = View.GONE
         it?.let {
@@ -230,8 +234,9 @@ class TodayFragment: Fragment() {
             for(i in 0..6) forecastList.add(it.forecastList[i])
             adapter.notifyDataSetChanged()
             if(forecastList.isEmpty()) {
+                today_error_cloud.visibility = View.VISIBLE
                 empty_recycler_view.visibility = View.VISIBLE
-                empty_recycler_view.text = getString(R.string.empty_weekly_alert)
+                button_recycler_view.visibility = View.VISIBLE
             }
             rv_weather_forecast.visibility = View.VISIBLE
             weekly.visibility = View.VISIBLE
@@ -244,9 +249,11 @@ class TodayFragment: Fragment() {
         empty_recycler_view.visibility = View.GONE
         weekly.visibility = View.GONE
         if(error_view.visibility == View.VISIBLE) {
+            today_error_cloud.visibility = View.GONE
             error_recycler_view.visibility = View.GONE
             button_recycler_view.visibility = View.GONE
         } else {
+            today_error_cloud.visibility = View.VISIBLE
             error_recycler_view.visibility = View.VISIBLE
             button_recycler_view.visibility = View.VISIBLE
         }

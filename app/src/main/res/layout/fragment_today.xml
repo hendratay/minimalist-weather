@@ -259,8 +259,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="64dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:layout_marginTop="32dp"/>
 
                 <TextView
                     android:id="@+id/error_recycler_view"
@@ -268,13 +268,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="64dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:layout_marginTop="32dp"/>
+
+                <ImageView
+                    android:id="@+id/today_error_cloud"
+                    android:layout_width="96dp"
+                    android:layout_height="48dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:src="@drawable/error"
+                    android:layout_marginTop="16dp"/>
 
                 <Button
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:id="@+id/button_recycler_view"
                     android:text="@string/error_button"
+                    android:layout_marginTop="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
