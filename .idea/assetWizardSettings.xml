@@ -34,8 +34,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="67c8ff" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Downloads/app_launcher.png" />
+                                      <entry key="backgroundColor" value="42b5f4" />
+                                      <entry key="foregroundImage" value="C:\Users\User\Desktop\weather\weather.png" />
                                       <entry key="outputName" value="weather_ic_launcher" />
                                     </map>
                                   </option>
