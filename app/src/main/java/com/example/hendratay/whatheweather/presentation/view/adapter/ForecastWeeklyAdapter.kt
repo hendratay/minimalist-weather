@@ -37,6 +37,10 @@ class ForecastWeeklyAdapter(private val forecastList: List<ListItem>):
                 val v2: View = inflater.inflate(R.layout.item_forecast_weekly, parent, false)
                 viewHolder = GeneralViewHolder(v2)
             }
+            ListItem.TYPE_FOOTER -> {
+                val v3: View = inflater.inflate(R.layout.item_footer, parent, false)
+                viewHolder = FooterViewHolder(v3)
+            }
         }
         return viewHolder
     }
@@ -70,6 +74,9 @@ class ForecastWeeklyAdapter(private val forecastList: List<ListItem>):
         var weatherIconImageView = itemView.weekly_weather_icon_image_view
         var tempTextView = itemView.weekly_temp_text_view
         var timeTextView = itemView.weekly_time_text_view
+    }
+
+    inner class FooterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     }
 
 }

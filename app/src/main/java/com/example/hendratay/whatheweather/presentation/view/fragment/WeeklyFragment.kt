@@ -107,6 +107,7 @@ class WeeklyFragment: Fragment() {
                     val generalItem = GeneralItem(forecast)
                     consolidatedList.add(generalItem)
                 }
+                consolidatedList.add(FooterItem())
             }
             adapter.notifyDataSetChanged()
             if(consolidatedList.isEmpty()) {
