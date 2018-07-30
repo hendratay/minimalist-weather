@@ -23,6 +23,7 @@ import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
+import com.example.hendratay.whatheweather.presentation.view.fragment.SettingsFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import com.google.android.gms.common.api.ResolvableApiException
@@ -201,15 +202,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupSettingsButton() {
         settings.setOnClickListener {
-            openSettingsDialog()
+            loadFragment(SettingsFragment())
         }
-    }
-
-    private fun openSettingsDialog() {
-        val builder = AlertDialog.Builder(this)
-        val view = this.layoutInflater.inflate(R.layout.dialog_settings, null)
-        builder.setView(view)
-        builder.show()
     }
 
     fun placePickerIntent() {

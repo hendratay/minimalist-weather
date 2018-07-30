@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="pref_temp_unit"
+        android:title="@string/temperature_unit"
+        android:summary="@string/celcius"
+        android:defaultValue="@string/celcius" />
+
+    <PreferenceCategory android:title="@string/pref_about_title">
+        <Preference
+            android:title="@string/send_feedback"
+            android:summary="@string/send_feedback_summary"/>
+        <Preference
+            android:title="@string/open_source_licenses"
+            android:summary="@string/open_source_licenses_summary"/>
+        <Preference
+            android:title="@string/app_version"
+            android:summary="@string/app_version_summary"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
