@@ -1,7 +1,6 @@
 package com.example.hendratay.whatheweather.presentation.view.activity
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.*
@@ -51,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
     @Inject lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
 
+    private lateinit var menu: Menu
     private lateinit var sharedPref: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        this.menu = menu!!
         menuInflater.inflate(R.menu.menu_toolbar, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -153,13 +154,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            if(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName != "SettingsFragment") {
+                showToolbar()
+            }
         } else {
             finish()
         }
@@ -203,7 +206,25 @@ class MainActivity : AppCompatActivity() {
     private fun setupSettingsButton() {
         settings.setOnClickListener {
             loadFragment(SettingsFragment())
+            hideToolbar()
         }
+    }
+
+    private fun hideToolbar() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.title = resources.getString(R.string.settings)
+        settings.visibility = View.GONE
+        city_name_text_view.visibility = View.GONE
+        menu.findItem(R.id.gps).isVisible = false
+    }
+
+    private fun showToolbar() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        settings.visibility = View.VISIBLE
+        city_name_text_view.visibility = View.VISIBLE
+        menu.findItem(R.id.gps).isVisible = true
     }
 
     fun placePickerIntent() {
