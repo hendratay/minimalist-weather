@@ -34,7 +34,7 @@ object TimeFormat {
     }
 
     fun forecastGroupTime(forecast: Long): String {
-        val sdf = SimpleDateFormat("dd MMM y, EEE", Locale.getDefault())
+        val sdf = SimpleDateFormat("EEE, dd MMM y", Locale.getDefault())
         sdf.timeZone = if(timeZoneId == null) TimeZone.getTimeZone(TimeZone.getDefault().id) else TimeZone.getTimeZone(timeZoneId)
         return sdf.format(Date(forecast))
     }

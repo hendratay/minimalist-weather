@@ -19,7 +19,6 @@ import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecas
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_weekly.*
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -140,7 +139,7 @@ class WeeklyFragment: Fragment() {
                 groupedHashMap[date] = list
             }
         }
-        return groupedHashMap.toList().sortedBy { (key, _) -> key }.toMap()
+        return groupedHashMap.toList().sortedBy { (key, _) -> Date(key) }.toMap()
     }
 
 }
