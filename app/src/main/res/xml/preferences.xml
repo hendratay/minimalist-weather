@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:key="pref_temp_unit"
+    <ListPreference
+        android:key="@string/saved_temp_unit"
         android:title="@string/temperature_unit"
-        android:summary="@string/celcius"
-        android:defaultValue="@string/celcius" />
+        android:dialogTitle="@string/select_temp_unit"
+        android:entries="@array/temp_unit"
+        android:entryValues="@array/temp_unit_values"
+        android:defaultValue="@string/celsius" />
 
     <PreferenceCategory android:title="@string/pref_about_title">
         <Preference
