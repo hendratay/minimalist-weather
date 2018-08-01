@@ -24,6 +24,8 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.SettingsFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
+import com.example.hendratay.whatheweather.presentation.view.utils.Location
+import com.example.hendratay.whatheweather.presentation.view.utils.Permission
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -51,7 +53,6 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
 
     private lateinit var menu: Menu
-    private lateinit var sharedPref: SharedPreferences
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
@@ -66,7 +67,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sharedPref = getPreferences(Context.MODE_PRIVATE)
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory)[CurrentWeatherViewModel::class.java]
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory)[WeatherForecastViewModel::class.java]
         timeZoneViewModel = ViewModelProviders.of(this, timeZoneViewModelFactory)[TimeZoneViewModel::class.java]
@@ -331,28 +331,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveLocation(lat: Double, lng: Double) {
-        with(sharedPref.edit()) {
-            putLong(getString(R.string.saved_latitude), java.lang.Double.doubleToRawLongBits(lat))
-            putLong(getString(R.string.saved_longitude), java.lang.Double.doubleToRawLongBits(lng))
-            apply()
-        }
+        Location.saveLatSharedPref(this, java.lang.Double.doubleToRawLongBits(lat))
+        Location.saveLngSharedPref(this, java.lang.Double.doubleToRawLongBits(lng))
     }
 
     private fun getSavedLocation() {
-        savedLatitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_latitude), 0))
-        savedLongitude = java.lang.Double.longBitsToDouble(sharedPref.getLong(getString(R.string.saved_longitude), 0))
+        savedLatitude = java.lang.Double.longBitsToDouble(Location.getLatSharedPref(this))
+        savedLongitude = java.lang.Double.longBitsToDouble(Location.getLngSharedPref(this))
         if(savedLatitude == 0.0) savedLatitude = null
         if(savedLongitude == 0.0) savedLongitude = null
     }
 
     private fun savePermissionCheck() {
-        sharedPref.edit()
-                .putBoolean(getString(R.string.saved_permission), false)
-                .apply()
+        Permission.savePermissionSharedPref(this, false)
     }
 
     private fun getPermissionCheck(): Boolean {
-        return sharedPref.getBoolean(getString(R.string.saved_permission), true)
+        return Permission.getPermissionSharedPref(this)
     }
 
 }
