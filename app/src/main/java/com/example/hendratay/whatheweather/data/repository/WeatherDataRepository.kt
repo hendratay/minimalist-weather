@@ -14,13 +14,13 @@ class WeatherDataRepository @Inject constructor(val factory: WeatherDataStoreFac
                                                 private val weatherForecastMapper: WeatherForecastMapper):
         WeatherRepository {
 
-    override fun getCurrentWeather(latitude: Double, longitude: Double): Observable<CurrentWeather> {
-        return factory.create().getCurrentWeather(latitude, longitude)
+    override fun getCurrentWeather(latitude: Double, longitude: Double, units: String): Observable<CurrentWeather> {
+        return factory.create().getCurrentWeather(latitude, longitude, units)
                 .map { currentWeatherMapper.mapFromEntity(it) }
     }
 
-    override fun getWeatherForecast(latitude: Double, longitude: Double): Observable<WeatherForecast> {
-        return factory.create().getWeatherForecast(latitude, longitude)
+    override fun getWeatherForecast(latitude: Double, longitude: Double, units: String): Observable<WeatherForecast> {
+        return factory.create().getWeatherForecast(latitude, longitude, units)
                 .map { weatherForecastMapper.mapFromEntity(it) }
     }
 

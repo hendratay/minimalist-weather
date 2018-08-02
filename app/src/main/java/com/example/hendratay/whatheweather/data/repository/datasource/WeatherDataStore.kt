@@ -6,8 +6,8 @@ import io.reactivex.Observable
 
 interface WeatherDataStore {
 
-    fun getCurrentWeather(latitude: Double, longitude: Double): Observable<CurrentWeatherEntity>
+    fun getCurrentWeather(latitude: Double, longitude: Double, units: String): Observable<CurrentWeatherEntity>
 
-    fun getWeatherForecast(latitude: Double, longitude: Double): Observable<WeatherForecastEntity>
+    fun getWeatherForecast(latitude: Double, longitude: Double, units: String): Observable<WeatherForecastEntity>
 
 }

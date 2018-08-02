@@ -26,6 +26,7 @@ import com.example.hendratay.whatheweather.presentation.view.fragment.SettingsFr
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
 import com.example.hendratay.whatheweather.presentation.view.utils.Location
 import com.example.hendratay.whatheweather.presentation.view.utils.Permission
+import com.example.hendratay.whatheweather.presentation.view.utils.Temperature
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var timeZoneViewModel: TimeZoneViewModel
     private var savedLatitude: Double? = null
     private var savedLongitude: Double? = null
+    private var savedUnits: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -78,8 +80,8 @@ class MainActivity : AppCompatActivity() {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             startLocationUpdates()
         } else {
-            currentWeatherViewModel.setLatLng(null, null)
-            weatherForecastViewModel.setLatLng(null, null)
+            currentWeatherViewModel.setLocation(null, null, savedUnits)
+            weatherForecastViewModel.setLocation(null, null, savedUnits)
         }
 
         setupToolbar()
@@ -111,8 +113,9 @@ class MainActivity : AppCompatActivity() {
                 when(resultCode) {
                     Activity.RESULT_OK -> {
                         val place: Place = PlacePicker.getPlace(this, data)
-                        currentWeatherViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
-                        weatherForecastViewModel.setLatLng(place.latLng.latitude, place.latLng.longitude)
+                        getSavedUnits()
+                        currentWeatherViewModel.setLocation(place.latLng.latitude, place.latLng.longitude, savedUnits)
+                        weatherForecastViewModel.setLocation(place.latLng.latitude, place.latLng.longitude, savedUnits)
                         weatherForecastViewModel.getWeatherForecast()
                         timeZoneViewModel.setQuery(place.latLng.latitude, place.latLng.longitude)
                         saveLocation(place.latLng.latitude,place.latLng.longitude)
@@ -126,11 +129,12 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_OK -> startLocationUpdates()
                     Activity.RESULT_CANCELED -> {
                         getSavedLocation()
+                        getSavedUnits()
                         if(savedLatitude != null && savedLongitude != null) {
                             Toast.makeText(this, R.string.notice_use_last_location, Toast.LENGTH_SHORT).show()
                         }
-                        currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
-                        weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                        currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
+                        weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
                         timeZoneViewModel.setQuery(savedLatitude, savedLongitude)
                     }
                 }
@@ -145,11 +149,12 @@ class MainActivity : AppCompatActivity() {
                     startLocationUpdates()
                 } else {
                     getSavedLocation()
+                    getSavedUnits()
                     if(savedLatitude != null && savedLongitude != null) {
                         Toast.makeText(this, R.string.notice_use_last_location, Toast.LENGTH_SHORT).show()
                     }
-                    currentWeatherViewModel.setLatLng(savedLatitude, savedLongitude)
-                    weatherForecastViewModel.setLatLng(savedLatitude, savedLongitude)
+                    currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
+                    weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
                     timeZoneViewModel.setQuery(savedLatitude, savedLongitude)
                 }
             }
@@ -162,6 +167,12 @@ class MainActivity : AppCompatActivity() {
                     FragmentManager.POP_BACK_STACK_INCLUSIVE)
             if(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName != "SettingsFragment") {
                 showToolbar()
+                if(Temperature.getTempSharedPrefs(this) != savedUnits) {
+                    getSavedLocation()
+                    getSavedUnits()
+                    currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
+                    weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
+                }
             }
         } else {
             finish()
@@ -256,9 +267,9 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
         } else {
-            if(getPermissionCheck()) {
+            if(Permission.getPermissionSharedPref(this)) {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
-                savePermissionCheck()
+                Permission.savePermissionSharedPref(this, false)
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
                 Snackbar.make(coordinator_layout, R.string.notice_asking_enable_location_permission, Snackbar.LENGTH_LONG)
@@ -310,8 +321,9 @@ class MainActivity : AppCompatActivity() {
             override fun onLocationResult(p0: LocationResult?) {
                 p0 ?: return
                 for(location in p0.locations) {
-                    currentWeatherViewModel.setLatLng(location.latitude, location.longitude)
-                    weatherForecastViewModel.setLatLng(location.latitude, location.longitude)
+                    getSavedUnits()
+                    currentWeatherViewModel.setLocation(location.latitude, location.longitude, savedUnits)
+                    weatherForecastViewModel.setLocation(location.latitude, location.longitude, savedUnits)
                     timeZoneViewModel.setQuery(location.latitude, location.longitude)
                     saveLocation(location.latitude,location.longitude)
                 }
@@ -342,12 +354,8 @@ class MainActivity : AppCompatActivity() {
         if(savedLongitude == 0.0) savedLongitude = null
     }
 
-    private fun savePermissionCheck() {
-        Permission.savePermissionSharedPref(this, false)
-    }
-
-    private fun getPermissionCheck(): Boolean {
-        return Permission.getPermissionSharedPref(this)
+    private fun getSavedUnits() {
+        savedUnits = Temperature.getTempSharedPrefs(this)
     }
 
 }

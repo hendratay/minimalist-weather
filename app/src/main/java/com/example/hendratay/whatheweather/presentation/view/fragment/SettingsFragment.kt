@@ -6,6 +6,7 @@ import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceManager
 import com.example.hendratay.whatheweather.R
+import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 
 class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
