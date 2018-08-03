@@ -9,14 +9,14 @@ object WeatherIcon {
         500, 501, 502, 503, 504 -> R.drawable.wi_sunny_rain
         520, 521, 522, 531 -> R.drawable.wi_night_rain
         511, 600, 601, 602, 611, 612, 615, 616, 620, 621, 622 -> R.drawable.wi_snowy
-        701, 711, 721, 731, 741, 751, 761 -> R.drawable.wi_windy
-        // todo: replace with shock icon
-//        762, 771, 781 -> R.drawable.
+        701, 711, 721, 741 -> R.drawable.wi_mist
+        731, 751, 761, 762 -> R.drawable.wi_sand
+        771, 781 -> R.drawable.wi_tornado
         800 -> if (icon.takeLast(1) == "d") R.drawable.wi_sunny else R.drawable.wi_night
         801 -> if (icon.takeLast(1) == "d") R.drawable.wi_sunny_cloud else R.drawable.wi_night_cloud
         802 -> R.drawable.wi_cloudy
-        803, 804 -> if (icon.takeLast(1) == "d") R.drawable.wi_sunny_gloom else R.drawable.wi_night_gloom
-        // todo: replace with confused icon
+        803, 804 -> R.drawable.wi_broken_cloud
+        // todo: replace with error icon
         else -> R.drawable.wi_sunny
     }
 }
