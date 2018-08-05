@@ -54,4 +54,6 @@
     <string name="open_source_licenses_summary">License details for open source software</string>
     <string name="app_version">App version</string>
     <string name="app_version_summary">1.0</string>
+    <string name="rate_this_app">Rate this app</string>
+    <string name="rate_this_app_summary">If you love this app, Please take a moment to rate it in Google Play Store</string>
 </resources>
