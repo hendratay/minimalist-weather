@@ -12,7 +12,9 @@
     <PreferenceCategory android:title="@string/pref_about_title">
         <Preference
             android:title="@string/send_feedback"
-            android:summary="@string/send_feedback_summary"/>
+            android:summary="@string/send_feedback_summary">
+            <intent android:action="com.example.hendratay.whatheweather.presentation.view.activity.SendFeedbackActivity"/>
+        </Preference>
         <Preference
             android:title="@string/open_source_licenses"
             android:summary="@string/open_source_licenses_summary"/>

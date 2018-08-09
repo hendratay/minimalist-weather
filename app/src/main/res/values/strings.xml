@@ -55,5 +55,11 @@
     <string name="app_version">App version</string>
     <string name="app_version_summary">1.0</string>
     <string name="rate_this_app">Rate this app</string>
-    <string name="rate_this_app_summary">If you love this app, Please take a moment to rate it in Google Play Store</string>
+    <string name="rate_this_app_summary">Please take a moment to rate this app</string>
+
+    <string name="feedback">Feedback</string>
+    <string name="send">Send</string>
+    <string name="label_from">From:</string>
+    <string name="label_about">I\'m telling you about</string>
+    <string name="hint_feedback">Write your Description</string>
 </resources>

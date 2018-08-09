@@ -27,6 +27,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".presentation.view.activity.SendFeedbackActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.example.hendratay.whatheweather.presentation.view.activity.SendFeedbackActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
