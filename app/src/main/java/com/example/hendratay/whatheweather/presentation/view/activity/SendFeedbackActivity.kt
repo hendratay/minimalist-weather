@@ -1,10 +1,14 @@
 package com.example.hendratay.whatheweather.presentation.view.activity
 
+import android.accounts.AccountManager
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.util.Patterns
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import com.example.hendratay.whatheweather.R
 import kotlinx.android.synthetic.main.activity_sendfeedback.*
 
@@ -17,6 +21,7 @@ class SendFeedbackActivity: AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.navigationIcon?.setColorFilter(resources.getColor(android.R.color.black), PorterDuff.Mode.SRC_ATOP);
+        setupSpinnerFrom()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -33,6 +38,18 @@ class SendFeedbackActivity: AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun setupSpinnerFrom() {
+        val emailPattern = Patterns.EMAIL_ADDRESS
+        val accounts = AccountManager.get(this).accounts
+        val accountList = ArrayList<String>()
+        for (account in accounts) {
+            if (emailPattern.matcher(account.name).matches()) accountList.add(account.name)
+        }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accountList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner_from.adapter = adapter
     }
 
 }
