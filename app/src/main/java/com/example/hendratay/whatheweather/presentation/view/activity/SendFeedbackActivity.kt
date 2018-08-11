@@ -17,11 +17,11 @@ class SendFeedbackActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sendfeedback)
-
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.navigationIcon?.setColorFilter(resources.getColor(android.R.color.black), PorterDuff.Mode.SRC_ATOP);
         setupSpinnerFrom()
+        setupSpinnerAbout()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -50,6 +50,13 @@ class SendFeedbackActivity: AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accountList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner_from.adapter = adapter
+    }
+
+    private fun setupSpinnerAbout() {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item,
+                resources.getStringArray(R.array.feedback_about))
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner_about.adapter = adapter
     }
 
 }

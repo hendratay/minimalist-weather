@@ -62,4 +62,8 @@
     <string name="label_from">From:</string>
     <string name="label_about">I\'m telling you about</string>
     <string name="hint_feedback">Write your Description</string>
+    <string-array name="feedback_about">
+        <item>request</item>
+        <item>issue</item>
+    </string-array>
 </resources>
