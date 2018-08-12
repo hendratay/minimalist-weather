@@ -11,6 +11,9 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import com.example.hendratay.whatheweather.R
 import kotlinx.android.synthetic.main.activity_sendfeedback.*
+import android.content.Intent
+
+
 
 class SendFeedbackActivity: AppCompatActivity() {
 
@@ -35,6 +38,7 @@ class SendFeedbackActivity: AppCompatActivity() {
             true
         }
         R.id.send -> {
+            sendFeedback()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -57,6 +61,10 @@ class SendFeedbackActivity: AppCompatActivity() {
                 resources.getStringArray(R.array.feedback_about))
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner_about.adapter = adapter
+    }
+
+    private fun sendFeedback() {
+        // todo: send email without using intent
     }
 
 }
