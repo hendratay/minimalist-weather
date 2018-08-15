@@ -4,15 +4,15 @@ import android.accounts.AccountManager
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.util.Patterns
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import com.example.hendratay.whatheweather.BuildConfig
 import com.example.hendratay.whatheweather.R
 import kotlinx.android.synthetic.main.activity_sendfeedback.*
-import android.content.Intent
-
+import com.example.hendratay.whatheweather.presentation.view.utils.Gmail
+import kotlin.concurrent.thread
 
 
 class SendFeedbackActivity: AppCompatActivity() {
@@ -64,7 +64,19 @@ class SendFeedbackActivity: AppCompatActivity() {
     }
 
     private fun sendFeedback() {
-        // todo: send email without using intent
+        thread {
+            try {
+                try {
+                    val sender = Gmail(BuildConfig.APP_GMAIL, BuildConfig.APP_GMAIL_PASS)
+                    sender.sendMail(spinner_about.selectedItem.toString(),
+                            input_feedback.text.toString(),
+                            spinner_from.selectedItem.toString(),
+                            BuildConfig.CUSTOMER_SERVICE_GMAIL)
+                } catch (e: Exception) {
+                }
+            } catch (e: Exception) {
+            }
+        }
     }
 
 }
