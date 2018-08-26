@@ -19,15 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize" >
 
-            <ImageButton
-                android:id="@+id/settings"
-                android:src="@drawable/ic_settings_black_24dp"
-                android:background="@android:color/transparent"
-                android:layout_margin="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="ContentDescription" />
-
             <TextView
                 android:id="@+id/city_name_text_view"
                 android:text="@string/placeholder_location"

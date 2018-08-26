@@ -24,6 +24,7 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.SettingsFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
+import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import com.example.hendratay.whatheweather.presentation.view.utils.Location
 import com.example.hendratay.whatheweather.presentation.view.utils.Permission
 import com.example.hendratay.whatheweather.presentation.view.utils.Temperature
@@ -85,7 +86,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupToolbar()
-        setupSettingsButton()
         loadFragment(TodayFragment())
     }
 
@@ -97,7 +97,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> {
-            onBackPressed()
+            when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+                is SettingsFragment -> {
+                    loadFragment(TodayFragment())
+                    showToolbar()
+                }
+                else -> {
+                    loadFragment(SettingsFragment())
+                    hideToolbar()
+                }
+            }
             true
         }
         R.id.gps -> {
@@ -212,28 +221,21 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         // remove App Title (Whathe Weather)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-    }
-
-    private fun setupSettingsButton() {
-        settings.setOnClickListener {
-            loadFragment(SettingsFragment())
-            hideToolbar()
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_settings_black_24dp)
     }
 
     private fun hideToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
         supportActionBar?.setDisplayShowTitleEnabled(true)
         supportActionBar?.title = resources.getString(R.string.settings)
-        settings.visibility = View.GONE
         city_name_text_view.visibility = View.GONE
         menu.findItem(R.id.gps).isVisible = false
     }
 
     private fun showToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_settings_black_24dp)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        settings.visibility = View.VISIBLE
         city_name_text_view.visibility = View.VISIBLE
         menu.findItem(R.id.gps).isVisible = true
     }
