@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -86,7 +87,9 @@ class TodayFragment: Fragment() {
 
     private fun setupWeeklyButton() {
         weekly.setOnClickListener {
-            (activity as MainActivity).loadFragment(WeeklyFragment())
+            Handler().postDelayed({
+                (activity as MainActivity).loadFragment(WeeklyFragment())
+            }, 150)
         }
     }
 

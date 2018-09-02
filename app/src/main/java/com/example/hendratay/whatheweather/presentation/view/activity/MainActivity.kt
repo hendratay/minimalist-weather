@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
@@ -24,7 +25,6 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.SettingsFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
-import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import com.example.hendratay.whatheweather.presentation.view.utils.Location
 import com.example.hendratay.whatheweather.presentation.view.utils.Permission
 import com.example.hendratay.whatheweather.presentation.view.utils.Temperature
@@ -99,12 +99,16 @@ class MainActivity : AppCompatActivity() {
         android.R.id.home -> {
             when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
                 is SettingsFragment -> {
-                    loadFragment(TodayFragment())
-                    showToolbar()
+                    Handler().postDelayed({
+                        loadFragment(TodayFragment())
+                        showToolbar()
+                    }, 150)
                 }
                 else -> {
-                    loadFragment(SettingsFragment())
-                    hideToolbar()
+                    Handler().postDelayed({
+                        loadFragment(SettingsFragment())
+                        hideToolbar()
+                    }, 150)
                 }
             }
             true
