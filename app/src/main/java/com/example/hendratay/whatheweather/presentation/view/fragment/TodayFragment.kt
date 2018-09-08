@@ -27,9 +27,9 @@ import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.empty_view.*
-import kotlinx.android.synthetic.main.error_view.*
-import kotlinx.android.synthetic.main.error_view.view.*
+import kotlinx.android.synthetic.main.view_empty.*
+import kotlinx.android.synthetic.main.view_error.*
+import kotlinx.android.synthetic.main.view_error.view.*
 import kotlinx.android.synthetic.main.fragment_today.*
 import java.util.*
 import javax.inject.Inject
