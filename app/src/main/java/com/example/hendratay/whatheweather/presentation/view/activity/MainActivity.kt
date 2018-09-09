@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                     Handler().postDelayed({
                         loadFragment(TodayFragment())
                         showToolbar()
+                        reloadTemperature()
                     }, 150)
                 }
                 else -> {
@@ -180,12 +181,7 @@ class MainActivity : AppCompatActivity() {
                     FragmentManager.POP_BACK_STACK_INCLUSIVE)
             if(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName != "SettingsFragment") {
                 showToolbar()
-                if(Temperature.getTempSharedPrefs(this) != savedUnits) {
-                    getSavedLocation()
-                    getSavedUnits()
-                    currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
-                    weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
-                }
+                reloadTemperature()
             }
         } else {
             finish()
@@ -362,6 +358,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun getSavedUnits() {
         savedUnits = Temperature.getTempSharedPrefs(this)
+    }
+
+    /**
+     * Check temperature units, if saved preferences is changed then reload temperature data
+     */
+    private fun reloadTemperature() {
+        if(Temperature.getTempSharedPrefs(this) != savedUnits) {
+            getSavedUnits()
+            getSavedLocation()
+            currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
+            weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
+        }
     }
 
 }
