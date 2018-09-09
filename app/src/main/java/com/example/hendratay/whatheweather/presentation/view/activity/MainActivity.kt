@@ -7,9 +7,11 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import android.support.annotation.RequiresApi
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
@@ -25,6 +27,7 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.SettingsFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
+import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import com.example.hendratay.whatheweather.presentation.view.utils.Location
 import com.example.hendratay.whatheweather.presentation.view.utils.Permission
 import com.example.hendratay.whatheweather.presentation.view.utils.Temperature
@@ -100,7 +103,8 @@ class MainActivity : AppCompatActivity() {
             when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
                 is SettingsFragment -> {
                     Handler().postDelayed({
-                        loadFragment(TodayFragment())
+                        supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName,
+                                FragmentManager.POP_BACK_STACK_INCLUSIVE)
                         showToolbar()
                         reloadTemperature()
                     }, 150)
@@ -175,16 +179,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount > 1) {
-            supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            if(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName != "SettingsFragment") {
+        when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+            is TodayFragment -> finishAffinity()
+            is WeeklyFragment -> loadFragment(TodayFragment())
+            is SettingsFragment -> {
+                supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 showToolbar()
                 reloadTemperature()
             }
-        } else {
-            finish()
         }
     }
 
