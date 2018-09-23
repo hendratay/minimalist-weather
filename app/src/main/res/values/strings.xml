@@ -60,8 +60,10 @@
     <string name="feedback">Feedback</string>
     <string name="send">Send</string>
     <string name="label_from">From:</string>
+    <string name="txt_from">sample@example.com</string>
     <string name="label_about">I\'m telling you about</string>
     <string name="hint_feedback">Write your Description</string>
+    <string name="feedback_description">By sending us some feedback and thoughts about our app can help us improve the app and continue building a better experience or app for you.</string>
     <string-array name="feedback_about">
         <item>request</item>
         <item>issue</item>

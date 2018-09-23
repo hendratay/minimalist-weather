@@ -29,8 +29,8 @@ class SendFeedbackActivity: AppCompatActivity() {
         setContentView(R.layout.activity_sendfeedback)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.navigationIcon?.setColorFilter(resources.getColor(android.R.color.black), PorterDuff.Mode.SRC_ATOP);
-        setupSpinnerFrom()
+        toolbar.navigationIcon?.setColorFilter(resources.getColor(android.R.color.black), PorterDuff.Mode.SRC_ATOP)
+        setupTextFrom()
         setupSpinnerAbout()
     }
 
@@ -52,18 +52,22 @@ class SendFeedbackActivity: AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == REQUEST_CODE_EMAIL && resultCode == Activity.RESULT_OK) {
-            val account = data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayOf(account))
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner_from.adapter = adapter
+        if(requestCode == REQUEST_CODE_EMAIL) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    val email = data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                    txt_from.text = email
+                }
+                Activity.RESULT_CANCELED -> finish()
+            }
         }
     }
 
-    private fun setupSpinnerFrom() {
+    private fun setupTextFrom() {
         try {
-            val intent = AccountPicker.newChooseAccountIntent(null, null,
-                    arrayOf(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE), false, null, null, null, null)
+            val intent = AccountPicker.newChooseAccountIntent(
+                    null, null, arrayOf(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE), true,
+                    null, null, null, null, false, 1, 0)
             startActivityForResult(intent, REQUEST_CODE_EMAIL)
         } catch (e: ActivityNotFoundException) {
         }
@@ -83,7 +87,7 @@ class SendFeedbackActivity: AppCompatActivity() {
                     val sender = Gmail(BuildConfig.APP_GMAIL, BuildConfig.APP_GMAIL_PASS)
                     sender.sendMail(spinner_about.selectedItem.toString(),
                             input_feedback.text.toString(),
-                            spinner_from.selectedItem.toString(),
+                            txt_from.text.toString(),
                             BuildConfig.CUSTOMER_SERVICE_GMAIL)
                 } catch (e: Exception) {
                 }
