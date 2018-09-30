@@ -14,6 +14,7 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastWeeklyAdapter
+import com.example.hendratay.whatheweather.presentation.view.utils.RecyclerViewSnapHelper
 import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
@@ -21,6 +22,7 @@ import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_weekly.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class WeeklyFragment: Fragment() {
 
@@ -32,7 +34,7 @@ class WeeklyFragment: Fragment() {
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
 
     private lateinit var adapter: ForecastWeeklyAdapter
-    private var consolidatedList: MutableList<ListItem> = ArrayList()
+    private var weekList: MutableList<Map<String, List<ForecastView>>> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_weekly, container, false)
@@ -54,9 +56,11 @@ class WeeklyFragment: Fragment() {
     }
 
     private fun setupRecyclerView() {
-        rv_forecast_weekly.layoutManager = LinearLayoutManager(activity as MainActivity)
-        adapter = ForecastWeeklyAdapter(consolidatedList)
+        adapter = ForecastWeeklyAdapter(weekList)
+        RecyclerViewSnapHelper().attachToRecyclerView(rv_forecast_weekly)
+        rv_forecast_weekly.layoutManager = LinearLayoutManager(activity as MainActivity, LinearLayoutManager.HORIZONTAL, false)
         rv_forecast_weekly.adapter = adapter
+        rv_forecast_weekly.setHasFixedSize(true)
     }
 
     private fun setupEmptyErrorButtonClick() {
@@ -97,19 +101,13 @@ class WeeklyFragment: Fragment() {
         error_weekly.visibility = View.GONE
         button_weekly.visibility = View.GONE
         it?.let {
-            consolidatedList.clear()
+            weekList.clear()
             val groupedHashMap: Map<String, MutableList<ForecastView>> = groupDataIntoHashMap(it.forecastList.toMutableList())
             for(forecastDate: String in groupedHashMap.keys) {
-                val dateItem = DateItem(forecastDate)
-                consolidatedList.add(dateItem)
-                for (forecast: ForecastView in groupedHashMap[forecastDate]!!) {
-                    val generalItem = GeneralItem(forecast)
-                    consolidatedList.add(generalItem)
-                }
-                consolidatedList.add(FooterItem())
+                weekList.add(mapOf(forecastDate to (groupedHashMap[forecastDate] ?: emptyList<ForecastView>())))
             }
             adapter.notifyDataSetChanged()
-            if(consolidatedList.isEmpty()) {
+            if(weekList.isEmpty()) {
                 error_cloud.visibility = View.VISIBLE
                 empty_weekly.visibility = View.VISIBLE
                 button_weekly.visibility = View.VISIBLE
@@ -143,4 +141,3 @@ class WeeklyFragment: Fragment() {
     }
 
 }
-
