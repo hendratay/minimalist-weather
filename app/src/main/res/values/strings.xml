@@ -6,6 +6,7 @@
     <string name="saved_longitude">Saved Longitude</string>
     <string name="saved_permission">Saved Permission</string>
     <string name="saved_temp_unit">Saved Temp Unit</string>
+    <string name="saved_theme">Saved Theme</string>
 
     <string name="empty_text_view">Oops, there is no result to display</string>
     <string name="error_text_view">Oops, there was an error fetching the data\nPlease turn on location or network if is not turn on</string>
@@ -47,6 +48,8 @@
     <string name="temperature_unit">Temperature Unit</string>
     <string name="celsius">metric</string>
     <string name="select_temp_unit">Select Temperature Unit</string>
+    <string name="dark_theme">Dark Mode</string>
+    <string name="dark_theme_summary">Enable dark mode throughout the app</string>
     <string name="pref_about_title">About</string>
     <string name="send_feedback">Send feedback</string>
     <string name="send_feedback_summary">Any suggestion to make this app better</string>

@@ -9,6 +9,12 @@
         android:entryValues="@array/temp_unit_values"
         android:defaultValue="@string/celsius" />
 
+    <SwitchPreference
+        android:key="@string/saved_theme"
+        android:defaultValue="false"
+        android:title="@string/dark_theme"
+        android:summary="@string/dark_theme_summary" />
+
     <PreferenceCategory android:title="@string/pref_about_title">
         <Preference
             android:title="@string/send_feedback"
