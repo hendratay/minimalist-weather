@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -81,19 +82,25 @@ class SendFeedbackActivity: AppCompatActivity() {
     }
 
     private fun sendFeedback() {
+        val progressDialog = progressDialog()
         thread {
+            runOnUiThread { progressDialog.show() }
             try {
-                try {
-                    val sender = Gmail(BuildConfig.APP_GMAIL, BuildConfig.APP_GMAIL_PASS)
-                    sender.sendMail(spinner_about.selectedItem.toString(),
-                            input_feedback.text.toString(),
-                            txt_from.text.toString(),
-                            BuildConfig.CUSTOMER_SERVICE_GMAIL)
-                } catch (e: Exception) {
-                }
+                val sender = Gmail(BuildConfig.APP_GMAIL, BuildConfig.APP_GMAIL_PASS)
+                sender.sendMail(spinner_about.selectedItem.toString(),
+                        input_feedback.text.toString(),
+                        txt_from.text.toString(),
+                        BuildConfig.CUSTOMER_SERVICE_GMAIL)
             } catch (e: Exception) {
             }
+            runOnUiThread { progressDialog.dismiss() }
         }
+    }
+
+    private fun progressDialog(): AlertDialog {
+        val builder = AlertDialog.Builder(this)
+        builder.setView(layoutInflater.inflate(R.layout.dialog_progress, null))
+        return builder.create()
     }
 
 }
