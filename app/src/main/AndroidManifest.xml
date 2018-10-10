@@ -36,6 +36,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".presentation.view.activity.OpenSourceLicenseActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.example.hendratay.whatheweather.presentation.view.activity.OpenSourceLicenseActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

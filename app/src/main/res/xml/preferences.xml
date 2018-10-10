@@ -23,7 +23,9 @@
         </Preference>
         <Preference
             android:title="@string/open_source_licenses"
-            android:summary="@string/open_source_licenses_summary"/>
+            android:summary="@string/open_source_licenses_summary">
+            <intent android:action="com.example.hendratay.whatheweather.presentation.view.activity.OpenSourceLicenseActivity"/>
+        </Preference>
         <Preference
             android:title="@string/app_version"
             android:summary="@string/app_version_summary"/>
