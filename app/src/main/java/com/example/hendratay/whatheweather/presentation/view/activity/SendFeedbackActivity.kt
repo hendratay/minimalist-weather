@@ -68,7 +68,7 @@ class SendFeedbackActivity: AppCompatActivity() {
         try {
             val intent = AccountPicker.newChooseAccountIntent(
                     null, null, arrayOf(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE), true,
-                    null, null, null, null, false, 1, 0)
+                    null, null, null, null)
             startActivityForResult(intent, REQUEST_CODE_EMAIL)
         } catch (e: ActivityNotFoundException) {
         }
