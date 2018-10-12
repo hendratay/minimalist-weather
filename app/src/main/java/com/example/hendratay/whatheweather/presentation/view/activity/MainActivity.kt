@@ -5,6 +5,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.*
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
@@ -42,6 +44,7 @@ import com.google.android.gms.tasks.Task
 import com.google.maps.android.SphericalUtil
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 import javax.inject.Inject
 
 const val PLACE_PICKER_REQUEST_CODE = 1
@@ -58,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
 
     private lateinit var menu: Menu
+    private lateinit var geocoder: Geocoder
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
@@ -72,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        geocoder = Geocoder(this, Locale.getDefault())
         currentWeatherViewModel = ViewModelProviders.of(this, currentWeatherViewModelFactory)[CurrentWeatherViewModel::class.java]
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory)[WeatherForecastViewModel::class.java]
         timeZoneViewModel = ViewModelProviders.of(this, timeZoneViewModelFactory)[TimeZoneViewModel::class.java]
@@ -215,7 +219,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupScreenForSuccess(data: CurrentWeatherView?) {
         toolbar.visibility = View.VISIBLE
-        city_name_text_view.text = if(data?.cityName == "") getString(R.string.placeholder_address) else data?.cityName
+        val address = geocoder.getFromLocation(data?.coordinate?.latitude ?: 0.0,
+                data?.coordinate?.longitude ?: 0.0, 1)[0]
+        city_name_text_view.text = when {
+            address.thoroughfare == null -> address.locality.capitalize()
+            address.locality == null -> address.countryName.capitalize()
+            else -> address.thoroughfare.capitalize()
+        }
     }
 
     private fun setupScreenForError() {
