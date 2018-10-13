@@ -13,7 +13,8 @@ import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import kotlinx.android.synthetic.main.item_forecast_hour.view.*
 import kotlin.math.roundToInt
 
-class ForecastHourAdapter(val forecastList: List<ForecastView>):
+class ForecastHourAdapter(val forecastList: List<ForecastView>,
+                          private val clickListener: (ForecastView) -> Unit):
         RecyclerView.Adapter<ForecastHourAdapter.ForecastHourViewHolder>() {
 
     override fun getItemCount() = forecastList.size
@@ -28,6 +29,7 @@ class ForecastHourAdapter(val forecastList: List<ForecastView>):
         holder.weatherDescTextView.text = forecast.weatherList[0].description
         holder.timeTextView.text = TimeFormat.forecastTime(forecast.dateTime * 1000).toLowerCase()
         holder.tempTextView.text = "${forecast.main.temp.roundToInt()}\u00b0"
+        holder.itemView.setOnClickListener { clickListener(forecast) }
     }
 
     inner class ForecastHourViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

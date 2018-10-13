@@ -56,7 +56,7 @@ class WeeklyFragment: Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = ForecastWeeklyAdapter(weekList)
+        adapter = ForecastWeeklyAdapter(weekList) { it -> weeklyForecastClick(it) }
         RecyclerViewSnapHelper().attachToRecyclerView(rv_forecast_weekly)
         rv_forecast_weekly.layoutManager = LinearLayoutManager(activity as MainActivity, LinearLayoutManager.HORIZONTAL, false)
         rv_forecast_weekly.adapter = adapter
@@ -138,6 +138,9 @@ class WeeklyFragment: Fragment() {
             }
         }
         return groupedHashMap.toList().sortedBy { (key, _) -> Date(key) }.toMap()
+    }
+
+    private fun weeklyForecastClick(forecastView: ForecastView) {
     }
 
 }

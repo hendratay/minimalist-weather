@@ -2,6 +2,7 @@ package com.example.hendratay.whatheweather.presentation.view.adapter
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,8 @@ import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.model.ForecastView
 import kotlinx.android.synthetic.main.item_forecast_week.view.*
 
-class ForecastWeeklyAdapter(val forecastList: List<Map<String, List<ForecastView>>>):
+class ForecastWeeklyAdapter(val forecastList: List<Map<String, List<ForecastView>>>,
+                            val clickListener: (ForecastView) -> Unit):
         RecyclerView.Adapter<ForecastWeeklyAdapter.ForecastWeeklyViewHolder>() {
 
     private val viewPool = RecyclerView.RecycledViewPool()
@@ -26,7 +28,7 @@ class ForecastWeeklyAdapter(val forecastList: List<Map<String, List<ForecastView
         holder.weeklyForecast.layoutManager = LinearLayoutManager(holder.weeklyForecast.context)
         for (item in forecastList[position]) {
             holder.dateTextView.text = item.key
-            holder.weeklyForecast.adapter = ForecastHourAdapter(item.value)
+            holder.weeklyForecast.adapter = ForecastHourAdapter(item.value) { it -> clickListener(it) }
         }
     }
 
