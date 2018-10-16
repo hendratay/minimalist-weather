@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.*
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -22,7 +21,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.example.hendratay.whatheweather.R
 import com.example.hendratay.whatheweather.presentation.data.Resource
 import com.example.hendratay.whatheweather.presentation.data.ResourceState
@@ -33,6 +31,7 @@ import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFrag
 import com.example.hendratay.whatheweather.presentation.view.utils.Location
 import com.example.hendratay.whatheweather.presentation.view.utils.Permission
 import com.example.hendratay.whatheweather.presentation.view.utils.Temperature
+import com.example.hendratay.whatheweather.presentation.view.utils.Toast
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -153,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                         getSavedLocation()
                         getSavedUnits()
                         if(savedLatitude != null && savedLongitude != null) {
-                            Toast.makeText(this, R.string.notice_use_last_location, Toast.LENGTH_SHORT).show()
+                            Toast(this, getString(R.string.notice_use_last_location))
                         }
                         currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
                         weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -173,7 +172,7 @@ class MainActivity : AppCompatActivity() {
                     getSavedLocation()
                     getSavedUnits()
                     if(savedLatitude != null && savedLongitude != null) {
-                        Toast.makeText(this, R.string.notice_use_last_location, Toast.LENGTH_SHORT).show()
+                        Toast(this, getString(R.string.notice_use_last_location))
                     }
                     currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
                     weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -318,7 +317,7 @@ class MainActivity : AppCompatActivity() {
                 try {
                     it.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
                 } catch (sendEx: IntentSender.SendIntentException) {
-                    Toast.makeText(this, R.string.notice_error_enable_location, Toast.LENGTH_SHORT).show()
+                    Toast(this, getString(R.string.notice_error_enable_location))
                 }
             }
         }
