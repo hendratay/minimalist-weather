@@ -28,10 +28,7 @@ import com.example.hendratay.whatheweather.presentation.model.CurrentWeatherView
 import com.example.hendratay.whatheweather.presentation.view.fragment.SettingsFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragment
 import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
-import com.example.hendratay.whatheweather.presentation.view.utils.Location
-import com.example.hendratay.whatheweather.presentation.view.utils.Permission
-import com.example.hendratay.whatheweather.presentation.view.utils.Temperature
-import com.example.hendratay.whatheweather.presentation.view.utils.Toast
+import com.example.hendratay.whatheweather.presentation.view.utils.*
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -152,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                         getSavedLocation()
                         getSavedUnits()
                         if(savedLatitude != null && savedLongitude != null) {
-                            Toast(this, getString(R.string.notice_use_last_location))
+                            toast(this, getString(R.string.notice_use_last_location))
                         }
                         currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
                         weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -172,7 +169,7 @@ class MainActivity : AppCompatActivity() {
                     getSavedLocation()
                     getSavedUnits()
                     if(savedLatitude != null && savedLongitude != null) {
-                        Toast(this, getString(R.string.notice_use_last_location))
+                        toast(this, getString(R.string.notice_use_last_location))
                     }
                     currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
                     weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -288,17 +285,15 @@ class MainActivity : AppCompatActivity() {
                 Permission.savePermissionSharedPref(this, false)
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
-                Snackbar.make(coordinator_layout, R.string.notice_asking_enable_location_permission, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.notice_enable_location_permission) {
-                            val intent = Intent()
-                            val uri = Uri.fromParts("package", packageName, null)
-                            intent.apply {
-                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                                data = uri
-                            }
-                            startActivity(intent)
-                        }
-                        .show()
+                snackBar(coordinator_layout, getString(R.string.notice_asking_enable_location_permission), getString(R.string.notice_enable_location_permission)) {
+                    val intent = Intent()
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.apply {
+                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        data = uri
+                    }
+                    startActivity(intent)
+                }
             }
         }
     }
@@ -317,7 +312,7 @@ class MainActivity : AppCompatActivity() {
                 try {
                     it.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
                 } catch (sendEx: IntentSender.SendIntentException) {
-                    Toast(this, getString(R.string.notice_error_enable_location))
+                    toast(this, getString(R.string.notice_error_enable_location))
                 }
             }
         }
