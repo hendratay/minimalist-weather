@@ -1,8 +1,6 @@
 package com.example.hendratay.whatheweather.presentation.view.activity
 
-import android.accounts.AccountManager
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -15,9 +13,9 @@ import com.example.hendratay.whatheweather.BuildConfig
 import com.example.hendratay.whatheweather.R
 import kotlinx.android.synthetic.main.activity_sendfeedback.*
 import com.example.hendratay.whatheweather.presentation.view.utils.Gmail
-import com.google.android.gms.auth.GoogleAuthUtil
-import com.google.android.gms.common.AccountPicker
 import kotlin.concurrent.thread
+import android.content.IntentSender
+import com.google.android.gms.auth.api.credentials.*
 
 class SendFeedbackActivity: AppCompatActivity() {
 
@@ -56,8 +54,8 @@ class SendFeedbackActivity: AppCompatActivity() {
         if(requestCode == REQUEST_CODE_EMAIL) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    val email = data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                    txt_from.text = email
+                    val credential = data?.getParcelableExtra<Credential>(Credential.EXTRA_KEY)
+                    txt_from.text = credential?.id
                 }
                 Activity.RESULT_CANCELED -> finish()
             }
@@ -65,12 +63,18 @@ class SendFeedbackActivity: AppCompatActivity() {
     }
 
     private fun setupTextFrom() {
+        val mCredentialsClient = Credentials.getClient(this)
+        val hintRequest = HintRequest.Builder()
+                .setHintPickerConfig(CredentialPickerConfig.Builder()
+                        .setShowCancelButton(false)
+                        .build())
+                .setEmailAddressIdentifierSupported(true)
+                .setAccountTypes(IdentityProviders.GOOGLE)
+                .build()
+        val intent = mCredentialsClient.getHintPickerIntent(hintRequest)
         try {
-            val intent = AccountPicker.newChooseAccountIntent(
-                    null, null, arrayOf(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE), true,
-                    null, null, null, null)
-            startActivityForResult(intent, REQUEST_CODE_EMAIL)
-        } catch (e: ActivityNotFoundException) {
+            startIntentSenderForResult(intent.intentSender, 1, null, 0, 0, 0)
+        } catch (e: IntentSender.SendIntentException) {
         }
     }
 
