@@ -4,15 +4,21 @@ import android.content.Context
 import android.graphics.Color
 import android.widget.TextView
 import android.support.design.widget.Snackbar
+import android.view.Gravity
 import android.view.View
+import android.widget.Toast
 
 fun toast(context: Context, message: CharSequence) {
-    val toast = android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT)
+    val unicodeIcon = String(Character.toChars(0x26A1))
+    val toast = Toast.makeText(context, "$unicodeIcon    ️$message   $unicodeIcon",
+            android.widget.Toast.LENGTH_SHORT)
     toast.view.apply {
         setBackgroundColor(Color.BLACK)
-        setPadding(36, 36, 36, 36)
         findViewById<TextView>(android.R.id.message).textSize = 14F
+        findViewById<TextView>(android.R.id.message).setTextColor(Color.WHITE)
     }
+    val xOffset = (56 * context.resources.displayMetrics.density).toInt()
+    toast.setGravity(Gravity.TOP, 0, xOffset)
     toast.show()
 }
 
