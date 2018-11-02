@@ -81,7 +81,7 @@ class TodayFragment: Fragment() {
 
     private fun setupRecyclerView() {
         rv_weather_forecast.layoutManager = LinearLayoutManager(activity as MainActivity, LinearLayoutManager.HORIZONTAL, false)
-        adapter = ForecastAdapter(forecastList)
+        adapter = ForecastAdapter(forecastList) { it -> forecastClick(it) }
         rv_weather_forecast.adapter = adapter
     }
 
@@ -269,6 +269,11 @@ class TodayFragment: Fragment() {
                     getCurrentWeather()
                     getTodayWeatherForecast()
                 })
+    }
+
+    private fun forecastClick(forecastView: ForecastView) {
+        val dialog = TodayDetailFragment()
+        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 
 }

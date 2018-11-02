@@ -9,10 +9,9 @@ import com.example.hendratay.whatheweather.presentation.model.ForecastView
 import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.view.utils.WeatherIcon
 import kotlinx.android.synthetic.main.item_forecast.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
-class ForecastAdapter(val forecastList: List<ForecastView>):
+class ForecastAdapter(val forecastList: List<ForecastView>,
+                      val clickListener: (ForecastView) -> Unit):
         RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>() {
 
     override fun getItemCount() = forecastList.size
@@ -26,6 +25,7 @@ class ForecastAdapter(val forecastList: List<ForecastView>):
         holder.weatherDescTextView.text = forecast.weatherList[0].description
         holder.weatherIconImageView.setImageResource(WeatherIcon.getWeatherId(forecast.weatherList[0].id, forecast.weatherList[0].icon))
         holder.dateTimeTextview.text = TimeFormat.todayForecastTime(forecast.dateTime * 1000).toLowerCase()
+        holder.itemView.setOnClickListener { clickListener(forecast) }
     }
 
     inner class ForecastViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
