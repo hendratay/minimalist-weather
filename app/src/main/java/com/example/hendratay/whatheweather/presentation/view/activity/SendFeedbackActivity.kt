@@ -1,5 +1,6 @@
 package com.example.hendratay.whatheweather.presentation.view.activity
 
+import android.accounts.AccountManager
 import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
@@ -15,7 +16,8 @@ import kotlinx.android.synthetic.main.activity_sendfeedback.*
 import com.example.hendratay.whatheweather.presentation.view.utils.Gmail
 import kotlin.concurrent.thread
 import android.content.IntentSender
-import com.google.android.gms.auth.api.credentials.*
+import com.google.android.gms.auth.GoogleAuthUtil
+import com.google.android.gms.common.AccountPicker
 
 class SendFeedbackActivity: AppCompatActivity() {
 
@@ -54,8 +56,8 @@ class SendFeedbackActivity: AppCompatActivity() {
         if(requestCode == REQUEST_CODE_EMAIL) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    val credential = data?.getParcelableExtra<Credential>(Credential.EXTRA_KEY)
-                    txt_from.text = credential?.id
+                    val email = data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                    txt_from.text = email
                 }
                 Activity.RESULT_CANCELED -> finish()
             }
@@ -63,17 +65,12 @@ class SendFeedbackActivity: AppCompatActivity() {
     }
 
     private fun setupTextFrom() {
-        val mCredentialsClient = Credentials.getClient(this)
-        val hintRequest = HintRequest.Builder()
-                .setHintPickerConfig(CredentialPickerConfig.Builder()
-                        .setShowCancelButton(false)
-                        .build())
-                .setEmailAddressIdentifierSupported(true)
-                .setAccountTypes(IdentityProviders.GOOGLE)
-                .build()
-        val intent = mCredentialsClient.getHintPickerIntent(hintRequest)
         try {
-            startIntentSenderForResult(intent.intentSender, 1, null, 0, 0, 0)
+            val intent = AccountPicker.newChooseAccountIntent(
+                    null, null, arrayOf(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE), true,
+                    null, null, null, null)
+            intent.putExtra("overrideTheme", 1)
+            startActivityForResult(intent, REQUEST_CODE_EMAIL)
         } catch (e: IntentSender.SendIntentException) {
         }
     }
