@@ -14,7 +14,19 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="275d0b77-ff46-4033-be6f-9235a3d44855" name="Default" comment="k" />
+    <list default="true" id="275d0b77-ff46-4033-be6f-9235a3d44855" name="Default" comment="k">
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,32 +48,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SendFeedbackActivity.kt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SendFeedbackActivity.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="60" column="13" lean-forward="true" selection-start-line="60" selection-start-column="13" selection-end-line="60" selection-end-column="13" />
+            <state relative-caret-position="1462">
+              <caret line="86" column="7" selection-start-line="86" selection-start-column="7" selection-end-line="86" selection-end-column="7" />
               <folding>
-                <element signature="e#72#724#0" expanded="true" />
+                <element signature="e#72#811#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AccountPicker.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/8161d6622baffcef9fb810398ac10f75/jars/classes.jar!/com/google/android/gms/common/AccountPicker.class">
+      <file leaf-file-name="MainActivity.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="27" column="49" selection-start-line="27" selection-start-column="49" selection-end-line="27" selection-end-column="49" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseFragmentActivityApi14.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/support-fragment/27.1.1/94732bda44fba11302c58e459b7c1f47e7521bf9/support-fragment-27.1.1-sources.jar!/android/support/v4/app/BaseFragmentActivityApi14.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="151">
-              <caret line="58" column="16" selection-start-line="58" selection-start-column="16" selection-end-line="58" selection-end-column="16" />
+            <state relative-caret-position="629">
+              <caret line="80" column="8" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -2279,9 +2282,9 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_place_picker.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/PlacePickerActivity.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/fragment/TodayFragment.kt" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt" />
       </list>
     </option>
   </component>
@@ -2310,6 +2313,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -2332,17 +2337,15 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="send&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt&#10;sty&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/styles.xml&#10;mani&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/AndroidManifest.xml&#10;style&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/styles.xml&#10;main&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;sendf&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt&#10;TodayFr&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/fragment/TodayFragment.kt&#10;styl&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/styles.xml&#10;PopUp&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/utils/PopupMessage.kt&#10;Main&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;value&#9;FILE&#9;file://C:/Users/User/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/a895f71d7a1e4298fcaa1c11040a9695/res/values/values.xml&#10;manife&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/AndroidManifest.xml&#10;continuewith&#9;PSI&#9;JAVA://com.google.android.gms.tasks.Task#continueWith&#10;Continue With&#9;PSI&#9;JAVA://com.google.android.gms.tasks.Task#continueWith&#10;Account Picker&#9;PSI&#9;JAVA://com.google.android.gms.common.AccountPicker&#10;Choose account &#9;PSI&#9;JAVA://android.support.design.R.styleable#ActivityChooserView_initialActivityCount&#10;AccountPi&#9;FILE&#9;jar://C:/Users/User/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/8161d6622baffcef9fb810398ac10f75/jars/classes.jar!/com/google/android/gms/common/AccountPicker.class&#10;chooseaccount&#9;FILE&#9;file://C:/Users/User/AppData/Local/Android/Sdk/sources/android-27/android/accounts/ChooseAccountActivity.java&#10;chooseAccount&#9;FILE&#9;jar://C:/Users/User/AppData/Local/Android/Sdk/platforms/android-27/android.jar!/res/layout/choose_account.xml&#10;ChooseAccount&#9;FILE&#9;file://C:/Users/User/AppData/Local/Android/Sdk/platforms/android-27/data/res/layout/choose_account.xml&#10;sendFe&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt&#10;MainAc&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;MainA&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;build&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/build.gradle&#10;string&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/strings.xml&#10;settings&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="MainAc&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;send&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt&#10;sty&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/styles.xml&#10;mani&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/AndroidManifest.xml&#10;style&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/styles.xml&#10;main&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;sendf&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt&#10;TodayFr&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/fragment/TodayFragment.kt&#10;styl&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/styles.xml&#10;PopUp&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/utils/PopupMessage.kt&#10;Main&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;value&#9;FILE&#9;file://C:/Users/User/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/a895f71d7a1e4298fcaa1c11040a9695/res/values/values.xml&#10;manife&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/AndroidManifest.xml&#10;continuewith&#9;PSI&#9;JAVA://com.google.android.gms.tasks.Task#continueWith&#10;Continue With&#9;PSI&#9;JAVA://com.google.android.gms.tasks.Task#continueWith&#10;Account Picker&#9;PSI&#9;JAVA://com.google.android.gms.common.AccountPicker&#10;Choose account &#9;PSI&#9;JAVA://android.support.design.R.styleable#ActivityChooserView_initialActivityCount&#10;AccountPi&#9;FILE&#9;jar://C:/Users/User/.gradle/caches/transforms-1/files-1.1/play-services-basement-16.0.1.aar/8161d6622baffcef9fb810398ac10f75/jars/classes.jar!/com/google/android/gms/common/AccountPicker.class&#10;chooseaccount&#9;FILE&#9;file://C:/Users/User/AppData/Local/Android/Sdk/sources/android-27/android/accounts/ChooseAccountActivity.java&#10;chooseAccount&#9;FILE&#9;jar://C:/Users/User/AppData/Local/Android/Sdk/platforms/android-27/android.jar!/res/layout/choose_account.xml&#10;ChooseAccount&#9;FILE&#9;file://C:/Users/User/AppData/Local/Android/Sdk/platforms/android-27/data/res/layout/choose_account.xml&#10;sendFe&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt&#10;MainA&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt&#10;build&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/build.gradle&#10;string&#9;FILE&#9;file://C:/Users/User/AndroidStudioProjects/what-the-weather/app/src/main/res/values/strings.xml&#10;settings&#9;null&#9;null" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="device.picker.selection" value="29654b1a" />
+    <property name="device.picker.selection" value="Nexus_5X_API_25" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
-    <property name="sync.plugin.last.upgrade.timestamp" value="1541984965538" />
+    <property name="sync.plugin.last.upgrade.timestamp" value="1542072132699" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -2494,6 +2497,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32900432" />
@@ -2504,7 +2508,7 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32900432" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32900432" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32792208" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32792208" />
       <window_info anchor="bottom" id="Logcat" order="7" weight="0.32900432" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
@@ -2532,13 +2536,13 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/platforms/android-27/data/res/layout/choose_account_row.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/build/generated/source/r/debug/android/support/design/R.java">
@@ -2608,19 +2612,16 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="35" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
           <caret line="43" column="28" lean-forward="true" selection-start-line="43" selection-start-column="28" selection-end-line="43" selection-end-column="28" />
@@ -2628,6 +2629,9 @@
             <element signature="e#1793#1833#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/design/27.1.1/6e10c7f954f63690f7846fb22352375cf1b9fbb4/design-27.1.1-sources.jar!/android/support/design/widget/Snackbar.java">
@@ -2685,21 +2689,21 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_weekly_detail.xml">
-      <provider editor-type-id="android-designer2">
+      <provider selected="true" editor-type-id="text-editor">
         <state />
       </provider>
-      <provider selected="true" editor-type-id="text-editor">
+      <provider editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_today_detail.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/fragment/WeeklyDetailFragment.kt">
@@ -2783,43 +2787,43 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/view_error.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
           <caret line="37" column="26" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="26" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/view_empty.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/view_empty.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="21" selection-start-line="13" selection-start-column="21" selection-end-line="13" selection-end-column="21" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_weekly.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_weekly.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="29" column="21" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="21" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_today.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_today.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="279" column="33" selection-start-line="279" selection-start-column="33" selection-end-line="279" selection-end-column="33" />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/utils/WeatherIcon.kt">
@@ -2859,17 +2863,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
           <caret line="7550" column="23" selection-start-line="7550" selection-start-column="23" selection-end-line="7550" selection-end-column="23" />
-          <folding>
-            <element signature="e#331027#331028#0" expanded="true" />
-            <element signature="e#331056#331057#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="261" column="76" selection-start-line="261" selection-start-column="76" selection-end-line="261" selection-end-column="76" />
         </state>
       </provider>
     </entry>
@@ -2882,7 +2875,7 @@
     </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.android.support/support-fragment/27.1.1/94732bda44fba11302c58e459b7c1f47e7521bf9/support-fragment-27.1.1-sources.jar!/android/support/v4/app/BaseFragmentActivityApi14.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
+        <state relative-caret-position="646">
           <caret line="58" column="16" selection-start-line="58" selection-start-column="16" selection-end-line="58" selection-end-column="16" />
         </state>
       </provider>
@@ -2896,11 +2889,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/SendFeedbackActivity.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="60" column="13" lean-forward="true" selection-start-line="60" selection-start-column="13" selection-end-line="60" selection-end-column="13" />
+        <state relative-caret-position="1462">
+          <caret line="86" column="7" selection-start-line="86" selection-start-column="7" selection-end-line="86" selection-end-column="7" />
           <folding>
-            <element signature="e#72#724#0" expanded="true" />
+            <element signature="e#72#811#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/hendratay/whatheweather/presentation/view/activity/MainActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="80" column="8" selection-start-line="80" selection-start-column="8" selection-end-line="80" selection-end-column="8" />
         </state>
       </provider>
     </entry>

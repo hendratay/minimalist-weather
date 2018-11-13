@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.annotation.RequiresApi
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -30,6 +29,8 @@ import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragm
 import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import com.example.hendratay.whatheweather.presentation.view.utils.*
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.location.places.Place
@@ -46,6 +47,7 @@ import javax.inject.Inject
 const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
+const val GOOGLE_API_AVAILABILITY = 2404
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -196,8 +198,8 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         currentWeatherViewModel.getCurrentWeather().observe(this,
-                Observer<Resource<CurrentWeatherView>> {
-                    it?.let { handleCurrentWeatherViewState(it.status, it.data) }
+                Observer<Resource<CurrentWeatherView>> { resource ->
+                    resource?.let { handleCurrentWeatherViewState(it.status, it.data) }
                 })
     }
 
@@ -379,6 +381,21 @@ class MainActivity : AppCompatActivity() {
             currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
             weatherForecastViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
         }
+    }
+
+    /**
+     * Check Google Play Service is available, if not available show error dialog
+     */
+    private fun isGooglePlayServicesAvailable(activity: AppCompatActivity): Boolean {
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val status = googleApiAvailability.isGooglePlayServicesAvailable(activity)
+        if (status != ConnectionResult.SUCCESS) {
+            if(googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, GOOGLE_API_AVAILABILITY).show()
+            }
+            return false
+        }
+        return true
     }
 
 }
