@@ -1,12 +1,17 @@
 package com.example.hendratay.whatheweather.presentation.view.fragment
 
+import android.annotation.TargetApi
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceManager
 import com.example.hendratay.whatheweather.R
-import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
+import android.content.Intent
+import android.content.ActivityNotFoundException
+import android.net.Uri
+import android.os.Build
+
 
 class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -16,6 +21,9 @@ class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPr
         addPreferencesFromResource(R.xml.preferences)
         sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         onSharedPreferenceChanged(sharedPref, getString(R.string.saved_temp_unit))
+        // RATE THIS APP
+        val preference = findPreference(getString(R.string.rate_this_app))
+        preference.setOnPreferenceClickListener { openPlayStore();true }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -34,6 +42,22 @@ class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPr
     override fun onPause() {
         super.onPause()
         preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun openPlayStore() {
+        val uri = Uri.parse("market://details?id=${context?.packageName}")
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+        try {
+            startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=${context?.packageName}")))
+        }
     }
 
 }
