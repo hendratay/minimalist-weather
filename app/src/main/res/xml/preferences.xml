@@ -15,20 +15,20 @@
         android:title="@string/dark_theme"
         android:summary="@string/dark_theme_summary" />
 
-    <PreferenceCategory android:title="@string/pref_about_title">
+    <PreferenceCategory android:title="@string/pref_more_title">
         <Preference
-            android:title="@string/send_feedback"
-            android:summary="@string/send_feedback_summary">
-            <intent android:action="com.example.hendratay.whatheweather.presentation.view.activity.SendFeedbackActivity"/>
-        </Preference>
+            android:title="@string/about"
+            android:summary="@string/about_summary"/>
         <Preference
             android:title="@string/open_source_licenses"
             android:summary="@string/open_source_licenses_summary">
             <intent android:action="com.example.hendratay.whatheweather.presentation.view.activity.OpenSourceLicenseActivity"/>
         </Preference>
         <Preference
-            android:title="@string/app_version"
-            android:summary="@string/app_version_summary"/>
+            android:title="@string/send_feedback"
+            android:summary="@string/send_feedback_summary">
+            <intent android:action="com.example.hendratay.whatheweather.presentation.view.activity.SendFeedbackActivity"/>
+        </Preference>
         <Preference
             android:key="@string/rate_this_app"
             android:title="@string/rate_this_app"
