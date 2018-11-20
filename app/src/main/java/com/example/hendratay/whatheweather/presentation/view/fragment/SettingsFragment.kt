@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Build
+import com.example.hendratay.whatheweather.presentation.view.activity.AboutActivity
 
 
 class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -21,9 +22,10 @@ class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPr
         addPreferencesFromResource(R.xml.preferences)
         sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         onSharedPreferenceChanged(sharedPref, getString(R.string.saved_temp_unit))
-        // RATE THIS APP
-        val preference = findPreference(getString(R.string.rate_this_app))
-        preference.setOnPreferenceClickListener { openPlayStore();true }
+        val aboutPreference = findPreference(getString(R.string.about))
+        val rateThisAppPreference = findPreference(getString(R.string.rate_this_app))
+        aboutPreference.setOnPreferenceClickListener { startActivity(Intent(context, AboutActivity::class.java));true }
+        rateThisAppPreference.setOnPreferenceClickListener { openPlayStore();true }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

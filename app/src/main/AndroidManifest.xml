@@ -28,6 +28,11 @@
         </activity>
 
         <activity
+            android:name=".presentation.view.activity.AboutActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
             android:name=".presentation.view.activity.SendFeedbackActivity"
             android:screenOrientation="portrait">
             <intent-filter>

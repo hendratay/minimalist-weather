@@ -17,6 +17,7 @@
 
     <PreferenceCategory android:title="@string/pref_more_title">
         <Preference
+            android:key="@string/about"
             android:title="@string/about"
             android:summary="@string/about_summary"/>
         <Preference
