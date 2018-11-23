@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.*
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -217,8 +218,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupScreenForSuccess(data: CurrentWeatherView?) {
         toolbar.visibility = View.VISIBLE
-        val address = geocoder.getFromLocation(data?.coordinate?.latitude ?: 0.0,
-                data?.coordinate?.longitude ?: 0.0, 1)[0]
+        val listAddress = geocoder.getFromLocation(data?.coordinate?.latitude ?: 0.0,
+                data?.coordinate?.longitude ?: 0.0, 1)
+        lateinit var address: Address
+        if (listAddress.isEmpty()) return else address = listAddress[0]
         city_name_text_view.text = when {
             address.thoroughfare == null -> address.locality.capitalize()
             address.locality == null -> address.countryName.capitalize()
