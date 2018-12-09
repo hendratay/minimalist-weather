@@ -17,8 +17,8 @@ fun toast(context: Context, message: CharSequence) {
         findViewById<TextView>(android.R.id.message).textSize = 14F
         findViewById<TextView>(android.R.id.message).setTextColor(Color.WHITE)
     }
-    val xOffset = (56 * context.resources.displayMetrics.density).toInt()
-    toast.setGravity(Gravity.TOP, 0, xOffset)
+    val yOffset = (56 * context.resources.displayMetrics.density).toInt()
+    toast.setGravity(Gravity.TOP or Gravity.END, 0, yOffset)
     toast.show()
 }
 
