@@ -6,20 +6,19 @@ import android.widget.TextView
 import android.support.design.widget.Snackbar
 import android.view.Gravity
 import android.view.View
-import android.widget.Toast
+import com.github.johnpersano.supertoasts.library.Style
+import com.github.johnpersano.supertoasts.library.SuperActivityToast
 
-fun toast(context: Context, message: CharSequence) {
-    val unicodeIcon = String(Character.toChars(0x26A1))
-    val toast = Toast.makeText(context, "$unicodeIcon    ️$message   $unicodeIcon",
-            android.widget.Toast.LENGTH_SHORT)
-    toast.view.apply {
-        setBackgroundColor(Color.BLACK)
-        findViewById<TextView>(android.R.id.message).textSize = 14F
-        findViewById<TextView>(android.R.id.message).setTextColor(Color.WHITE)
-    }
-    val yOffset = (56 * context.resources.displayMetrics.density).toInt()
-    toast.setGravity(Gravity.TOP or Gravity.END, 0, yOffset)
-    toast.show()
+fun toast(context: Context, message: String) {
+    val yOffset = (60 * context.resources.displayMetrics.density).toInt()
+    SuperActivityToast.create(context, Style(), Style.TYPE_STANDARD)
+            .setColor(Color.BLACK)
+            .setFrame(Style.FRAME_STANDARD)
+            .setGravity(Gravity.END, -8, yOffset)
+            .setText(message)
+            .setTextColor(Color.WHITE)
+            .setAnimations(Style.ANIMATIONS_POP)
+            .show()
 }
 
 fun snackBar(view: View, message: CharSequence, action: CharSequence, listener: (View) -> Unit) {

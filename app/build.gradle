@@ -25,7 +25,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.hendratay.whatheweather"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:preference-v7:27.1.1'
     implementation "com.mikepenz:aboutlibraries:6.1.1"
+    implementation 'com.github.johnpersano:supertoasts:2.0'
 
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
