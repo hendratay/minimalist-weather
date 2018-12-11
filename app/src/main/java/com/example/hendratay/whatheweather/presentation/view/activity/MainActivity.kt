@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
@@ -30,6 +31,7 @@ import com.example.hendratay.whatheweather.presentation.view.fragment.TodayFragm
 import com.example.hendratay.whatheweather.presentation.view.fragment.WeeklyFragment
 import com.example.hendratay.whatheweather.presentation.view.utils.*
 import com.example.hendratay.whatheweather.presentation.viewmodel.*
+import com.github.johnpersano.supertoasts.library.SuperActivityToast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
@@ -290,15 +292,17 @@ class MainActivity : AppCompatActivity() {
                 Permission.savePermissionSharedPref(this, false)
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
-                snackBar(coordinator_layout, getString(R.string.notice_asking_enable_location_permission), getString(R.string.notice_enable_location_permission)) {
-                    val intent = Intent()
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.apply {
-                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                        data = uri
+                snackBar(this, getString(R.string.notice_asking_enable_location_permission), getString(R.string.notice_enable_location_permission), object : SuperActivityToast.OnButtonClickListener {
+                    override fun onClick(view: View?, token: Parcelable?) {
+                        val intent = Intent()
+                        val uri = Uri.fromParts("package", packageName, null)
+                        intent.apply {
+                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                            data = uri
+                        }
+                        startActivity(intent)
                     }
-                    startActivity(intent)
-                }
+                })
             }
         }
     }
