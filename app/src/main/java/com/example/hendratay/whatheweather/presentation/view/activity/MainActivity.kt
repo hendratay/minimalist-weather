@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Parcelable
 import android.provider.Settings
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
@@ -206,6 +205,11 @@ class MainActivity : AppCompatActivity() {
                 })
     }
 
+    override fun onResume() {
+        super.onResume()
+        isGooglePlayServicesAvailable(this)
+    }
+
     private fun handleCurrentWeatherViewState(status: ResourceState, data: CurrentWeatherView?) {
         when(status) {
             ResourceState.LOADING -> setupScreenForLoadingState()
@@ -292,16 +296,14 @@ class MainActivity : AppCompatActivity() {
                 Permission.savePermissionSharedPref(this, false)
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
-                snackBar(this, getString(R.string.notice_asking_enable_location_permission), getString(R.string.notice_enable_location_permission), object : SuperActivityToast.OnButtonClickListener {
-                    override fun onClick(view: View?, token: Parcelable?) {
-                        val intent = Intent()
-                        val uri = Uri.fromParts("package", packageName, null)
-                        intent.apply {
-                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                            data = uri
-                        }
-                        startActivity(intent)
+                snackBar(this, getString(R.string.notice_asking_enable_location_permission), getString(R.string.notice_enable_location_permission), SuperActivityToast.OnButtonClickListener { _, _ ->
+                    val intent = Intent()
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.apply {
+                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        data = uri
                     }
+                    startActivity(intent)
                 })
             }
         }
@@ -398,7 +400,9 @@ class MainActivity : AppCompatActivity() {
         val status = googleApiAvailability.isGooglePlayServicesAvailable(activity)
         if (status != ConnectionResult.SUCCESS) {
             if(googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(activity, status, GOOGLE_API_AVAILABILITY).show()
+                val dialog = googleApiAvailability.getErrorDialog(activity, status, GOOGLE_API_AVAILABILITY)
+                dialog.setOnCancelListener { finish() }
+                dialog.show()
             }
             return false
         }
