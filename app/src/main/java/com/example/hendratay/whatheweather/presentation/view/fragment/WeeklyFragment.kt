@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PagerSnapHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,6 @@ import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastWeeklyAdapter
 import com.example.hendratay.whatheweather.presentation.view.utils.LinePagerIndicatorDecoration
-import com.example.hendratay.whatheweather.presentation.view.utils.RecyclerViewSnapHelper
 import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
@@ -58,7 +58,7 @@ class WeeklyFragment: Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ForecastWeeklyAdapter(weekList) { it -> weeklyForecastClick(it) }
-        RecyclerViewSnapHelper().attachToRecyclerView(rv_forecast_weekly)
+        PagerSnapHelper().attachToRecyclerView(rv_forecast_weekly)
         rv_forecast_weekly.layoutManager = LinearLayoutManager(activity as MainActivity, LinearLayoutManager.HORIZONTAL, false)
         rv_forecast_weekly.adapter = adapter
         rv_forecast_weekly.setHasFixedSize(true)
