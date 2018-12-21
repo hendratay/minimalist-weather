@@ -15,6 +15,7 @@ import com.example.hendratay.whatheweather.presentation.data.ResourceState
 import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastWeeklyAdapter
+import com.example.hendratay.whatheweather.presentation.view.utils.CirclePagerIndicatorDecoration
 import com.example.hendratay.whatheweather.presentation.view.utils.LinePagerIndicatorDecoration
 import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
@@ -62,7 +63,7 @@ class WeeklyFragment: Fragment() {
         rv_forecast_weekly.layoutManager = LinearLayoutManager(activity as MainActivity, LinearLayoutManager.HORIZONTAL, false)
         rv_forecast_weekly.adapter = adapter
         rv_forecast_weekly.setHasFixedSize(true)
-        rv_forecast_weekly.addItemDecoration(LinePagerIndicatorDecoration())
+        rv_forecast_weekly.addItemDecoration(CirclePagerIndicatorDecoration())
     }
 
     private fun setupEmptyErrorButtonClick() {
