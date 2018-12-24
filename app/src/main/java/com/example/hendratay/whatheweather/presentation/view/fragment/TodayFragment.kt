@@ -272,7 +272,7 @@ class TodayFragment: Fragment() {
     }
 
     private fun forecastClick(forecastView: ForecastView) {
-        val dialog = TodayDetailFragment()
+        val dialog = WeatherDetailFragment()
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 

@@ -144,7 +144,7 @@ class WeeklyFragment: Fragment() {
     }
 
     private fun weeklyForecastClick(forecastView: ForecastView) {
-        val dialog = WeeklyDetailFragment()
+        val dialog = WeatherDetailFragment()
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 
