@@ -16,7 +16,6 @@ import com.example.hendratay.whatheweather.presentation.model.*
 import com.example.hendratay.whatheweather.presentation.view.activity.MainActivity
 import com.example.hendratay.whatheweather.presentation.view.adapter.ForecastWeeklyAdapter
 import com.example.hendratay.whatheweather.presentation.view.utils.CirclePagerIndicatorDecoration
-import com.example.hendratay.whatheweather.presentation.view.utils.LinePagerIndicatorDecoration
 import com.example.hendratay.whatheweather.presentation.view.utils.TimeFormat
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModel
 import com.example.hendratay.whatheweather.presentation.viewmodel.WeatherForecastViewModelFactory
@@ -144,7 +143,11 @@ class WeeklyFragment: Fragment() {
     }
 
     private fun weeklyForecastClick(forecastView: ForecastView) {
+        val bundle = Bundle()
+        bundle.putSerializable("FORECAST_VIEW", forecastView)
+
         val dialog = WeatherDetailFragment()
+        dialog.arguments = bundle
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 

@@ -272,7 +272,11 @@ class TodayFragment: Fragment() {
     }
 
     private fun forecastClick(forecastView: ForecastView) {
+        val bundle = Bundle()
+        bundle.putSerializable("FORECAST_VIEW", forecastView)
+
         val dialog = WeatherDetailFragment()
+        dialog.arguments = bundle
         dialog.show(requireActivity().supportFragmentManager, dialog.tag)
     }
 
