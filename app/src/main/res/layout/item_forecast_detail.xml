@@ -97,7 +97,7 @@
                 android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/details"
                 android:textAllCaps="true"
                 android:textColor="@android:color/black"
@@ -153,29 +153,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/humidity_label" />
 
             <TextView
-                android:id="@+id/sunrise_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sunset"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sunset_label" />
-
-            <TextView
-                android:id="@+id/sunset_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sunrise"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cloud_label" />
-
-            <TextView
                 android:id="@+id/wind_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
                 android:text="@string/placeholder_wind"
                 app:fontFamily="monospace"
-                app:layout_constraintStart_toStartOf="@+id/pressure_text_view"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details" />
 
             <TextView
                 android:id="@+id/pressure_text_view"
@@ -183,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder_pressure"
                 app:fontFamily="monospace"
-                app:layout_constraintStart_toStartOf="@+id/humidity_text_view"
+                app:layout_constraintStart_toStartOf="@+id/wind_text_view"
                 app:layout_constraintTop_toBottomOf="@+id/wind_text_view" />
 
             <TextView
@@ -192,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder_humidity"
                 app:fontFamily="monospace"
-                app:layout_constraintStart_toStartOf="@+id/cloud_text_view"
+                app:layout_constraintStart_toStartOf="@+id/pressure_text_view"
                 app:layout_constraintTop_toBottomOf="@+id/pressure_text_view" />
 
             <TextView
@@ -201,26 +187,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/placeholder_cloud"
                 app:fontFamily="monospace"
-                app:layout_constraintStart_toStartOf="@+id/sunrise_text_view"
+                app:layout_constraintStart_toStartOf="@+id/humidity_text_view"
                 app:layout_constraintTop_toBottomOf="@+id/humidity_text_view" />
-
-            <TextView
-                android:id="@+id/sunrise_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/placeholder_sunrise"
-                app:layout_constraintStart_toStartOf="@+id/sunset_text_view"
-                app:layout_constraintTop_toBottomOf="@+id/cloud_text_view" />
-
-            <TextView
-                android:id="@+id/sunset_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="48dp"
-                android:layout_marginStart="48dp"
-                android:text="@string/placeholder_sunset"
-                app:layout_constraintStart_toEndOf="@+id/cloud_label"
-                app:layout_constraintTop_toBottomOf="@+id/sunrise_text_view" />
 
         </android.support.constraint.ConstraintLayout>
 
