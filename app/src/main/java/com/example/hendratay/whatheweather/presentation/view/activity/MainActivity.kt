@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                     Activity.RESULT_CANCELED -> {
                         getSavedLocation()
                         getSavedUnits()
-                        if(savedLatitude != null && savedLongitude != null) {
+                        if(savedLatitude != null && savedLongitude != null && connectivityStatus()) {
                             toast(this, getString(R.string.notice_use_last_location))
                         }
                         currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -172,7 +172,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     getSavedLocation()
                     getSavedUnits()
-                    if(savedLatitude != null && savedLongitude != null) {
+                    if(savedLatitude != null && savedLongitude != null && connectivityStatus()) {
                         toast(this, getString(R.string.notice_use_last_location))
                     }
                     currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
