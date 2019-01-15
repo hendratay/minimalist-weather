@@ -4,7 +4,7 @@
     <ListPreference
         android:key="@string/saved_temp_unit"
         android:title="@string/temperature_unit"
-        android:dialogTitle="@string/select_temp_unit"
+        android:dialogTitle="@string/temperature_unit"
         android:entries="@array/temp_unit"
         android:entryValues="@array/temp_unit_values"
         android:defaultValue="@string/celsius" />
