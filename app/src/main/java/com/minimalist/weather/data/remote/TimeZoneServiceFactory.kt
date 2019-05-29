@@ -40,7 +40,7 @@ object TimeZoneServiceFactory {
 class TimeZoneInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val url: HttpUrl = chain.request().url().newBuilder()
-                .addQueryParameter("key", BuildConfig.TIMEZONE_API_KEY)
+                .addQueryParameter("key", BuildConfig.GOOGLE_MAPS_API_KEY)
                 .build()
         return chain.proceed(chain.request().newBuilder().addHeader("Accept", "application/json").url(url).build())
     }

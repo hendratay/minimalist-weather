@@ -13,8 +13,7 @@ import android.net.Uri
 import android.os.Build
 import com.minimalist.weather.presentation.view.activity.AboutActivity
 
-
-class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var sharedPref: SharedPreferences
 
@@ -23,8 +22,10 @@ class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPr
         sharedPref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         onSharedPreferenceChanged(sharedPref, getString(R.string.saved_temp_unit))
         val aboutPreference = findPreference(getString(R.string.about))
+        val sendFeedbackPreference = findPreference(getString(R.string.send_feedback))
         val rateThisAppPreference = findPreference(getString(R.string.rate_this_app))
         aboutPreference.setOnPreferenceClickListener { startActivity(Intent(context, AboutActivity::class.java));true }
+        sendFeedbackPreference.setOnPreferenceClickListener { openGithubIssues();true }
         rateThisAppPreference.setOnPreferenceClickListener { openPlayStore();true }
     }
 
@@ -44,6 +45,11 @@ class SettingsFragment: PreferenceFragmentCompat(), SharedPreferences.OnSharedPr
     override fun onPause() {
         super.onPause()
         preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun openGithubIssues() {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/hendratay/minimalist-weather/issues"))
+        startActivity(browserIntent)
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

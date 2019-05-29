@@ -31,10 +31,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"${getProperty("local.properties", "openweathermap_api_key")}\""
-        buildConfigField "String", "TIMEZONE_API_KEY", "\"${getProperty("local.properties", "timezone_api_key")}\""
-        buildConfigField "String", "APP_GMAIL", "\"${getProperty("local.properties", "app_gmail")}\""
-        buildConfigField "String", "APP_GMAIL_PASS", "\"${getProperty("local.properties", "app_gmail_pass")}\""
-        buildConfigField "String", "CUSTOMER_SERVICE_GMAIL", "\"${getProperty("local.properties", "customer_service_gmail")}\""
+        buildConfigField "String", "GOOGLE_MAPS_API_KEY", "\"${getProperty("local.properties", "google_maps_api_key")}\""
+        resValue "string", "google_maps_api_key", "\"${getProperty("local.properties", "google_maps_api_key")}\""
         multiDexEnabled true
     }
     buildTypes {

@@ -26,9 +26,9 @@
             <intent android:action="com.minimalist.weather.presentation.view.activity.OpenSourceLicenseActivity"/>
         </Preference>
         <Preference
+            android:key="@string/send_feedback"
             android:title="@string/send_feedback"
             android:summary="@string/send_feedback_summary">
-            <intent android:action="com.minimalist.weather.presentation.view.activity.SendFeedbackActivity"/>
         </Preference>
         <Preference
             android:key="@string/rate_this_app"
