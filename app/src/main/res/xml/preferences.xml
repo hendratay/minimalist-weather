@@ -23,12 +23,12 @@
         <Preference
             android:title="@string/open_source_licenses"
             android:summary="@string/open_source_licenses_summary">
-            <intent android:action="com.example.hendratay.whatheweather.presentation.view.activity.OpenSourceLicenseActivity"/>
+            <intent android:action="com.minimalist.weather.presentation.view.activity.OpenSourceLicenseActivity"/>
         </Preference>
         <Preference
             android:title="@string/send_feedback"
             android:summary="@string/send_feedback_summary">
-            <intent android:action="com.example.hendratay.whatheweather.presentation.view.activity.SendFeedbackActivity"/>
+            <intent android:action="com.minimalist.weather.presentation.view.activity.SendFeedbackActivity"/>
         </Preference>
         <Preference
             android:key="@string/rate_this_app"

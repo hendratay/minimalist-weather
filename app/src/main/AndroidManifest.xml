@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.hendratay.whatheweather">
+    package="com.minimalist.weather">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name=".WhatheWeatherApplication"
+        android:name="com.minimalist.weather.MinimalistWeatherApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -25,7 +25,7 @@
             android:value="AIzaSyACFhKwXYU9MNO1D7vZcYN3fugF9JjsVPw"/>
 
         <activity
-            android:name=".presentation.view.activity.MainActivity"
+            android:name="com.minimalist.weather.presentation.view.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,24 +34,24 @@
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.AboutActivity"
+            android:name="com.minimalist.weather.presentation.view.activity.AboutActivity"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.SendFeedbackActivity"
+            android:name="com.minimalist.weather.presentation.view.activity.SendFeedbackActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="com.example.hendratay.whatheweather.presentation.view.activity.SendFeedbackActivity" />
+                <action android:name="com.minimalist.weather.presentation.view.activity.SendFeedbackActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".presentation.view.activity.OpenSourceLicenseActivity"
+            android:name="com.minimalist.weather.presentation.view.activity.OpenSourceLicenseActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="com.example.hendratay.whatheweather.presentation.view.activity.OpenSourceLicenseActivity" />
+                <action android:name="com.minimalist.weather.presentation.view.activity.OpenSourceLicenseActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

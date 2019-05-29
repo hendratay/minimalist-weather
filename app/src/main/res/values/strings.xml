@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Whathe Weather</string>
+    <string name="app_name">Minimalist Weather</string>
     <string name="gps">Gps</string>
     <!--Shared Preference-->
     <string name="saved_latitude">Saved Latitude</string>
