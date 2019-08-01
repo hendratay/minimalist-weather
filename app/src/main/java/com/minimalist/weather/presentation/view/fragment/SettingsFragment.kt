@@ -1,13 +1,10 @@
 package com.minimalist.weather.presentation.view.fragment
 
-import android.annotation.TargetApi
 import android.content.SharedPreferences
 import android.os.Bundle
 import com.minimalist.weather.R
 import android.content.Intent
-import android.content.ActivityNotFoundException
 import android.net.Uri
-import android.os.Build
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -53,20 +50,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         startActivity(browserIntent)
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun openPlayStore() {
-        val uri = Uri.parse("market://details?id=${context?.packageName}")
-        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-        try {
-            startActivity(goToMarket)
-        } catch (e: ActivityNotFoundException) {
-            startActivity(Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=${context?.packageName}")))
-        }
+        startActivity(Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=${context?.packageName}")))
     }
 
 }
