@@ -2,13 +2,13 @@ package com.minimalist.weather.presentation.view.activity
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.minimalist.weather.R
 import kotlinx.android.synthetic.main.activity_open_source_license.*
 
-class OpenSourceLicenseActivity: AppCompatActivity() {
+class OpenSourceLicenseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

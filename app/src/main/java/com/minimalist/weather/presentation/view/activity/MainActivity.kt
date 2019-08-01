@@ -1,9 +1,9 @@
 package com.minimalist.weather.presentation.view.activity
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.content.*
+import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -13,21 +13,16 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.support.annotation.RequiresApi
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.minimalist.weather.R
-import com.minimalist.weather.presentation.data.Resource
-import com.minimalist.weather.presentation.data.ResourceState
-import com.minimalist.weather.presentation.model.CurrentWeatherView
-import com.minimalist.weather.presentation.view.fragment.SettingsFragment
-import com.minimalist.weather.presentation.view.fragment.TodayFragment
-import com.minimalist.weather.presentation.view.fragment.WeeklyFragment
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.github.johnpersano.supertoasts.library.SuperActivityToast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -39,6 +34,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.Task
 import com.google.maps.android.SphericalUtil
+import com.minimalist.weather.R
+import com.minimalist.weather.presentation.data.Resource
+import com.minimalist.weather.presentation.data.ResourceState
+import com.minimalist.weather.presentation.model.CurrentWeatherView
+import com.minimalist.weather.presentation.view.fragment.SettingsFragment
+import com.minimalist.weather.presentation.view.fragment.TodayFragment
+import com.minimalist.weather.presentation.view.fragment.WeeklyFragment
 import com.minimalist.weather.presentation.view.utils.*
 import com.minimalist.weather.presentation.viewmodel.*
 import dagger.android.AndroidInjection
@@ -50,15 +52,19 @@ const val PLACE_PICKER_REQUEST_CODE = 1
 const val REQUEST_ACCESS_FINE_LOCATION = 111
 const val REQUEST_CHECK_SETTINGS = 222
 const val GOOGLE_API_AVAILABILITY = 2404
+
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private val TAG = MainActivity::class.simpleName
     }
 
-    @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
-    @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
-    @Inject lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
+    @Inject
+    lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
+    @Inject
+    lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
+    @Inject
+    lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
 
     private lateinit var menu: Menu
     private lateinit var geocoder: Geocoder
@@ -81,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         weatherForecastViewModel = ViewModelProviders.of(this, weatherForecastViewModelFactory)[WeatherForecastViewModel::class.java]
         timeZoneViewModel = ViewModelProviders.of(this, timeZoneViewModelFactory)[TimeZoneViewModel::class.java]
 
-        if(connectivityStatus()) {
+        if (connectivityStatus()) {
             createLocationRequest()
             // initialize location callback first for pass into requestLocationUpdates at `startLocationUpdates`
             receiveLocationUpdates()
@@ -104,10 +110,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
         android.R.id.home -> {
-            when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+            when (supportFragmentManager.findFragmentById(R.id.fragment_container)) {
                 is SettingsFragment -> {
                     Handler().postDelayed({
-                        supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName,
+                        supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)!!::class.simpleName,
                                 FragmentManager.POP_BACK_STACK_INCLUSIVE)
                         showToolbar()
                         reloadTemperature()
@@ -130,9 +136,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when(requestCode) {
+        when (requestCode) {
             PLACE_PICKER_REQUEST_CODE -> {
-                when(resultCode) {
+                when (resultCode) {
                     Activity.RESULT_OK -> {
                         val place: Place = PlacePicker.getPlace(this, data)
                         getSavedUnits()
@@ -140,19 +146,19 @@ class MainActivity : AppCompatActivity() {
                         weatherForecastViewModel.setLocation(place.latLng.latitude, place.latLng.longitude, savedUnits)
                         weatherForecastViewModel.getWeatherForecast()
                         timeZoneViewModel.setQuery(place.latLng.latitude, place.latLng.longitude)
-                        saveLocation(place.latLng.latitude,place.latLng.longitude)
+                        saveLocation(place.latLng.latitude, place.latLng.longitude)
                     }
                     Activity.RESULT_CANCELED -> {
                     }
                 }
             }
             REQUEST_CHECK_SETTINGS -> {
-                when(resultCode) {
+                when (resultCode) {
                     Activity.RESULT_OK -> startLocationUpdates()
                     Activity.RESULT_CANCELED -> {
                         getSavedLocation()
                         getSavedUnits()
-                        if(savedLatitude != null && savedLongitude != null && connectivityStatus()) {
+                        if (savedLatitude != null && savedLongitude != null && connectivityStatus()) {
                             toast(this, getString(R.string.notice_use_last_location))
                         }
                         currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -165,14 +171,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when(requestCode) {
+        when (requestCode) {
             REQUEST_ACCESS_FINE_LOCATION -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationUpdates()
                 } else {
                     getSavedLocation()
                     getSavedUnits()
-                    if(savedLatitude != null && savedLongitude != null && connectivityStatus()) {
+                    if (savedLatitude != null && savedLongitude != null && connectivityStatus()) {
                         toast(this, getString(R.string.notice_use_last_location))
                     }
                     currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -185,11 +191,11 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onBackPressed() {
-        when(supportFragmentManager.findFragmentById(R.id.fragment_container)) {
+        when (supportFragmentManager.findFragmentById(R.id.fragment_container)) {
             is TodayFragment -> finishAffinity()
             is WeeklyFragment -> loadFragment(TodayFragment())
             is SettingsFragment -> {
-                supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)::class.simpleName,
+                supportFragmentManager.popBackStackImmediate(supportFragmentManager.findFragmentById(R.id.fragment_container)!!::class.simpleName,
                         FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 showToolbar()
                 reloadTemperature()
@@ -211,7 +217,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleCurrentWeatherViewState(status: ResourceState, data: CurrentWeatherView?) {
-        when(status) {
+        when (status) {
             ResourceState.LOADING -> setupScreenForLoadingState()
             ResourceState.SUCCESS -> setupScreenForSuccess(data)
             ResourceState.ERROR -> setupScreenForError()
@@ -269,7 +275,7 @@ class MainActivity : AppCompatActivity() {
         val heading = arrayOf(0, 90, 180, 270)
         val latLngBuilder = LatLngBounds.Builder()
         lateinit var point: LatLng
-        for(i in heading.indices) {
+        for (i in heading.indices) {
             point = SphericalUtil.computeOffset(latLng, distance, heading[i].toDouble())
             latLngBuilder.include(point)
         }
@@ -281,7 +287,8 @@ class MainActivity : AppCompatActivity() {
         val newFragment: Fragment? = supportFragmentManager.findFragmentByTag(fragment::class.simpleName)
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.fragment_container, newFragment ?: fragment, fragment::class.simpleName)
+                .replace(R.id.fragment_container, newFragment
+                        ?: fragment, fragment::class.simpleName)
                 // the argument is for POP_BACK_STACK_INCLUSIVE
                 .addToBackStack(fragment::class.simpleName)
                 .commit()
@@ -291,7 +298,7 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
         } else {
-            if(Permission.getPermissionSharedPref(this)) {
+            if (Permission.getPermissionSharedPref(this)) {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ACCESS_FINE_LOCATION)
                 Permission.savePermissionSharedPref(this, false)
             } else {
@@ -319,7 +326,7 @@ class MainActivity : AppCompatActivity() {
         val client: SettingsClient = LocationServices.getSettingsClient(this)
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
         task.addOnFailureListener {
-            if (it is ResolvableApiException){
+            if (it is ResolvableApiException) {
                 try {
                     it.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
                 } catch (sendEx: IntentSender.SendIntentException) {
@@ -330,7 +337,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startLocationUpdates() {
-        if(ActivityCompat.checkSelfPermission(this,
+        if (ActivityCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
         } else {
@@ -342,12 +349,12 @@ class MainActivity : AppCompatActivity() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult?) {
                 p0 ?: return
-                for(location in p0.locations) {
+                for (location in p0.locations) {
                     getSavedUnits()
                     currentWeatherViewModel.setLocation(location.latitude, location.longitude, savedUnits)
                     weatherForecastViewModel.setLocation(location.latitude, location.longitude, savedUnits)
                     timeZoneViewModel.setQuery(location.latitude, location.longitude)
-                    saveLocation(location.latitude,location.longitude)
+                    saveLocation(location.latitude, location.longitude)
                 }
                 stopLocationUpdates()
             }
@@ -372,8 +379,8 @@ class MainActivity : AppCompatActivity() {
     private fun getSavedLocation() {
         savedLatitude = java.lang.Double.longBitsToDouble(Location.getLatSharedPref(this))
         savedLongitude = java.lang.Double.longBitsToDouble(Location.getLngSharedPref(this))
-        if(savedLatitude == 0.0) savedLatitude = null
-        if(savedLongitude == 0.0) savedLongitude = null
+        if (savedLatitude == 0.0) savedLatitude = null
+        if (savedLongitude == 0.0) savedLongitude = null
     }
 
     private fun getSavedUnits() {
@@ -384,7 +391,7 @@ class MainActivity : AppCompatActivity() {
      * Check temperature units, if saved preferences is changed then reload temperature data
      */
     private fun reloadTemperature() {
-        if(Temperature.getTempSharedPrefs(this) != savedUnits) {
+        if (Temperature.getTempSharedPrefs(this) != savedUnits) {
             getSavedUnits()
             getSavedLocation()
             currentWeatherViewModel.setLocation(savedLatitude, savedLongitude, savedUnits)
@@ -399,7 +406,7 @@ class MainActivity : AppCompatActivity() {
         val googleApiAvailability = GoogleApiAvailability.getInstance()
         val status = googleApiAvailability.isGooglePlayServicesAvailable(activity)
         if (status != ConnectionResult.SUCCESS) {
-            if(googleApiAvailability.isUserResolvableError(status)) {
+            if (googleApiAvailability.isUserResolvableError(status)) {
                 val dialog = googleApiAvailability.getErrorDialog(activity, status, GOOGLE_API_AVAILABILITY)
                 dialog.setOnCancelListener { finish() }
                 dialog.show()

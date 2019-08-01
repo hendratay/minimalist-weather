@@ -1,5 +1,6 @@
 package com.minimalist.weather.presentation.view.utils
 
+import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +28,7 @@ object TimeFormat {
         return Pair(dateTime, today)
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun todayForecastTime(todayForecastTime: Long): String {
         val sdf = SimpleDateFormat("K a")
         sdf.timeZone = if(timeZoneId == null) TimeZone.getTimeZone(TimeZone.getDefault().id) else TimeZone.getTimeZone(timeZoneId)

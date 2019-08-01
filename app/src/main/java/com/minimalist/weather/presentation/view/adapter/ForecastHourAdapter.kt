@@ -1,11 +1,11 @@
 package com.minimalist.weather.presentation.view.adapter
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.minimalist.weather.R
 import com.minimalist.weather.presentation.model.ForecastView
 import com.minimalist.weather.presentation.view.utils.TimeFormat
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_forecast_hour.view.*
 import kotlin.math.roundToInt
 
 class ForecastHourAdapter(val forecastList: List<ForecastView>,
-                          private val clickListener: (ForecastView) -> Unit):
+                          private val clickListener: (ForecastView) -> Unit) :
         RecyclerView.Adapter<ForecastHourAdapter.ForecastHourViewHolder>() {
 
     override fun getItemCount() = forecastList.size
@@ -32,7 +32,7 @@ class ForecastHourAdapter(val forecastList: List<ForecastView>,
         holder.itemView.setOnClickListener { clickListener(forecast) }
     }
 
-    inner class ForecastHourViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ForecastHourViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var weatherDescTextView: TextView = itemView.weekly_weather_desc_text_view
         var weatherIconImageView: ImageView = itemView.weekly_weather_icon_image_view
         var tempTextView: TextView = itemView.weekly_temp_text_view

@@ -1,9 +1,9 @@
 package com.minimalist.weather.presentation.viewmodel
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.minimalist.weather.domain.interactor.GetTimeZone
 import com.minimalist.weather.domain.interactor.SingleObserver
 import com.minimalist.weather.domain.model.TimeZone

@@ -3,14 +3,15 @@ package com.minimalist.weather.presentation.view.fragment
 import android.annotation.TargetApi
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v7.preference.ListPreference
-import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.PreferenceManager
 import com.minimalist.weather.R
 import android.content.Intent
 import android.content.ActivityNotFoundException
 import android.net.Uri
 import android.os.Build
+import androidx.preference.ListPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.minimalist.weather.presentation.view.activity.AboutActivity
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -24,9 +25,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         val aboutPreference = findPreference(getString(R.string.about))
         val sendFeedbackPreference = findPreference(getString(R.string.send_feedback))
         val rateThisAppPreference = findPreference(getString(R.string.rate_this_app))
-        aboutPreference.setOnPreferenceClickListener { startActivity(Intent(context, AboutActivity::class.java));true }
-        sendFeedbackPreference.setOnPreferenceClickListener { openGithubIssues();true }
-        rateThisAppPreference.setOnPreferenceClickListener { openPlayStore();true }
+        aboutPreference.onPreferenceClickListener =  Preference.OnPreferenceClickListener { startActivity(Intent(context, AboutActivity::class.java)); true }
+        sendFeedbackPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener { openGithubIssues(); true }
+        rateThisAppPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener { openPlayStore(); true }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

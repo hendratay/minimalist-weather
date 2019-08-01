@@ -2,7 +2,7 @@ package com.minimalist.weather.presentation.view.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceManager
+import android.preference.PreferenceManager
 import com.minimalist.weather.R
 
 class Permission {

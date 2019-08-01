@@ -2,7 +2,7 @@ package com.minimalist.weather.presentation.view.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.minimalist.weather.R
 
 class Temperature {
@@ -14,7 +14,7 @@ class Temperature {
 
         fun getTempSharedPrefs(context: Context): String {
             val prefs = getSharedPrefs(context)
-            return prefs.getString(context.getString(R.string.saved_temp_unit), context.getString(R.string.celsius))
+            return prefs.getString(context.getString(R.string.saved_temp_unit), context.getString(R.string.celsius)) ?: context.getString(R.string.celsius)
         }
     }
 

@@ -2,10 +2,10 @@ package com.minimalist.weather.presentation.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.minimalist.weather.R
 import com.minimalist.weather.presentation.model.ForecastView
 import com.minimalist.weather.presentation.view.utils.WeatherIcon

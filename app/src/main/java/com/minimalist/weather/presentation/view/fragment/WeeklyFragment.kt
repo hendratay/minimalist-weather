@@ -1,14 +1,14 @@
 package com.minimalist.weather.presentation.view.fragment
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PagerSnapHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.minimalist.weather.R
 import com.minimalist.weather.presentation.data.Resource
 import com.minimalist.weather.presentation.data.ResourceState
@@ -25,14 +25,16 @@ import kotlinx.android.synthetic.main.fragment_weekly.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-class WeeklyFragment: Fragment() {
+class WeeklyFragment : Fragment() {
 
     companion object {
         private val TAG = WeeklyFragment::class.simpleName
     }
 
-    @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
+    @Inject
+    lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
 
     private lateinit var adapter: ForecastWeeklyAdapter
@@ -75,14 +77,14 @@ class WeeklyFragment: Fragment() {
     private fun getWeeklyForecast() {
         weatherForecastViewModel.getWeatherForecast().observe(activity as MainActivity,
                 Observer<Resource<WeatherForecastView>> {
-                    if(view?.parent != null) {
+                    if (view?.parent != null) {
                         it?.let { handleWeatherForecastState(it.status, it.data) }
                     }
                 })
     }
 
     private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?) {
-        when(resourceState) {
+        when (resourceState) {
             ResourceState.LOADING -> setupRecyclerForLoadingState()
             ResourceState.SUCCESS -> setupRecyclerForSuccess(data)
             ResourceState.ERROR -> setupRecyclerForError()
@@ -106,11 +108,12 @@ class WeeklyFragment: Fragment() {
         it?.let {
             weekList.clear()
             val groupedHashMap: Map<String, MutableList<ForecastView>> = groupDataIntoHashMap(it.forecastList.toMutableList())
-            for(forecastDate: String in groupedHashMap.keys) {
-                weekList.add(mapOf(forecastDate to (groupedHashMap[forecastDate] ?: emptyList<ForecastView>())))
+            for (forecastDate: String in groupedHashMap.keys) {
+                weekList.add(mapOf(forecastDate to (groupedHashMap[forecastDate]
+                        ?: emptyList<ForecastView>())))
             }
             adapter.notifyDataSetChanged()
-            if(weekList.isEmpty()) {
+            if (weekList.isEmpty()) {
                 error_cloud.visibility = View.VISIBLE
                 empty_weekly.visibility = View.VISIBLE
                 button_weekly.visibility = View.VISIBLE
@@ -130,9 +133,9 @@ class WeeklyFragment: Fragment() {
 
     private fun groupDataIntoHashMap(forecastList: MutableList<ForecastView>): Map<String, MutableList<ForecastView>> {
         val groupedHashMap: HashMap<String, MutableList<ForecastView>> = HashMap()
-        for(forecastView: ForecastView in forecastList) {
+        for (forecastView: ForecastView in forecastList) {
             val date = TimeFormat.forecastGroupTime(forecastView.dateTime * 1000)
-            if(groupedHashMap.containsKey(date)) {
+            if (groupedHashMap.containsKey(date)) {
                 groupedHashMap[date]?.add(forecastView)
             } else {
                 val list: MutableList<ForecastView> = ArrayList()

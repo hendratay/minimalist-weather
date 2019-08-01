@@ -2,8 +2,8 @@ package com.minimalist.weather.presentation.view.activity
 
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.minimalist.weather.R
 import kotlinx.android.synthetic.main.activity_about.*
 
@@ -20,6 +20,7 @@ class AboutActivity : AppCompatActivity() {
         else -> super.onOptionsItemSelected(item)
     }
 
+    @Suppress("DEPRECATION")
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

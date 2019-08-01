@@ -1,18 +1,18 @@
 package com.minimalist.weather.presentation.view.fragment
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.minimalist.weather.R
 import com.minimalist.weather.presentation.data.Resource
 import com.minimalist.weather.presentation.data.ResourceState
@@ -35,15 +35,18 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class TodayFragment: Fragment() {
+class TodayFragment : Fragment() {
 
     companion object {
         private val TAG = TodayFragment::class.simpleName
     }
 
-    @Inject lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
-    @Inject lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
-    @Inject lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
+    @Inject
+    lateinit var currentWeatherViewModelFactory: CurrentWeatherViewModelFactory
+    @Inject
+    lateinit var weatherForecastViewModelFactory: WeatherForecastViewModelFactory
+    @Inject
+    lateinit var timeZoneViewModelFactory: TimeZoneViewModelFactory
 
     private lateinit var currentWeatherViewModel: CurrentWeatherViewModel
     private lateinit var weatherForecastViewModel: WeatherForecastViewModel
@@ -112,7 +115,7 @@ class TodayFragment: Fragment() {
             weatherForecastViewModel.fetchWeatherForecast()
         }
         location_button.setOnClickListener {
-            if((activity as MainActivity).connectivityStatus()) {
+            if ((activity as MainActivity).connectivityStatus()) {
                 (activity as MainActivity).placePickerIntent()
             } else {
                 Toast.makeText(activity, R.string.notice_no_network, Toast.LENGTH_SHORT).show()
@@ -122,7 +125,7 @@ class TodayFragment: Fragment() {
     }
 
     private fun checkGpsEnabled() {
-        if((activity as MainActivity).connectivityStatus()) {
+        if ((activity as MainActivity).connectivityStatus()) {
             val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 (activity as MainActivity).startLocationUpdates()
@@ -139,14 +142,14 @@ class TodayFragment: Fragment() {
     private fun getCurrentWeather() {
         currentWeatherViewModel.getCurrentWeather().observe(this,
                 Observer<Resource<CurrentWeatherView>> {
-                    if(view?.parent != null) {
+                    if (view?.parent != null) {
                         it?.let { handleCurrentWeatherViewState(it.status, it.data) }
                     }
                 })
     }
 
     private fun handleCurrentWeatherViewState(resourceState: ResourceState, data: CurrentWeatherView?) {
-        when(resourceState) {
+        when (resourceState) {
             ResourceState.LOADING -> setupScreenForLoadingState()
             ResourceState.SUCCESS -> setupScreenForSuccess(data)
             ResourceState.ERROR -> setupScreenForError()
@@ -154,7 +157,7 @@ class TodayFragment: Fragment() {
     }
 
     private fun setupScreenForLoadingState() {
-        progress_bar.visibility = if(swipe_refresh_layout.isRefreshing) View.GONE else View.VISIBLE
+        progress_bar.visibility = if (swipe_refresh_layout.isRefreshing) View.GONE else View.VISIBLE
         swipe_refresh_layout.isEnabled = progress_bar.visibility == View.GONE
         data_view.visibility = View.GONE
         empty_view.visibility = View.GONE
@@ -208,7 +211,7 @@ class TodayFragment: Fragment() {
     }
 
     private fun handleWeatherForecastState(resourceState: ResourceState, data: WeatherForecastView?) {
-        when(resourceState) {
+        when (resourceState) {
             ResourceState.LOADING -> setupRecyclerForLoadingState()
             ResourceState.SUCCESS -> setupRecyclerForSuccess(data)
             ResourceState.ERROR -> setupRecyclerForError()
@@ -234,9 +237,9 @@ class TodayFragment: Fragment() {
         button_recycler_view.visibility = View.GONE
         it?.let {
             forecastList.clear()
-            for(i in 0..6) forecastList.add(it.forecastList[i])
+            for (i in 0..6) forecastList.add(it.forecastList[i])
             adapter.notifyDataSetChanged()
-            if(forecastList.isEmpty()) {
+            if (forecastList.isEmpty()) {
                 today_error_cloud.visibility = View.VISIBLE
                 empty_recycler_view.visibility = View.VISIBLE
                 button_recycler_view.visibility = View.VISIBLE
@@ -251,7 +254,7 @@ class TodayFragment: Fragment() {
         rv_weather_forecast.visibility = View.GONE
         empty_recycler_view.visibility = View.GONE
         weekly.visibility = View.GONE
-        if(error_view.visibility == View.VISIBLE) {
+        if (error_view.visibility == View.VISIBLE) {
             today_error_cloud.visibility = View.GONE
             error_recycler_view.visibility = View.GONE
             button_recycler_view.visibility = View.GONE
