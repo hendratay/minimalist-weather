@@ -6,7 +6,6 @@
     <string name="saved_longitude">Saved Longitude</string>
     <string name="saved_permission">Saved Permission</string>
     <string name="saved_temp_unit">Saved Temp Unit</string>
-    <string name="saved_theme">Saved Theme</string>
 
     <string name="empty_text_view">Oops, there is no result to display</string>
     <string name="error_text_view">Oops, there was an error fetching the data\nPlease turn on location or network if is not turn on</string>
@@ -47,9 +46,6 @@
     <string name="settings">Settings</string>
     <string name="temperature_unit">Temperature Unit</string>
     <string name="celsius">metric</string>
-    <string name="dark_theme">Dark Mode</string>
-    <string name="dark_theme_summary">Enable dark mode throughout the app</string>
-    <string name="pref_more_title">More</string>
     <string name="send_feedback">Send feedback</string>
     <string name="send_feedback_summary">Any suggestion to make this app better</string>
     <string name="open_source_licenses">Open source licenses</string>
@@ -58,17 +54,4 @@
     <string name="about_summary">Information about this app</string>
     <string name="rate_this_app">Rate this app</string>
     <string name="rate_this_app_summary">Please take a moment to rate this app</string>
-
-    <string name="feedback">Feedback</string>
-    <string name="send">Send</string>
-    <string name="label_from">From:</string>
-    <string name="txt_from">sample@example.com</string>
-    <string name="label_about">I\'m telling you about</string>
-    <string name="hint_feedback">Write your Description</string>
-    <string name="feedback_description">By sending us some feedback and thoughts about our app can help us improve the app and continue building a better experience or app for you.</string>
-    <string name="label_progress_dialog">Sending</string>
-    <string-array name="feedback_about">
-        <item>request</item>
-        <item>issue</item>
-    </string-array>
 </resources>
